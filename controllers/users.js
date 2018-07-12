@@ -5,7 +5,7 @@ const JWT = require('jsonwebtoken');
 const User = require('../models/users');
 const {JWT_SECRET} = require('../config/index.js')
 
-singnToken = user => {
+signToken = user => {
     var curTime  = new Date().getTime()
     var curDate = new Date().getDate();
     

@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const {INVITE_TOKEN} = require('../config/index.js')
 
 module.exports = {
 
@@ -34,7 +35,7 @@ module.exports = {
             telephone: Joi.number().required(),
             email: Joi.string().email().required(),
             password: Joi.string().required(),
-            auth_token: Joi.string().valid(['aimune_alcyomics_2018'])
+            auth_token: Joi.string().valid([INVITE_TOKEN])
         }),
         signIn: Joi.object().keys({
             username: Joi.string().required(),

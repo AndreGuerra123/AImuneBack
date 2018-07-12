@@ -6,11 +6,11 @@ require('../passport.js'); // Sets the authentication mechanisms in the passport
 
 //In-package Dependencies
 const UsersController = require('../controllers/users');
-const Validator = require('../common/validator.js');
+const {validator, schemas} = require('../common/validator.js');
 
 //Pushing the validators
-const signUpValidation = Validator.validator(Validator.schemas.signup);
-const signInValidation = Validator.validator(Validator.schemas.signin);
+const signUpValidation = validator(schemas.signup);
+const signInValidation = validator(schemas.signin);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
