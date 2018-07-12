@@ -3,6 +3,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+
 //MongoDB
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:6612/authentication');
