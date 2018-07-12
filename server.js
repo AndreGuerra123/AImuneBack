@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 
 //MongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:6612/authentication');
+mongoose.connect('mongodb://localhost:27017/authentication');
 //Express
 var app = express();
 
