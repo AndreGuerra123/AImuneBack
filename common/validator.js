@@ -37,7 +37,7 @@ module.exports = {
             auth_token: Joi.string().valid(['aimune_alcyomics_2018'])
         }),
         signIn: Joi.object().keys({
-            username: Joi.string().alphanum().min(3).max(30).required(),
+            username: Joi.string().required(),
             password: Joi.string().required()
         })
     }

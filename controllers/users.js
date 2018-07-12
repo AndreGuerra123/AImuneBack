@@ -1,5 +1,21 @@
+//Import Dependencies
+const JWT = require('jsonwebtoken');
+
 //Import Internal Dependencies
 const User = require('../models/users');
+const {JWT_SECRET} = require('../config/index.js')
+
+singnToken = user => {
+    var curTime  = new Date().getTime()
+    var curDate = new Date().getDate();
+    
+    return JWT.sign({
+        iss: 'Alcyomics',
+        sub: user._id,
+        iat: curTime,
+        exp: new Date().setDate(curDate + 1)//+ 1 day ahead
+    },JWT_SECRET);
+}
 
 module.exports = {
     signUp: async (req, res, next) => {
@@ -38,7 +54,6 @@ module.exports = {
             });
         }
 
-
         //Create NEw User
         const newUser = new User({
             firstname,
@@ -56,15 +71,19 @@ module.exports = {
         await newUser.save();
 
         // Respond with token
-        resizeBy.json({
-            status: 'created'
-        });
+        const token  = signToken(newUser)
+        res.status(200).json({token});
+
+        console.log("Sign Up sucessfully.")
 
     },
     signIn: async (req, res, next) => {
+        const token = signToken(req.user);
+        res.status(200).json({token});
 
+        console.log("Sign in sucessfully.")
     },
     secret: async (req, res, next) => {
-        //TODO:
+       console.log('I manage to get the secret!');
     }
 };
