@@ -9,8 +9,8 @@ const UsersController = require('../controllers/users');
 const {validator, schemas} = require('../common/validator.js');
 
 //Pushing the validators
-const signUpValidation = validator(schemas.signup);
-const signInValidation = validator(schemas.signin);
+const signUpValidation = validator(schemas.signUp);
+const signInValidation = validator(schemas.signIn);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -26,7 +26,7 @@ router.route('/signup')
 router.route('/signin')
     .post(signInValidation, localAuthentication, UsersController.signIn);
 
-router.route('secret')
+router.route('/secret')
     .get(jwtAuthentication, UsersController.secret);
 
 //Exporting routes

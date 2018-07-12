@@ -32,14 +32,12 @@ const jwt_validation_function = async (payload, done) => {
 
 //JWT Strategy
 const jwt_strategy = new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+    jwtFromRequest: ExtractJwt.fromHeader('token'),
     secretOrKey: JWT_SECRET
 }, jwt_validation_function);
 
 //Setting JWT strategy
 passport.use(jwt_strategy);
-
-
 
 //Local Strategy Function
 const local_strategy_function = async (username, password, done) => {

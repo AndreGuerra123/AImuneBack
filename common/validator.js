@@ -5,7 +5,7 @@ module.exports = {
 
     /// Validator
     validator: (schema) => {
-        return (requestAnimationFrame, res, next) => {
+        return (req, res, next) => {
             const result = Joi.validate(req.body, schema);
             if (result.error) {
                 return res.status(400).json(result.error);
@@ -26,7 +26,7 @@ module.exports = {
         signUp: Joi.object().keys({
             firstname: Joi.string().required(),
             lastname: Joi.string().required(),
-            birthdate: Joi.date().required(),
+            birthdate: Joi.string().required(),
             username: Joi.string().alphanum().min(3).max(30).required(),
             address: Joi.string().required(),
             postalcode: Joi.string().required(),
@@ -35,7 +35,7 @@ module.exports = {
             telephone: Joi.number().required(),
             email: Joi.string().email().required(),
             password: Joi.string().required(),
-            auth_token: Joi.string().valid([INVITE_TOKEN])
+            auth_token: Joi.string().valid(INVITE_TOKEN)
         }),
         signIn: Joi.object().keys({
             username: Joi.string().required(),
