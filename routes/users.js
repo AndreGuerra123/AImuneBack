@@ -21,10 +21,10 @@ const localAuthentication = passport.authenticate('local', {
 });
 //Routing
 router.route('/signup')
-    .post(singUpValidation, UsersController.signUp);
+    .post(signUpValidation, UsersController.signUp);
 
 router.route('/signin')
-    .post(singInValidation, localAuthentication, UsersController.signIn);
+    .post(signInValidation, localAuthentication, UsersController.signIn);
 
 router.route('secret')
     .get(jwtAuthentication, UsersController.secret);

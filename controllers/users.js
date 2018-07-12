@@ -2,7 +2,7 @@
 const JWT = require('jsonwebtoken');
 
 //Import Internal Dependencies
-const User = require('../models/users');
+const User = require('../models/users.js');
 const {JWT_SECRET} = require('../config/index.js')
 
 signToken = user => {

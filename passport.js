@@ -10,7 +10,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const {
     JWT_SECRET
 } = require('./config/index.js');
-const User = require('./models/user.js');
+const User = require('./models/users.js');
 
 //JWT Strategy Function
 const jwt_validation_function = async (payload, done) => {
@@ -77,18 +77,3 @@ const local_strategy = new LocalStrategy({
 
 //Setting local Strategy
 passport.use(local_strategy);
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Local Validation
-passport.use();
