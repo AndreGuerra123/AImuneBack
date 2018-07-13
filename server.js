@@ -33,4 +33,3 @@ https.createServer({
     console.log('AImune app listening on port 3000! Go to https://aimune.science:3000/')
   })
 
-app.listen(PORT);
