@@ -3,6 +3,8 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+const {PORT} = require('./config/index.js');
+
 
 //MongoDB
 mongoose.Promise = global.Promise;
@@ -21,6 +23,5 @@ app.use(bodyParser.json());
 app.use('/', require('./routes/users'));
 
 //Start server
-const port = process.env.PORT || 3000;
-app.listen(port);
-console.log(`AImune Backend API is running in ${port}`);
+app.listen(PORT);
+console.log(`AImune Backend API is running in ${PORT}`);
