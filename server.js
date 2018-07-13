@@ -4,6 +4,7 @@ var https = require('https');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var path = require('path');
 
 const {PORT} = require('./config/index.js');
 
