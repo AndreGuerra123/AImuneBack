@@ -1,4 +1,6 @@
 var express = require('express');
+var fs = require('fs');
+var https = require('https');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -23,5 +25,12 @@ app.use(bodyParser.json());
 app.use('/', require('./routes/users'));
 
 //Start server
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+  }, app)
+  .listen(PORT, function () {
+    console.log('AImune app listening on port 3000! Go to https://aimune.science:3000/')
+  })
+
 app.listen(PORT);
-console.log(`AImune Backend API is running in ${PORT}`);
