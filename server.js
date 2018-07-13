@@ -26,8 +26,8 @@ app.use('/', require('./routes/users'));
 
 //Start server
 https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
+    key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'server.cert'))
   }, app)
   .listen(PORT, function () {
     console.log('AImune app listening on port 3000! Go to https://aimune.science:3000/')
