@@ -8,6 +8,11 @@ var path = require('path');
 
 const {PORT} = require('./config/index.js');
 
+const credentials = {
+    key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'server.cert'))
+  }
+
 
 //MongoDB
 mongoose.Promise = global.Promise;
@@ -26,11 +31,10 @@ app.use(bodyParser.json());
 app.use('/', require('./routes/users'));
 
 //Start server
-https.createServer({
-    key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'server.cert'))
-  }, app)
-  .listen(PORT, function () {
-    console.log('AImune app listening on port 3000! Go to https://aimune.science:3000/')
-  })
+var httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(PORT, function () {
+    console.log('AImune app listening on port '+PORT.toString()+'! Go to https://aimune.science:3000/')
+  });
+
 
