@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
 
-const vars = require('./config/index.js');
+const {PORT} = require('./config/index.js');
 
 
 //MongoDB
@@ -30,7 +30,7 @@ https.createServer({
     key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
     cert: fs.readFileSync(path.resolve(__dirname, 'server.cert'))
   }, app)
-  .listen(vars.PORT, function () {
+  .listen(PORT, function () {
     console.log('AImune app listening on port 3000! Go to https://aimune.science:3000/')
   })
 
