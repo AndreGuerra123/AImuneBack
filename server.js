@@ -7,7 +7,10 @@ var mongoose = require('mongoose');
 
 const {PORT} = require('./config/index.js');
 
+//TO SET THE SERVER CORRECTLY
 //sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+//ufw allow from  fontend-ip to any port 3000
+//node server.js
 
 const credentials = {
     key: fs.readFileSync('/etc/ssl/private/aimuneback.key'),
