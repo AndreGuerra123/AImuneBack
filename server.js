@@ -4,13 +4,14 @@ var https = require('https');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var path = require('path');
 
 const {PORT} = require('./config/index.js');
 
+//sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+
 const credentials = {
-    key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'server.cert'))
+    key: fs.readFileSync('/etc/ssl/private/aimuneback.key'),
+    cert: fs.readFileSync('/etc/ssl/certs/aimuneback.cert')
   }
 
 
