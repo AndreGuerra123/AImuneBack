@@ -4,6 +4,7 @@ var https = require('https');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 const {PORT} = require('./config/index.js');
 
@@ -30,6 +31,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 app.use(bodyParser.json());
+app.use(cors());
 
 //Routes
 app.use('/', require('./routes/users'));
