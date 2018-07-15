@@ -31,7 +31,14 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 app.use(bodyParser.json());
-app.use(cors());
+
+//Allowing cors from all sources
+app.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": true,
+    "optionsSuccessStatus": 204
+  }));
 
 //Routes
 app.use('/', require('./routes/users'));
