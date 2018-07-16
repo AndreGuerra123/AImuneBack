@@ -38,8 +38,20 @@ module.exports = {
             telephone: Joi.number().required(),
             email: Joi.string().email().required(),
             password: Joi.string().required(),
-            password_confirm: Joi.string().valid(Joi.ref('password')).required(),
-            auth_token: Joi.string().valid(INVITE_TOKEN).required()
+            password_confirm: Joi.string().valid(Joi.ref('password')).required().options({
+                language: {
+                    valid: {
+                        allowOnly: 'Passwords don\'t match.'
+                    }
+                }
+            }),
+            auth_token: Joi.string().valid(INVITE_TOKEN).required().options({
+                language: {
+                    valid: {
+                        allowOnly: 'Invalid invitation token.'
+                    }
+                }
+            })
         }),
         signIn: Joi.object().keys({
             username: Joi.string().required(),
