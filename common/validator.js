@@ -1,6 +1,9 @@
 const Joi = require('joi');
 const {INVITE_TOKEN} = require('../config/index.js')
 
+const maxdate = new Date();
+maxdate.setFullYear(maxdate.getFullYear() - 18);
+
 module.exports = {
 
     /// Validator
@@ -26,7 +29,7 @@ module.exports = {
         signUp: Joi.object().keys({
             firstname: Joi.string().required(),
             lastname: Joi.string().required(),
-            birthdate: Joi.string().required(),
+            birthdate: Joi.date().max(maxdate).required(),
             username: Joi.string().alphanum().min(3).max(30).required(),
             address: Joi.string().required(),
             postalcode: Joi.string().required(),
@@ -35,7 +38,8 @@ module.exports = {
             telephone: Joi.number().required(),
             email: Joi.string().email().required(),
             password: Joi.string().required(),
-            auth_token: Joi.string().valid(INVITE_TOKEN)
+            password_confirm: Joi.string().valid(Joi.ref('password')).required(),
+            auth_token: Joi.string().valid(INVITE_TOKEN).required()
         }),
         signIn: Joi.object().keys({
             username: Joi.string().required(),
