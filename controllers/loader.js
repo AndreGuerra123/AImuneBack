@@ -16,10 +16,10 @@ module.exports = {
             compound,
             classi,
             image
-        } = req.value.body;
+        } = req.body;
 
         //Create NEw User
-        const newLoading = new Loader({
+        const newLoader = new Loader({
             user,
             patient,
             condition,
@@ -28,6 +28,7 @@ module.exports = {
             image
         });
         await newLoader.save();
+        
 
         res.status(200)
         // Respond with token
@@ -35,6 +36,6 @@ module.exports = {
         //res.status(200).json({token});
 
         console.log("Load image sucessfully.")
-
+        next()
     }
 };
