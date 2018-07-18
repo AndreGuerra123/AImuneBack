@@ -2,7 +2,7 @@
 const JWT = require('jsonwebtoken');
 
 //Import Internal Dependencies
-const Loader = require('../models/loaders.js');
+const Loader = require('../models/loader.js');
 
 module.exports = {
     load: async (req, res, next) => {
