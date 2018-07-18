@@ -26,10 +26,6 @@ const loaderSchema = new Schema({
         data: Buffer,
         contentType: String
     },
-    mime: {
-        type: String,
-        required: true
-    }
 });
 
 const Loader = mongoose.model('load', loaderSchema);

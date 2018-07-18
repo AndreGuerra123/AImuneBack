@@ -8,9 +8,8 @@ module.exports = {
 
         var form = new Formidable.IncomingForm();
 
-        let image;
         let path;
-        let mime;
+        let contentType;
 
         await form.parse(req, async function (err, fields, files) {
 
@@ -29,7 +28,7 @@ module.exports = {
                 } = fields;
 
                 path = files.image.path;
-                mime = files.image.type;
+                contentType = files.image.type;
                 fs.readFile(path, async function (err, data) {
 
                     if (err) {
@@ -37,7 +36,7 @@ module.exports = {
                         return res.status(404).json(err);
 
                     } else {
-                        image = data;
+
                         //Save load
                         const newLoader = new Loader({
                             user,
@@ -45,12 +44,14 @@ module.exports = {
                             condition,
                             compound,
                             classi,
-                            image,
-                            mime
+                            image: {
+                                data,
+                                contentType
+                            }
                         });
-                        
+
                         //Delete image in local storage
-                        await fs.unlink(path, function(error){
+                        await fs.unlink(path, function (error) {
                             return res.status(404).json(error)
                         });
 
