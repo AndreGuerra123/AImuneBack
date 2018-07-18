@@ -51,7 +51,7 @@ module.exports = {
                     })
 
                     //Delete image in local storage
-                    await fs.unlink(path,function(err){})
+                    await fs.unlink(path);
 
                     await newLoader.save();
 
