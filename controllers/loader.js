@@ -9,7 +9,8 @@ module.exports = {
 
         console.log(Object.keys(req));
         console.log(Object.keys(req.body));
-        
+        console.log(Object.keys(req.params));
+
         const {
             user,
             patient,
