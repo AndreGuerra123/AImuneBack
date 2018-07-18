@@ -1,12 +1,12 @@
 //Import Internal Dependencies
 const Loader = require('../models/loader.js');
-const formi = require('formidable');
+const Formidable = require('formidable');
 const fs = require('fs');
 
 module.exports = {
     load: async (req, res, next) => {
 
-        var form = new formi.IncomingForm();
+        var form = new Formidable.IncomingForm();
 
         let image;
         let path;
@@ -50,7 +50,9 @@ module.exports = {
                         });
                         
                         //Delete image in local storage
-                        await fs.unlink(path);
+                        await fs.unlink(path, function(error){
+                            return res.status(404).json(error)
+                        });
 
                         await newLoader.save();
 
