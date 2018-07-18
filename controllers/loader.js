@@ -8,56 +8,58 @@ module.exports = {
 
         var form = new formi.IncomingForm();
 
-        let vars;
         let image;
         let path;
         let mime;
 
-        await form.parse(req, function (err, fields, files) {
+        await form.parse(req, async function (err, fields, files) {
 
             if (err) {
 
-            return res.status(404).json(err);
+                return res.status(404).json(err);
 
             } else {
 
-                vars = fields;
+                const {
+                    user,
+                    patient,
+                    condition,
+                    compound,
+                    classi
+                } = fields;
+
                 path = files.image.path;
                 mime = files.image.type;
+                fs.readFile(path, async function (err, data) {
 
+                    if (err) {
+
+                        return res.status(404).json(err);
+
+                    } else {
+                        image = data;
+                        //Save load
+                        const newLoader = new Loader({
+                            user,
+                            patient,
+                            condition,
+                            compound,
+                            classi,
+                            image,
+                            mime
+                        });
+                        
+                        //Delete image in local storage
+                        await fs.unlink(path);
+
+                        await newLoader.save();
+
+                        res.status(200).json("Load image sucessfully.");
+
+                        next()
+                    }
+                })
             }
         });
-        await fs.readFile(path, function (err, data) {
-
-            if (err) {
-                return res.status(404).json(err);
-            } else {
-                image = data;
-            }
-        })
-        const { user,
-            patient,
-            condition,
-            compound,
-            classi } = fields;
-
-        //Save load
-        const newLoader = new Loader({
-            user,
-            patient,
-            condition,
-            compound,
-            classi,
-            image,
-            mime
-        });
-
-        //Delete image in local storage
-        await fs.unlink(path);
-
-        await newLoader.save();
-
-        res.status(200).json("Load image sucessfully.");
     }
-
 };
