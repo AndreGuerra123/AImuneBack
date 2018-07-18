@@ -1,26 +1,19 @@
-//Import Dependencies
-const JWT = require('jsonwebtoken');
-
 //Import Internal Dependencies
 const Loader = require('../models/loader.js');
-
-
-function pkeys(any){
-    let a = Object.keys(any)
-    console.log(a)
-    a.forEach(element => {
-        pkeys(a[element]);
-    });
-}
+const formi = require('formidable');
 
 module.exports = {
     load: async (req, res, next) => {
-        
-        pkeys(req);
 
-        Object.keys(any);
-        
-        const {
+        var form = new formi.IncomingForm();
+
+        form.parse(req, function(err,fields,files){
+            res.writeHead(200, {'content-type': 'text/plain'});
+            res.write('received upload:\n\n');
+            res.end(util.inspect({fields: fields, files: files}));
+        })
+
+/*         const {
             user,
             patient,
             condition,
@@ -40,11 +33,10 @@ module.exports = {
         });
         await newLoader.save();
         
-
         res.status(200)
         // Respond with token
         //const token  = signToken(newUser)
-        //res.status(200).json({token});
+        //res.status(200).json({token}); */
 
         console.log("Load image sucessfully.")
         next()

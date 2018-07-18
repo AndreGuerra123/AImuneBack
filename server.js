@@ -18,10 +18,11 @@ const credentials = {
     cert: fs.readFileSync('/etc/ssl/certs/aimuneback.cert')
   }
 
-
 //MongoDB
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/authentication');
+var conn = mongoose.connection;
+
 //Express
 var app = express();
 

@@ -4,6 +4,9 @@ const router = require('express-promise-router')();
 const passport = require('passport');
 require('../passport.js'); // Sets the authentication mechanisms in the passport
 
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+
 //Pushing the Controllers
 const UsersController = require('../controllers/users');
 const LoaderController = require('../controllers/loader.js');
@@ -37,8 +40,7 @@ router.route('/secret')
 /* router.route('/load')
     .post(loaderValidation,jwtAuthentication, LoaderController.load);
  */
-    router.route('/load')
-    .post(LoaderController.load);
+    router.route('/load').post(LoaderController.load);
 
 //Exporting routes
 
