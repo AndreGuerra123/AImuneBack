@@ -8,7 +8,7 @@ module.exports = {
 
         var form = new formi.IncomingForm();
 
-        form.parse(req, function (err, fields, files) {
+        form.parse(req, async function (err, fields, files) {
 
             if (err) {
 
@@ -32,7 +32,7 @@ module.exports = {
                     const path = img.path;
                     const mime = img.type;
 
-                    fs.readFile(path, function (err, data) {
+                    await fs.readFile(path, function (err, data) {
 
                         if (err) {
                             res.status(404).json(err);
@@ -51,7 +51,7 @@ module.exports = {
                     })
 
                     //Delete image in local storage
-                    fs.unlink(path);
+                    await fs.unlink(path);
 
                     await newLoader.save();
 
