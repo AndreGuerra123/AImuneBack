@@ -52,7 +52,10 @@ module.exports = {
 
                         //Delete image in local storage
                         await fs.unlink(path, function (error) {
-                            return res.status(404).json(error)
+                            if(error){
+                                return res.status(404).json(error);
+                            }
+                                                            
                         });
 
                         await newLoader.save();
