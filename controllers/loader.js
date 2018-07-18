@@ -13,9 +13,7 @@ module.exports = {
             condition,
             compound,
             classi,
-            image,
-            date_sampled,
-            date_acquired
+            image
         } = req.value.body;
 
         //Create NEw User
@@ -25,9 +23,7 @@ module.exports = {
             condition,
             compound,
             classi,
-            image,
-            date_sampled,
-            date_acquired
+            image
         });
         await newLoader.save();
 

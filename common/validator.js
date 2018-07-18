@@ -66,8 +66,6 @@ module.exports = {
             compound: Joi.string(),
             class: Joi.number().required(),
             image: Joi.any().required(),
-            date_sampled: Joi.date(),
-            date_acquired: Joi.date()
         })
 
     }

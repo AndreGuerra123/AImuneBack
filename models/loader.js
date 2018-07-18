@@ -18,7 +18,7 @@ const loaderSchema = new Schema({
         type: String,
         required: false
     },
-    class: {
+    classi: {
         type: Number,
         required: true
     },
@@ -26,33 +26,8 @@ const loaderSchema = new Schema({
         data: Buffer,
         contentType: String,
         required: true
-    },
-    date_sample:{
-        type: Date,
-        required: false
-    },
-    date_acquired: {
-        type: Date,
-        required: false
-    },
-    date_uploaded: {
-        type: Date,
-        require: false
-    },
-    date_modified: {
-        type: Date,
-        required: false
     }
 });
-
-loaderSchema.pre('save', function(next){
-    var now = Date.now();
-    this.date_modified = now;
-    if ( !this.date_uploaded) {
-      this.date_uploaded = now;
-    }
-    next();
-  });
 
 const Loader = mongoose.model('load', loaderSchema);
 

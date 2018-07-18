@@ -27,10 +27,8 @@ var app = express();
 
 //Middleware
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 //Allowing cors from all sources
 app.use(cors({
