@@ -4,19 +4,22 @@ const JWT = require('jsonwebtoken');
 //Import Internal Dependencies
 const Loader = require('../models/loader.js');
 
+
 function pkeys(any){
     let a = Object.keys(any)
     console.log(a)
     a.forEach(element => {
-        pkeys(element);
+        pkeys(a[element]);
     });
 }
 
 module.exports = {
     load: async (req, res, next) => {
         
-        pkeys(req.files);
+        pkeys(req);
 
+        Object.keys(any);
+        
         const {
             user,
             patient,
