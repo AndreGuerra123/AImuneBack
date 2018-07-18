@@ -6,9 +6,8 @@ const Loader = require('../models/loader.js');
 
 module.exports = {
     load: async (req, res, next) => {
-//TODO: rEMOVE THIS BI
-        res.status(200).json(req);
 
+        console.log(Object.keys(req));
 
         const {
             user,
