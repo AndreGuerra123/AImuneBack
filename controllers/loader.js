@@ -6,7 +6,7 @@ const Loader = require('../models/loader.js');
 
 module.exports = {
     load: async (req, res, next) => {
-
+        console.log(req.files);
         const {
             user,
             patient,
