@@ -41,7 +41,7 @@ app.use(cors({
   }));
 
 //Routes
-app.use('/', require('./routes/users'));
+app.use('/', require('./routes/routes.js'));
 
 //Start server
 var httpsServer = https.createServer(credentials, app);

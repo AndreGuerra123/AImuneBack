@@ -1,5 +1,7 @@
 const Joi = require('joi');
-const {INVITE_TOKEN} = require('../config/index.js')
+const {
+    INVITE_TOKEN
+} = require('../config/index.js')
 
 const maxdate = new Date();
 maxdate.setFullYear(maxdate.getFullYear() - 18);
@@ -40,14 +42,14 @@ module.exports = {
             password: Joi.string().required(),
             password_confirm: Joi.string().valid(Joi.ref('password')).required().options({
                 language: {
-                    valid: {
+                    string: {
                         allowOnly: 'Passwords don\'t match.'
                     }
                 }
             }),
             auth_token: Joi.string().valid(INVITE_TOKEN).required().options({
                 language: {
-                    valid: {
+                    string: {
                         allowOnly: 'Invalid invitation token.'
                     }
                 }
@@ -56,7 +58,18 @@ module.exports = {
         signIn: Joi.object().keys({
             username: Joi.string().required(),
             password: Joi.string().required()
+        }),
+        loader: Joi.object().keys({
+            user: Joi.string().required(),
+            patient: Joi.string(),
+            condition: Joi.string(),
+            compound: Joi.string(),
+            class: Joi.number().required(),
+            image: Joi.any().required(),
+            date_sampled: Joi.date(),
+            date_acquired: Joi.date()
         })
+
     }
 
 }
