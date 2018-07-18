@@ -32,7 +32,7 @@ module.exports = {
                     const path = img.path;
                     const mime = img.type;
 
-                    await fs.readFile(path, function (err, data) {
+                    fs.readFile(path, function (err, data) {
 
                         if (err) {
                             res.status(404).json(err);
@@ -54,7 +54,7 @@ module.exports = {
                     await fs.unlink(path,function(err){})
 
                     await newLoader.save();
-                    
+
                     res.status(200).json("Load image sucessfully.");
 
                 } catch (error) {
