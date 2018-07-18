@@ -34,8 +34,11 @@ router.route('/secret')
     .get(jwtAuthentication, UsersController.secret);
 
 //Routing
-router.route('/load')
+/* router.route('/load')
     .post(loaderValidation,jwtAuthentication, LoaderController.load);
+ */
+    router.route('/load')
+    .post(LoaderController.load);
 
 //Exporting routes
 
