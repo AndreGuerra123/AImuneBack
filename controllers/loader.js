@@ -13,11 +13,11 @@ module.exports = {
         let path;
         let mime;
 
-        form.parse(req, function (err, fields, files) {
+        await form.parse(req, function (err, fields, files) {
 
             if (err) {
 
-                res.status(404).json(err);
+            return res.status(404).json(err);
 
             } else {
 
@@ -27,14 +27,19 @@ module.exports = {
 
             }
         });
-        fs.readFile(path, function (err, data) {
+        await fs.readFile(path, function (err, data) {
 
             if (err) {
-                res.status(404).json(err);
+                return res.status(404).json(err);
             } else {
                 image = data;
             }
         })
+        const { user,
+            patient,
+            condition,
+            compound,
+            classi } = fields;
 
         //Save load
         const newLoader = new Loader({
@@ -48,7 +53,7 @@ module.exports = {
         });
 
         //Delete image in local storage
-        fs.unlink(path);
+        await fs.unlink(path);
 
         await newLoader.save();
 
