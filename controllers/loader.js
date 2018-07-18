@@ -12,7 +12,8 @@ module.exports = {
         let contentType;
 
         await form.parse(req, async function (err, fields, files) {
-
+            console.log(fields)
+            console.log(files)
             if (err) {
 
                 return res.status(404).json(err);
