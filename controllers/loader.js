@@ -7,10 +7,6 @@ const Loader = require('../models/loader.js');
 module.exports = {
     load: async (req, res, next) => {
 
-        console.log(Object.keys(req));
-        console.log(Object.keys(req.body));
-        console.log(Object.keys(req.params));
-
         const {
             user,
             patient,
