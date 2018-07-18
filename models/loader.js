@@ -25,6 +25,10 @@ const loaderSchema = new Schema({
     image: {
         data: Buffer,
         contentType: String
+    },
+    mime: {
+        type: String,
+        required: true
     }
 });
 
