@@ -8,7 +8,12 @@ module.exports = {
 
         var form = new formi.IncomingForm();
 
-        form.parse(req, async function (err, fields, files) {
+        let vars;
+        let image;
+        let path;
+        let mime;
+
+        form.parse(req, function (err, fields, files) {
 
             if (err) {
 
@@ -16,54 +21,38 @@ module.exports = {
 
             } else {
 
-                try {
-                    //Importing fields
-                    const {
-                        user,
-                        patient,
-                        condition,
-                        compound,
-                        classi
-                    } = fields
+                vars = fields;
+                path = files.image.path;
+                mime = files.image.type;
 
-                    //Importing image
-                    const img = files.image;
+            }
+        });
+        fs.readFile(path, function (err, data) {
 
-                    const path = img.path;
-                    const mime = img.type;
-
-                    await fs.readFile(path, function (err, data) {
-
-                        if (err) {
-                            res.status(404).json(err);
-                        } else {
-                            //Save load
-                            const newLoader = new Loader({
-                                user,
-                                patient,
-                                condition,
-                                compound,
-                                classi,
-                                image: data,
-                                mime
-                            });
-                        }
-                    })
-
-                    //Delete image in local storage
-                    await fs.unlink(path);
-
-                    await newLoader.save();
-
-                    res.status(200).json("Load image sucessfully.");
-
-                } catch (error) {
-
-                    res.status(404).json(error);
-
-                }
+            if (err) {
+                res.status(404).json(err);
+            } else {
+                image = data;
             }
         })
-        next()
+
+        //Save load
+        const newLoader = new Loader({
+            user,
+            patient,
+            condition,
+            compound,
+            classi,
+            image,
+            mime
+        });
+
+        //Delete image in local storage
+        fs.unlink(path);
+
+        await newLoader.save();
+
+        res.status(200).json("Load image sucessfully.");
     }
+
 };
