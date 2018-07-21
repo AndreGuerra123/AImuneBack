@@ -44,7 +44,7 @@ router.route('/load').post(//loaderValidation, //jwtAuthentication,//
 router.route('design/init').get(//designInitValidation, //jwtAuthentication,//..
      DesignController.init);
 
-router.route('design/save').post(designSaveValidation, //jwtAuthentication,//.
+router.route('design/save').post(//designSaveValidation, //jwtAuthentication,//.
      DesignController.save);
 
 router.route('design/delete').post(designDeleteValidation, //jwtAuthentication,//..
