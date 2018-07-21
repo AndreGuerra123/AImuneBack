@@ -46,7 +46,7 @@ app.use('/', require('./routes/routes.js'));
 var httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(PORT, function () {
-    console.log('AImune app listening on port '+PORT.toString()+'! Go to https://aimune.science:3000/')
+    console.log('AImune app listening on port '+PORT.toString()+'!')
   });
 
 

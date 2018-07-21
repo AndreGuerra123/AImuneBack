@@ -38,7 +38,7 @@ router.route('/signup')
 router.route('/signin')
     .post(signInValidation, localAuthentication, UsersController.signIn);
 
-router.route('/load').post(loaderValidation, //jwtAuthentication,//
+router.route('/load').post(//loaderValidation, //jwtAuthentication,//
      LoaderController.load);
 
 router.route('design/init').get(designInitValidation, //jwtAuthentication,//..
