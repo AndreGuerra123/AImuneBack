@@ -66,6 +66,23 @@ module.exports = {
             compound: Joi.string(),
             class: Joi.number().required(),
             image: Joi.any().required(),
+        }),
+
+        designInit: Joi.object().keys({
+            owner: Joi.string().required(),
+        }),
+
+        designSave: Joi.object().keys({
+            name: Joi.string().required(),
+            owner: Joi.string().required(),
+            date: Joi.date().required(),
+            shared: Joi.boolean().required(),
+            file: Joi.object().required()
+        }),
+
+        designDelete: Joi.object().keys({
+            name: Joi.string().required(),
+            owner: Joi.string().required()
         })
 
     }
