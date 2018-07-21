@@ -41,7 +41,7 @@ router.route('/signin')
 router.route('/load').post(//loaderValidation, //jwtAuthentication,//
      LoaderController.load);
 
-router.route('design/init').get(designInitValidation, //jwtAuthentication,//..
+router.route('design/init').get(//designInitValidation, //jwtAuthentication,//..
      DesignController.init);
 
 router.route('design/save').post(designSaveValidation, //jwtAuthentication,//.
