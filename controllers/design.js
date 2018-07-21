@@ -15,7 +15,8 @@ module.exports = {
             }]
         }, function (err, docs) {
             if (err) {
-                return res.status(403).json(err)
+                return res.status(404).json(err)
+                console.log(err)
             } else {
                 return res.status(200).json(docs)
             }
@@ -32,12 +33,13 @@ module.exports = {
         });
 
         if (nametaken) {
-            return res.status(403).json('Architecture name already existent under this username, please rename architecture and try again.');
+            return res.status(404).json('Architecture name already existent under this username, please rename architecture and try again.');
         }
 
         await Designer.create(req.value.body, function (err, results) {
             if (err) {
-                res.status(403).json(err);
+                res.status(404).json(err);
+                console.log(err)
             } else {
                 res.status(200).json(results);
             }
@@ -53,7 +55,8 @@ module.exports = {
             name: req.value.body.name
         }, function(err,results){
             if (err) {
-                res.status(403).json(err);
+                res.status(404).json(err);
+                console.log(err)
             } else {
                 res.status(200).json(results);
             }
