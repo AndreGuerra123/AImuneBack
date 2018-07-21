@@ -38,13 +38,17 @@ router.route('/signup')
 router.route('/signin')
     .post(signInValidation, localAuthentication, UsersController.signIn);
 
-router.route('/load').post(loaderValidation, jwtAuthentication, LoaderController.load);
+router.route('/load').post(loaderValidation, //jwtAuthentication,//
+     LoaderController.load);
 
-router.route('design/init').get(designInitValidation, jwtAuthentication, DesignController.init);
+router.route('design/init').get(designInitValidation, //jwtAuthentication,//..
+     DesignController.init);
 
-router.route('design/save').post(designSaveValidation, jwtAuthentication, DesignController.save);
+router.route('design/save').post(designSaveValidation, //jwtAuthentication,//.
+     DesignController.save);
 
-router.route('design/delete').post(designDeleteValidation, jwtAuthentication, DesignController.delete);
+router.route('design/delete').post(designDeleteValidation, //jwtAuthentication,//..
+     DesignController.delete);
 
 
 
