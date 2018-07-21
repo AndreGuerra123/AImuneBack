@@ -24,7 +24,7 @@ const designerSchema = new Schema({
     }
 });
 
-designerSchema.createIndex({owner:1,name:1},{unique: true}) //make a unique schema in oder to avoid user to create a architecture with the same name.
+designerSchema.index({owner:1,name:1},{unique: true}) //make a unique schema in oder to avoid user to create a architecture with the same name.
 
 const Designer = mongoose.model('architecture', designerSchema);
 
