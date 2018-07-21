@@ -15,9 +15,10 @@ module.exports = {
             }]
         }, function (err, docs) {
             if (err) {
-                return res.status(404).json(err)
                 console.log(err)
+                return res.status(404).json(err)
             } else {
+                console.log(err)
                 return res.status(200).json(docs)
             }
         });
