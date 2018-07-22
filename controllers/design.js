@@ -5,10 +5,8 @@ module.exports = {
     init: async (req, res, next) => {
 
         console.log(req);
-        
-        const {
-            user
-        } = req.value;
+
+        const user = req.params['user'];
 
         await Designer.find({
             $or: [{
