@@ -6,7 +6,7 @@ const designerSchema = new Schema({
         type: String,
         required: true
     },
-    owner: {
+    user: {
         type: String,
         required: true
     },
@@ -24,7 +24,7 @@ const designerSchema = new Schema({
     }
 });
 
-designerSchema.index({owner:1,name:1},{unique: true}) //make a unique schema in oder to avoid user to create a architecture with the same name.
+designerSchema.index({user:1,name:1},{unique: true}) //make a unique schema in oder to avoid user to create a architecture with the same name.
 
 const Designer = mongoose.model('architecture', designerSchema);
 

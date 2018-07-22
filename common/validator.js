@@ -70,12 +70,12 @@ module.exports = {
         }),
 
         designInit: Joi.object().keys({
-            owner: Joi.string().required(),
+            user: Joi.string().required(),
         }),
 
         designSave: Joi.object().keys({
             name: Joi.string().required(),
-            owner: Joi.string().required(),
+            user: Joi.string().required(),
             date: Joi.date().required(),
             shared: Joi.boolean().required(),
             file: Joi.object().required()
@@ -83,7 +83,7 @@ module.exports = {
 
         designDelete: Joi.object().keys({
             name: Joi.string().required(),
-            owner: Joi.string().required()
+            user: Joi.string().required()
         })
 
     }

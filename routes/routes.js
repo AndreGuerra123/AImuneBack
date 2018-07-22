@@ -40,17 +40,20 @@ router.route('/login')
 
 //put jwt authentication on all this
 
-router.route('/load').post(//loaderValidation
+router.route('/load').post(loaderValidation,
      //jwtAuthentication,
      LoaderController.load);
 
-router.route('/design/init').get(//designInitValidation, //jwtAuthentication,//..
+router.route('/design/init').get(designInitValidation, 
+    //jwtAuthentication,//..
      DesignController.init);
 
-router.route('/design/save').post(//designSaveValidation, //jwtAuthentication,//.
+router.route('/design/save').post(designSaveValidation,
+     //jwtAuthentication,//.
      DesignController.save);
 
-router.route('/design/delete').post(designDeleteValidation, //jwtAuthentication,//..
+router.route('/design/delete').post(designDeleteValidation,
+     //jwtAuthentication,//..
      DesignController.delete);
 
 

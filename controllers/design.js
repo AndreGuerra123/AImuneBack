@@ -4,12 +4,12 @@ const Designer = require('../models/design.js');
 module.exports = {
     init: async (req, res, next) => {
         const {
-            owner
+            user
         } = req.value.body;
 
         await Designer.find({
             $or: [{
-                owner
+                user
             }, {
                 shared: true
             }]
@@ -29,7 +29,7 @@ module.exports = {
     save: async (req, res, next) => {
 
         const nametaken = await Designer.findOne({
-            owner: req.value.body.owner,
+            user: req.value.body.owner,
             name: req.value.body.name
         });
 
