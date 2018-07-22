@@ -41,7 +41,8 @@ router.route('/login')
 //put jwt authentication on all this
 
 router.route('/load').post(//loaderValidation
-     jwtAuthentication, LoaderController.load);
+     //jwtAuthentication,
+     LoaderController.load);
 
 router.route('/design/init').get(//designInitValidation, //jwtAuthentication,//..
      DesignController.init);
