@@ -77,11 +77,12 @@ module.exports = {
         console.log("Sign Up sucessfully.")
 
     },
-    signIn: async (req, res, next) => {
+    logIn: async (req, res, next) => {
+
         const token = signToken(req.user);
         res.status(200).json({token});
 
-        console.log("Sign in sucessfully.")
+        console.log("Log In sucessfully.")
     },
     secret: async (req, res, next) => {
        console.log('I manage to get the secret!');

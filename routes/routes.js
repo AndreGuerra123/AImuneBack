@@ -16,7 +16,7 @@ const {
 } = require('../common/validator.js');
 
 const signUpValidation = validator(schemas.signUp);
-const signInValidation = validator(schemas.signIn);
+const logInValidation = validator(schemas.logIn);
 const loaderValidation = validator(schemas.loader);
 const designInitValidation = validator(schemas.designInit);
 const designSaveValidation = validator(schemas.designSave);
@@ -35,19 +35,21 @@ const localAuthentication = passport.authenticate('local', {
 router.route('/signup')
     .post(signUpValidation, UsersController.signUp);
 
-router.route('/signin')
-    .post(signInValidation, localAuthentication, UsersController.signIn);
+router.route('/login')
+    .post(logInValidation, localAuthentication, UsersController.logIn);
 
-router.route('/load').post(//loaderValidation, //jwtAuthentication,//
-     LoaderController.load);
+//put jwt authentication on all this
 
-router.route('design/init').get(//designInitValidation, //jwtAuthentication,//..
+router.route('/load').post(//loaderValidation
+     jwtAuthentication, LoaderController.load);
+
+router.route('/design/init').get(//designInitValidation, //jwtAuthentication,//..
      DesignController.init);
 
-router.route('design/save').post(//designSaveValidation, //jwtAuthentication,//.
+router.route('/design/save').post(//designSaveValidation, //jwtAuthentication,//.
      DesignController.save);
 
-router.route('design/delete').post(designDeleteValidation, //jwtAuthentication,//..
+router.route('/design/delete').post(designDeleteValidation, //jwtAuthentication,//..
      DesignController.delete);
 
 

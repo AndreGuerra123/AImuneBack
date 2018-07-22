@@ -1,11 +1,14 @@
 const passport = require('passport');
 
 const JwtStrategy = require('passport-jwt').Strategy;
+
 const {
     ExtractJwt
 } = require('passport-jwt');
 
-const LocalStrategy = require('passport-local').Strategy;
+const {
+    LocalStrategy
+} = require('passport-local').Strategy;
 
 const {
     JWT_SECRET
@@ -25,7 +28,7 @@ const jwt_validation_function = async (payload, done) => {
         done(null, user);
 
     } catch (error) {
-        console.log("No user found in jwt validation: "+error.toString())
+        console.log("No user found in jwt validation: " + error.toString())
         done(error, false);
     }
 };
@@ -53,15 +56,15 @@ const local_strategy_function = async (username, password, done) => {
         //Check passord
         const passed = user.isValid(password);
         //Failed
-        if(!passed){
-            return done(null,false);
+        if (!passed) {
+            return done(null, false);
         }
 
         //Return user
-        done(null,user);
+        done(null, user);
 
     } catch (error) {
-        
+
         done(error, false);
     }
 }
@@ -69,7 +72,8 @@ const local_strategy_function = async (username, password, done) => {
 
 //Local Strategy
 const local_strategy = new LocalStrategy({
-    usernameField: 'username'
+    usernameField: 'username',
+    passwordField: 'password'
 }, local_strategy_function);
 
 

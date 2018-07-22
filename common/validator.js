@@ -56,7 +56,7 @@ module.exports = {
                 }
             })
         }),
-        signIn: Joi.object().keys({
+        logIn: Joi.object().keys({
             username: Joi.string().required(),
             password: Joi.string().required()
         }),
