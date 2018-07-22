@@ -3,9 +3,12 @@ const Designer = require('../models/design.js');
 
 module.exports = {
     init: async (req, res, next) => {
+
+        console.log(req);
+        
         const {
             user
-        } = req.value.body;
+        } = req.value;
 
         await Designer.find({
             $or: [{
