@@ -44,7 +44,7 @@ module.exports = {
             })
         },
         loader: {
-            body: Joi.object().keys({
+            params: Joi.object().keys({
                 user: Joi.string().required(),
                 patient: Joi.string(),
                 condition: Joi.string(),
