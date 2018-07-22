@@ -69,8 +69,7 @@ module.exports = {
                 file: Joi.object().required()
             })
         },
-
-        designSave: {
+        designDelete: {
             params: Joi.object().keys({
                 name: Joi.string().required(),
                 user: Joi.string().required()
