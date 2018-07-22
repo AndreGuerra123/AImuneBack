@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
+const {errors} = require('celebrate');
 
 const {PORT} = require('./config/index.js');
 
@@ -30,6 +31,7 @@ var app = express();
 app.use(morgan('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(errors())
 
 //Allowing cors from all sources
 app.use(cors({
