@@ -11,16 +11,17 @@ const DesignController = require('../controllers/design.js')
 
 //Pushing the validators
 const {
-    validator,
+    bodyValidator,
+    paramsValidator,
     schemas
 } = require('../common/validator.js');
 
-const signUpValidation = validator(schemas.signUp);
-const logInValidation = validator(schemas.logIn);
-const loaderValidation = validator(schemas.loader);
-const designInitValidation = validator(schemas.designInit);
-const designSaveValidation = validator(schemas.designSave);
-const designDeleteValidation = validator(schemas.designDelete);
+const signUpValidation = bodyValidator(schemas.signUp);
+const logInValidation = bodyValidator(schemas.logIn);
+const loaderValidation = bodyValidator(schemas.loader);
+const designInitValidation = paramsValidator(schemas.designInit);
+const designSaveValidation = bodyValidator(schemas.designSave);
+const designDeleteValidation = paramsValidator(schemas.designDelete);
 
 
 //Pushing the authentications
