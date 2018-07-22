@@ -30,7 +30,7 @@ module.exports = {
             telephone,
             email,
             password
-        } = req.value.body;
+        } = req.body;
 
         //Check if there is the same email or username
         const usernametaken = await User.findOne({
