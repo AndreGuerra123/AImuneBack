@@ -3,6 +3,8 @@ const express = require('express');
 const router = require('express-promise-router')();
 const passport = require('passport');
 require('../passport.js'); // Sets the authentication mechanisms in the passport
+const {celebrate} = require('celebrate');
+
 
 //Pushing the Controllers
 const UsersController = require('../controllers/users');
@@ -11,17 +13,15 @@ const DesignController = require('../controllers/design.js')
 
 //Pushing the validators
 const {
-    bodyValidator,
-    paramsValidator,
     schemas
-} = require('../common/validator.js');
+} = require('../common/celebrate.js');
 
-const signUpValidation = bodyValidator(schemas.signUp);
-const logInValidation = bodyValidator(schemas.logIn);
-const loaderValidation = bodyValidator(schemas.loader);
-const designInitValidation = paramsValidator(schemas.designInit);
-const designSaveValidation = bodyValidator(schemas.designSave);
-const designDeleteValidation = paramsValidator(schemas.designDelete);
+const signUpValidation = celebrate(schemas.signUp);
+const logInValidation = celebrate(schemas.logIn);
+const loaderValidation = celebrate(schemas.loader);
+const designInitValidation = celebrate(schemas.designInit);
+const designSaveValidation = celebrate(schemas.designSave);
+const designDeleteValidation = celebrate(schemas.designDelete);
 
 
 //Pushing the authentications
