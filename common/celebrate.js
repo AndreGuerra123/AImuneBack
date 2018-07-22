@@ -68,6 +68,13 @@ module.exports = {
                 shared: Joi.boolean().required(),
                 file: Joi.object().required()
             })
+        },
+
+        designSave: {
+            params: Joi.object().keys({
+                name: Joi.string().required(),
+                user: Joi.string().required()
+            })
         }
 
     }
