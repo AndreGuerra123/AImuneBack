@@ -44,7 +44,7 @@ module.exports = {
             })
         },
         designInit: {
-            params: Joi.object().keys({
+            query: Joi.object().keys({
                 user: Joi.string().required(),
             })
         },
