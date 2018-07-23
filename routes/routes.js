@@ -21,12 +21,6 @@ const designInitValidation = celebrate(schemas.designInit);
 const designSaveValidation = celebrate(schemas.designSave);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
-const {
-    forms
-} = require('../common/forms.js');
-
-const loaderValidation = forms.loader;
-
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
     session: false
@@ -44,9 +38,8 @@ router.route('/login')
 
 //put jwt authentication on all this
 
-router.route('/load').post(loaderValidation,
-     //jwtAuthentication,
-     LoaderController.load);
+router.route('/load').post(//jwtAuthentication, In this case validation is done in the front end due to dificulties in importing form dat as body .
+    LoaderController.load);
 
 router.route('/design/init').get(designInitValidation, 
     //jwtAuthentication,//..
