@@ -1,6 +1,7 @@
 //Import Internal Dependencies
 const Designer = require('../models/design.js');
 const Formidable = require('formidable');
+const fs = require('fs');
 
 module.exports = {
     init: async (req, res, next) => {
@@ -68,7 +69,7 @@ module.exports = {
                             date,
                             shared,
                             file: JSON.parse(data)
-                            
+
                         });
 
                         //Delete image in local storage
