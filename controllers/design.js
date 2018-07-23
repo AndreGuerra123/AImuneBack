@@ -68,6 +68,7 @@ module.exports = {
                             date,
                             shared,
                             file: JSON.parse(data)
+                            
                         });
 
                         //Delete image in local storage
