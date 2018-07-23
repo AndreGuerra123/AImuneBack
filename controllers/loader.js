@@ -8,7 +8,7 @@ load: async (req, res, next) => {
 
 var form = new Formidable.IncomingForm();
 
-const path,
+var path,
     contentType,
     user,
     patient,
@@ -38,7 +38,7 @@ await form.parse(req, function (err, fields, files) {
 });
 
 
-const newLoader;
+var newLoader;
 
 fs.readFile(path, function (err, data) {
 
