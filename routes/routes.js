@@ -22,10 +22,10 @@ const designSaveValidation = celebrate(schemas.designSave);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
 const {
-    formsValidators 
+    forms
 } = require('../common/forms.js');
 
-const loaderValidation = formsValidators.loader;
+const loaderValidation = forms.loader;
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
