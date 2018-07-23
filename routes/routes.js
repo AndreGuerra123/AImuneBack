@@ -20,9 +20,9 @@ const {
 const signUpValidation = celebrate(schemas.signUp);
 const logInValidation = celebrate(schemas.logIn);
 const designInitValidation = celebrate(schemas.designInit);
-const designSaveNewValidation = celebrate(schemas.designSaveNew);
-const designSaveOldValidation = celebrate(schemas.designOldNew);
-const designDeleteValidation = celebrate(schemas.designDelete);
+//const designSaveNewValidation = celebrate(schemas.designSaveNew);
+//const designSaveOldValidation = celebrate(schemas.designOldNew);
+//const designDeleteValidation = celebrate(schemas.designDelete);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
