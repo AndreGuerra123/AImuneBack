@@ -4,11 +4,11 @@ const Formidable = require('formidable');
 const fs = require('fs');
 
 module.exports = {
-load: (req, res, next) => {
+load: async (req, res, next) => {
 
 var form = new Formidable.IncomingForm();
 
-let path,
+const path,
     contentType,
     user,
     patient,
@@ -16,8 +16,7 @@ let path,
     compound,
     classi;
 
-form.parse(req, function (err, fields, files) {
-
+await form.parse(req, function (err, fields, files) {
     if (err) {
 
         return res.status(404).json(err);
@@ -31,6 +30,7 @@ form.parse(req, function (err, fields, files) {
             compound,
             classi
         } = fields);
+
         path = files.image.path;
         contentType = files.image.type;
 
@@ -38,6 +38,7 @@ form.parse(req, function (err, fields, files) {
 });
 
 
+const newLoader;
 
 fs.readFile(path, function (err, data) {
 
@@ -48,7 +49,7 @@ fs.readFile(path, function (err, data) {
     } else {
 
         //Save load
-        const newLoader = new Loader({
+        newLoader = new Loader({
             user,
             patient,
             condition,
@@ -59,12 +60,12 @@ fs.readFile(path, function (err, data) {
                 contentType
             }
         });
-
-        newLoader.save();
-        res.status(200).json("Load image sucessfully.");
-        next()
     }
 });
+
+await newLoader.save();
+res.status(200).json("Load image sucessfully.");
+next()
 
 }
 }
