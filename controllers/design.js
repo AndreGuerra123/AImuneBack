@@ -29,6 +29,7 @@ module.exports = {
         var path;
         await form.parse(req, async function (err, fields, files) {
             if (err) {
+                console.log(err)
                 return res.status(404).json(err);
             } else {
                 const {
