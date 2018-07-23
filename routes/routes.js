@@ -15,14 +15,17 @@ const DesignController = require('../controllers/design.js')
 const {
     schemas
 } = require('../common/celebrate.js');
-
 const signUpValidation = celebrate(schemas.signUp);
 const logInValidation = celebrate(schemas.logIn);
-const loaderValidation = celebrate(schemas.loader);
 const designInitValidation = celebrate(schemas.designInit);
 const designSaveValidation = celebrate(schemas.designSave);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
+const {
+    formsValidators 
+} = require('../common/forms.js');
+
+const loaderValidation = formsValidators.loader;
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {

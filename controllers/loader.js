@@ -4,68 +4,68 @@ const Formidable = require('formidable');
 const fs = require('fs');
 
 module.exports = {
-    load: async (req, res, next) => {
+load: (req, res, next) => {
 
-        var form = new Formidable.IncomingForm();
+var form = new Formidable.IncomingForm();
 
-        let path;
-        let contentType;
+let path,
+    contentType,
+    user,
+    patient,
+    condition,
+    compound,
+    classi;
 
-        await form.parse(req, async function (err, fields, files) {
-          
-            if (err) {
+form.parse(req, function (err, fields, files) {
 
-                return res.status(404).json(err);
+    if (err) {
 
-            } else {
+        return res.status(404).json(err);
 
-                const {
-                    user,
-                    patient,
-                    condition,
-                    compound,
-                    classi
-                } = fields;
+    } else {
 
-                path = files.image.path;
-                contentType = files.image.type;
-                fs.readFile(path, async function (err, data) {
+        ({
+            user,
+            patient,
+            condition,
+            compound,
+            classi
+        } = fields);
+        path = files.image.path;
+        contentType = files.image.type;
 
-                    if (err) {
+    }
+});
 
-                        return res.status(404).json(err);
 
-                    } else {
 
-                        //Save load
-                        const newLoader = new Loader({
-                            user,
-                            patient,
-                            condition,
-                            compound,
-                            classi,
-                            image: {
-                                data,
-                                contentType
-                            }
-                        });
+fs.readFile(path, function (err, data) {
 
-                        //Delete image in local storage
-                        await fs.unlink(path, function (error) {
-                            if(error){
-                                return res.status(404).json(error);
-                            }
-                                                            
-                        });
+    if (err) {
 
-                        await newLoader.save();
+        return res.status(404).json(err);
 
-                        res.status(200).json("Load image sucessfully.");
+    } else {
 
-                        next()
-                    }
-                })
+        //Save load
+        const newLoader = new Loader({
+            user,
+            patient,
+            condition,
+            compound,
+            classi,
+            image: {
+                data,
+                contentType
             }
         });
+
+        newLoader.save();
+        res.status(200).json("Load image sucessfully.");
+        next()
     }
-};
+});
+
+}
+}
+

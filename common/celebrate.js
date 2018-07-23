@@ -43,23 +43,11 @@ module.exports = {
                 password: Joi.string().required()
             })
         },
-        loader: {
-            params: Joi.object().keys({
-                user: Joi.string().required(),
-                patient: Joi.string(),
-                condition: Joi.string(),
-                compound: Joi.string(),
-                class: Joi.number().required(),
-                image: Joi.any().required(),
-            })
-        },
-
         designInit: {
             params: Joi.object().keys({
                 user: Joi.string().required(),
             })
         },
-
         designSave: {
             body: Joi.object().keys({
                 name: Joi.string().required(),
