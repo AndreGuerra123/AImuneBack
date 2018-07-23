@@ -11,7 +11,6 @@ const loaderSchema = Joi.object().keys({
     condition: Joi.string(),
     compound: Joi.string(),
     classi: Joi.number().integer().min(0).max(5).required(),
-    image: Joi.any().required(),
 })
 
 //Import Internal Dependencies
@@ -23,15 +22,11 @@ module.exports = {
                 if (err) {
                     console.log(err)
                     return res.status(404).json(err);
-                } else {
-                    const tovalidate = { ...fields,
-                        ...files
-                    };
+                } else {                 
                     //validate
-                    const result = Joi.validate(tovalidate, loaderSchema);
-                    console.log(result)
-                    console.log(result.error)
-                    if (result.error) {
+                    const result = Joi.validate(fields, loaderSchema);
+                    if (result.error) { 
+                        console.log(result.error)
                         return res.status(404).json(result.error);
                     } else {
                         next();
