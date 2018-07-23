@@ -52,11 +52,11 @@ router.route('/design/savenew').post(//designSaveNewValidation,
     //jwtAuthentication,//.
     DesignController.savenew);
 
-router.route('/design/saveold').put(designSaveOldValidation,
+router.route('/design/saveold').put(//designSaveOldValidation,
     //jwtAuthentication,//.
     DesignController.saveold);
 
-router.route('/design/delete').post(designDeleteValidation,
+router.route('/design/delete').post(//designDeleteValidation,
     //jwtAuthentication,//..
     DesignController.delete);
 
