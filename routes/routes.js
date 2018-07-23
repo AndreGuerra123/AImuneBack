@@ -3,7 +3,9 @@ const express = require('express');
 const router = require('express-promise-router')();
 const passport = require('passport');
 require('../passport.js'); // Sets the authentication mechanisms in the passport
-const {celebrate} = require('celebrate');
+const {
+    celebrate
+} = require('celebrate');
 
 
 //Pushing the Controllers
@@ -18,7 +20,8 @@ const {
 const signUpValidation = celebrate(schemas.signUp);
 const logInValidation = celebrate(schemas.logIn);
 const designInitValidation = celebrate(schemas.designInit);
-const designSaveValidation = celebrate(schemas.designSave);
+const designSaveNewValidation = celebrate(schemas.designSaveNew);
+const designSaveOldValidation = celebrate(schemas.designOldNew);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
 //Pushing the authentications
@@ -38,20 +41,24 @@ router.route('/login')
 
 //put jwt authentication on all this
 
-router.route('/load').post(//jwtAuthentication, In this case validation is done in the front end due to dificulties in importing form dat as body .
+router.route('/load').post( //jwtAuthentication, In this case validation is done in the front end due to dificulties in importing form dat as body .
     LoaderController.load);
 
-router.route('/design/init').get(designInitValidation, 
+router.route('/design/init').get(designInitValidation,
     //jwtAuthentication,//..
-     DesignController.init);
+    DesignController.init);
 
-router.route('/design/save').post(designSaveValidation,
-     //jwtAuthentication,//.
-     DesignController.save);
+router.route('/design/savenew').post(//designSaveNewValidation,
+    //jwtAuthentication,//.
+    DesignController.savenew);
+
+router.route('/design/saveold').put(designSaveOldValidation,
+    //jwtAuthentication,//.
+    DesignController.saveold);
 
 router.route('/design/delete').post(designDeleteValidation,
-     //jwtAuthentication,//..
-     DesignController.delete);
+    //jwtAuthentication,//..
+    DesignController.delete);
 
 
 

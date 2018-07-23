@@ -48,7 +48,16 @@ module.exports = {
                 user: Joi.string().required(),
             })
         },
-        designSave: {
+        designSaveNew: { //Not working
+            body: Joi.object().keys({
+                name: Joi.string().required(),
+                user: Joi.string().required(),
+                date: Joi.date().required(),
+                shared: Joi.boolean().required(),
+                file: Joi.object().required()
+            })
+        },
+        designSaveOld: { //Not working
             body: Joi.object().keys({
                 name: Joi.string().required(),
                 user: Joi.string().required(),
