@@ -4,8 +4,6 @@ const Designer = require('../models/design.js');
 module.exports = {
     init: async (req, res, next) => {
 
-        console.log(req);
-
         const user = req.params['user'];
 
         await Designer.find({
@@ -16,10 +14,10 @@ module.exports = {
             }]
         }, function (err, docs) {
             if (err) {
-                console.log(err)
+                console.error(err);
                 return res.status(404).json(err)
             } else {
-                console.log(err)
+                console.log(docs)
                 return res.status(200).json(docs)
             }
         });
