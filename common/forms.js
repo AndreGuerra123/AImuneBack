@@ -1,6 +1,6 @@
 //Import Internal Dependencies
 const Formidable = require('formidable');
-const {Joi} = require('Joi');
+const {Joi} = require('celebrate');
 
 
 const loaderSchema = Joi.object().keys({
