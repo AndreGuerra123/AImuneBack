@@ -18,28 +18,24 @@ const loaderSchema = Joi.object().keys({
 module.exports = {
     forms: {
         loader: async function (req, res, next) {
-
             const Form = new Formidable.IncomingForm()
-            let tovalidate;
-            Form.parse(req, function (err, fields, files) {
+            var tovalidate;
+            await Form.parse(req, function (err, fields, files) {
                 if (err) {
                     return res.status(404).json(err);
                 } else {
                     tovalidate = { ...fields,
                         ...files
                     };
+                    //validate
+                    const result = Joi.validate(tovalidate, loaderSchema);
+                    if (result.error) {
+                        return res.status(404).json(result.error);
+                    } else {
+                        next();
+                    }
                 }
             });
-
-            //validate
-            const result = Joi.validate(tovalidate, loaderSchema);
-            if (result.error) {
-                return res.status(404).json(result.error);
-            }
-
-            next();
-
         }
     }
-
 }
