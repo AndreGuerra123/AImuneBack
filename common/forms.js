@@ -10,7 +10,7 @@ const loaderSchema = Joi.object().keys({
     patient: Joi.string(),
     condition: Joi.string(),
     compound: Joi.string(),
-    class: Joi.number().integer().min(0).max(5).required(),
+    classi: Joi.number().integer().min(0).max(5).required(),
     image: Joi.any().required(),
 })
 
