@@ -4,69 +4,68 @@ const Formidable = require('formidable');
 const fs = require('fs');
 
 module.exports = {
-load: async (req, res, next) => {
+    load: async (req, res, next) => {
 
-var form = new Formidable.IncomingForm();
+        var form = new Formidable.IncomingForm();
 
-var path,
-    contentType,
-    user,
-    patient,
-    condition,
-    compound,
-    classi;
+        let path;
+        let contentType;
 
-await form.parse(req, function (err, fields, files) {
-    if (err) {
+        await form.parse(req, async function (err, fields, files) {
+          
+            if (err) {
 
-        return res.status(404).json(err);
+                return res.status(404).json(err);
 
-    } else {
+            } else {
 
-        ({
-            user,
-            patient,
-            condition,
-            compound,
-            classi
-        } = fields);
+                const {
+                    user,
+                    patient,
+                    condition,
+                    compound,
+                    classi
+                } = fields;
 
-        path = files.image.path;
-        contentType = files.image.type;
+                path = files.image.path;
+                contentType = files.image.type;
+                fs.readFile(path, async function (err, data) {
 
-    }
-});
+                    if (err) {
 
+                        return res.status(404).json(err);
 
-var newLoader;
+                    } else {
 
-fs.readFile(path, function (err, data) {
+                        //Save load
+                        const newLoader = new Loader({
+                            user,
+                            patient,
+                            condition,
+                            compound,
+                            classi,
+                            image: {
+                                data,
+                                contentType
+                            }
+                        });
 
-    if (err) {
+                        //Delete image in local storage
+                        await fs.unlink(path, function (error) {
+                            if(error){
+                                return res.status(404).json(error);
+                            }
+                                                            
+                        });
 
-        return res.status(404).json(err);
+                        await newLoader.save();
 
-    } else {
+                        res.status(200).json("Load image sucessfully.");
 
-        //Save load
-        newLoader = new Loader({
-            user,
-            patient,
-            condition,
-            compound,
-            classi,
-            image: {
-                data,
-                contentType
+                        next()
+                    }
+                })
             }
         });
     }
-});
-
-await newLoader.save();
-res.status(200).json("Load image sucessfully.");
-next()
-
-}
-}
-
+};
