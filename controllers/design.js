@@ -124,9 +124,8 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
-        return res.status(200).json('sucess')
-        
-        /*     const user = req.params["user"];
+               
+            const user = req.params["user"];
             const name = req.params["name"];
 
             await Designer.findOneAndRemove({
@@ -140,10 +139,7 @@ module.exports = {
                 }
             })
       
-
-        next(); */
-
-
+        next();
 
     }
 
