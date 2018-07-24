@@ -127,6 +127,8 @@ module.exports = {
                
             const user = req.params["user"];
             const name = req.params["name"];
+            console.log(user);
+            console.log(name);
 
             await Designer.findOneAndRemove({
                 user,
