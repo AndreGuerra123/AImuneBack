@@ -91,13 +91,25 @@ module.exports = {
         });
     },
     saveold: async (req, res, next) => {
+       console.log(req);
+       const {name,user,date,shared,file} = req.body;
+
+        await Designer.update({name,user},{name,user,date,shared,file},{upsert:true, setDefaultsOnInsert:true},function(err){
+            if(err){
+                return res.status(404).json(err);
+            }else{
+                return res.status(200).json('Model architecture saved sucessfully.')
+            }
+        })
+
+        next();
 
     },
     delete: async (req, res, next) => {
 
         await Designer.findOneAndRemove({
-            owner: req.value.body.owner,
-            name: req.value.body.name
+            owner: req.body.owner,
+            name: req.body.name
         }, function (err, results) {
             if (err) {
                 return res.status(404).json(err);
