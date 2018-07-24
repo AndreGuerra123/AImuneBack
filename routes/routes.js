@@ -56,7 +56,7 @@ router.route('/design/saveold').post(//designSaveOldValidation,
     //jwtAuthentication,//.
     DesignController.saveold);
 
-router.route('/design/delete').delete(//designDeleteValidation,
+router.route('/design/delete').delete(designDeleteValidation,
     //jwtAuthentication,//..
     DesignController.delete);
 

@@ -67,7 +67,7 @@ module.exports = {
             })
         },
         designDelete: {
-            params: Joi.object().keys({
+            query: Joi.object().keys({
                 name: Joi.string().required(),
                 user: Joi.string().required()
             })
