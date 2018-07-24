@@ -124,12 +124,9 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
-            console.log(req)
            
-            const user = req.params.user;
-            const name = req.params.name;
-            console.log(user);
-            console.log(name);
+            const user = req.query.user;
+            const name = req.query.name;
 
             await Designer.findOneAndRemove({
                 user,
