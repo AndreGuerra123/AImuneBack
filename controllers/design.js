@@ -124,7 +124,7 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
-        return res.status(200)
+        return res.status(200).json('sucess')
         
         /*     const user = req.params["user"];
             const name = req.params["name"];
