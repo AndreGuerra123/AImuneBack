@@ -52,7 +52,7 @@ router.route('/design/savenew').post(//designSaveNewValidation,
     //jwtAuthentication,//.
     DesignController.savenew);
 
-router.route('/design/saveold').put(//designSaveOldValidation,
+router.route('/design/saveold').post(//designSaveOldValidation,
     //jwtAuthentication,//.
     DesignController.saveold);
 
