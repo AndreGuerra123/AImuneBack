@@ -22,7 +22,7 @@ const logInValidation = celebrate(schemas.logIn);
 const designInitValidation = celebrate(schemas.designInit);
 //const designSaveNewValidation = celebrate(schemas.designSaveNew);
 //const designSaveOldValidation = celebrate(schemas.designOldNew);
-//const designDeleteValidation = celebrate(schemas.designDelete);
+const designDeleteValidation = celebrate(schemas.designDelete);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -56,11 +56,9 @@ router.route('/design/saveold').post(//designSaveOldValidation,
     //jwtAuthentication,//.
     DesignController.saveold);
 
-router.route('/design/delete').post(//designDeleteValidation,
+router.route('/design/delete').post(designDeleteValidation,
     //jwtAuthentication,//..
     DesignController.delete);
-
-
 
 //Exporting routes
 

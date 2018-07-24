@@ -108,8 +108,8 @@ module.exports = {
     delete: async (req, res, next) => {
 
         await Designer.findOneAndRemove({
-            owner: req.body.owner,
-            name: req.body.name
+            owner: req.params.user,
+            name: req.params.name
         }, function (err, results) {
             if (err) {
                 return res.status(404).json(err);
