@@ -48,7 +48,7 @@ module.exports = {
                         shared: true
                     }]
                 });
-        
+
                 if (nametaken) {
                     return res.status(404).json('Architecture name already existent under this username, please rename architecture and try again.');
                 }
@@ -91,13 +91,31 @@ module.exports = {
         });
     },
     saveold: async (req, res, next) => {
-       console.log(req);
-       const {name,user,date,shared,file} = req.body;
+        console.log(req);
+        const {
+            name,
+            user,
+            date,
+            shared,
+            file
+        } = req.body;
 
-        await Designer.update({name,user},{name,user,date,shared,file},{upsert:true, setDefaultsOnInsert:true},function(err){
-            if(err){
+        await Designer.update({
+            name,
+            user
+        }, {
+            name,
+            user,
+            date,
+            shared,
+            file
+        }, {
+            upsert: true,
+            setDefaultsOnInsert: true
+        }, function (err) {
+            if (err) {
                 return res.status(404).json(err);
-            }else{
+            } else {
                 return res.status(200).json('Model architecture saved sucessfully.')
             }
         })
@@ -106,22 +124,27 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
-        const user = req.params["user"];
-        const name = req.params["name"];
 
-        await Designer.findOneAndRemove({
-            user,
-            name
-        }, function (err,arch) {
-            if (err) {
-                console.log(err);
-                return res.status(404).json(err);
-            } else {
-                return res.status(200).json("Delete was sucessfull.")
-            }
-        })
+        try {
+            const user = req.params["user"];
+            const name = req.params["name"];
+
+            await Designer.findOneAndRemove({
+                user,
+                name
+            }, function (err, arch) {
+                if (err) {
+                    throw err;
+                } else {
+                    return res.status(200).json("Delete was sucessfull.")
+                }
+            })
+        } catch (err) {
+            console.log(err)
+        }
 
         next();
+
 
 
     }
