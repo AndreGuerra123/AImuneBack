@@ -124,9 +124,11 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
-               
-            const user = req.params["user"];
-            const name = req.params["name"];
+            console.log(req.params)
+            console.log(req.body)
+            console.log(req.data);
+            const user = req.params.user;
+            const name = req.params.name;
             console.log(user);
             console.log(name);
 
