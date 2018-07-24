@@ -106,10 +106,12 @@ module.exports = {
 
     },
     delete: async (req, res, next) => {
+        const user = req.params["user"];
+        const name = req.params["name"];
 
         await Designer.findOneAndRemove({
-            user: req.params.user,
-            name: req.params.name
+            user,
+            name
         }, function (err,arch) {
             if (err) {
                 console.log(err);
