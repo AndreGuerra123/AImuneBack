@@ -112,6 +112,7 @@ module.exports = {
             name: req.params.name
         }, function (err, results) {
             if (err) {
+                console.log(err);
                 return res.status(404).json(err);
             } else {
                 res.status(200).json(results);
