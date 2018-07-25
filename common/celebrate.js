@@ -71,6 +71,11 @@ module.exports = {
                 name: Joi.string().required(),
                 user: Joi.string().required()
             })
+        },
+        modelInit: {
+            query: Joi.object().keys({
+                user: Joi.string().required(),
+            })
         }
 
     }

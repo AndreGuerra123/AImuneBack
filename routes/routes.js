@@ -12,6 +12,7 @@ const {
 const UsersController = require('../controllers/users');
 const LoaderController = require('../controllers/loader.js');
 const DesignController = require('../controllers/design.js')
+const ModelController = require('../controllers/model.js')
 
 //Pushing the validators
 const {
@@ -23,6 +24,8 @@ const designInitValidation = celebrate(schemas.designInit);
 //const designSaveNewValidation = celebrate(schemas.designSaveNew);
 //const designSaveOldValidation = celebrate(schemas.designOldNew);
 const designDeleteValidation = celebrate(schemas.designDelete);
+
+const modelInitValidation = celebrate(schemas.modelInit);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -44,6 +47,8 @@ router.route('/login')
 router.route('/load').post( //jwtAuthentication, In this case validation is done in the front end due to dificulties in importing form dat as body .
     LoaderController.load);
 
+//////////////////DESIGN////////////////
+
 router.route('/design/init').get(designInitValidation,
     //jwtAuthentication,//..
     DesignController.init);
@@ -59,6 +64,11 @@ router.route('/design/saveold').post(//designSaveOldValidation,
 router.route('/design/delete').delete(designDeleteValidation,
     //jwtAuthentication,//..
     DesignController.delete);
+
+////////////////MODEL///////////////////
+
+route.route('/model/init').get(modelInitValidation,//jwtAuthentication,
+    ModelController.init)
 
 //Exporting routes
 
