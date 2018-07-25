@@ -9,7 +9,7 @@ module.exports = {
         const user = req.params['user'];
         console.log(user)
 
-        Designer.find().or([{user: user},{shared: true}])
+       await Designer.find().or([{user: user},{shared: true}])
         .then(docs => {return res.status(200).json(docs)})
         .catch(err => {return res.status(404).json(err)});
         next();
