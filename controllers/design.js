@@ -6,8 +6,7 @@ const fs = require('fs');
 module.exports = {
     init: async (req, res, next) => {
 
-        const user = req.params['user'];
-        console.log(user)
+        const user = req.query.user;
 
        await Designer.find().or([{user: user},{shared: true}])
         .then(docs => {return res.status(200).json(docs)})
