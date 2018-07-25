@@ -7,24 +7,11 @@ module.exports = {
     init: async (req, res, next) => {
 
         const user = req.params['user'];
+        console.log(user)
 
-        await Designer.find({
-            $or: [{
-                user
-            }, {
-                shared: true
-            },{
-                user,
-                shared: false
-            }
-        ]
-        }, function (err, docs) {
-            if (err) {
-                return res.status(404).json(err)
-            } else {
-                return res.status(200).json(docs)
-            }
-        });
+        Designer.find().or([{user: user},{shared: true}])
+        .then(docs => {return res.status(200).json(docs)})
+        .catch(err => {return res.status(404).json(err)});
         next();
 
     },
