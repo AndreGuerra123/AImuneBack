@@ -15,7 +15,7 @@ module.exports = {
                 shared: true
             },{
                 user,
-                shared: true
+                shared: false
             }
         ]
         }, function (err, docs) {
