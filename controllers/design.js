@@ -13,7 +13,11 @@ module.exports = {
                 user
             }, {
                 shared: true
-            }]
+            },{
+                user,
+                shared: true
+            }
+        ]
         }, function (err, docs) {
             if (err) {
                 return res.status(404).json(err)
@@ -127,7 +131,7 @@ module.exports = {
            
             const user = req.query.user;
             const name = req.query.name;
-
+   
             await Designer.findOneAndRemove({
                 user,
                 name
