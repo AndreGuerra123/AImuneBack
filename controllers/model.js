@@ -27,29 +27,30 @@ module.exports = {
     },
     clone: async (req, res, next) => {},
     new: async (req, res, next) => {
-        const {
-            name,
-            user,
-            shared,
-            date,
-            architecture
-        } = req.body;
-        const newModel = new Modeler({
-            name,
-            user,
-            shared,
-            date,
-            architecture
-        });
-        await newModel.save(err => {
-            if(err){
-                console.log(err);
-                return res.status(404).json(err);
-            }else{
-                return res.status(200).json(newModel.id);
-            }
-        });
-        next();
+        try {
+            const {
+                name,
+                user,
+                shared,
+                date,
+                architecture
+            } = req.body;
+            const newModel = new Modeler({
+                name,
+                user,
+                shared,
+                date,
+                architecture
+            });
+            await newModel.save();
+            return res.status(200).json({
+                id: newModel.id
+            });
+            next();
+        } catch (err) {
+            return res.status(404).json(err);
+        }
+
     },
     proceed: async (req, res, next) => {},
 
