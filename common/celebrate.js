@@ -48,7 +48,7 @@ module.exports = {
                 user: Joi.string().required(),
             })
         },
-        designSaveNew: { //Not working
+        designSaveNew: {
             body: Joi.object().keys({
                 name: Joi.string().required(),
                 user: Joi.string().required(),
@@ -57,7 +57,7 @@ module.exports = {
                 file: Joi.object().required()
             })
         },
-        designSaveOld: { //Not working
+        designSaveOld: { 
             body: Joi.object().keys({
                 name: Joi.string().required(),
                 user: Joi.string().required(),
@@ -76,7 +76,27 @@ module.exports = {
             query: Joi.object().keys({
                 user: Joi.string().required(),
             })
-        }
+        },
+        modelClone: { 
+            body: Joi.object().keys({
+                
+            })
+        },
+        modelNew: { 
+            body: Joi.object().keys({
+                name: Joi.string().required(),
+                user: Joi.string().required(),
+                shared: Joi.boolean().required(),
+                date: Joi.date().required(),
+                architecture: Joi.object().required()
+            })
+        },
+        modelProceed: { 
+            query: Joi.object().keys({
+                
+            })
+        },
+
 
     }
 
