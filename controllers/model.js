@@ -42,8 +42,12 @@ module.exports = {
             architecture
         });
         await newModel.save(err => {
-            if (err) return res.status(404).json(err);
-            return res.status(200).json(newModel.id);
+            if(err){
+                console.log(err);
+                return res.status(404).json(err);
+            }else{
+                return res.status(200).json(newModel.id);
+            }
         });
         next();
     },
