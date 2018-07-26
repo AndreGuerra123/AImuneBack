@@ -10,8 +10,8 @@ const modelSchema = new Schema({
     architecture: {type:Object, required: true},
     config: {type:Object, required:true},
     data: {type:Object,required:false},
-    results: {type:Object, required=false},
-    file: {type:Object,required=false}
+    results: {type:Object, required:false},
+    file: {type:Object,required:false}
     
 });
 
