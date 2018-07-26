@@ -67,7 +67,7 @@ router.route('/design/delete').delete(designDeleteValidation,
 
 ////////////////MODEL///////////////////
 
-route.route('/model/init').get(modelInitValidation,//jwtAuthentication,
+router.route('/model/init').get(modelInitValidation,//jwtAuthentication,
     ModelController.init)
 
 //Exporting routes
