@@ -35,6 +35,7 @@ module.exports = {
                 date,
                 architecture
             } = req.body;
+
             const newModel = new Modeler({
                 name,
                 user,
@@ -42,12 +43,13 @@ module.exports = {
                 date,
                 architecture
             });
+
             await newModel.save();
             return res.status(200).json({
                 id: newModel.id
             });
-            next();
         } catch (err) {
+            console.log(err);
             return res.status(404).json(err);
         }
 
