@@ -38,35 +38,30 @@ module.exports = {
             source
         } = req.body;
 
-        var oldModel;
-        await Modeler.findById(source).lean().exec(function (err, modelfound) {
+        await Modeler.findById(source).lean().exec(function (err, oldModel) {
             if (err) {
                 return res.status(404)
             } else {
-                if (modelfound) {
-                    oldModel = modelfound;
-                } else {
-                    return res.status(404).json("No model found with such id.")
-                }
+               
+                delete oldModel._id;
+                oldModel.user = user;
+                oldModel.name = name;
+        
+                const newModel = Modeler(oldModel);
+                await newModel.save(function (error) {
+                    if (error) {
+                        return res.status(400).json(error)
+                    } else {
+                        return res.status(200).json(newModel._id)
+                    }
+                });
 
             }
         });
 
-        console.log(oldModel._id);
-        console.log(oldModel.id)
+       
 
-        delete oldModel._id;
-        oldModel.user = user;
-        oldModel.name = name;
-
-        const newModel = Modeler(oldModel);
-        await newModel.save(function (error) {
-            if (error) {
-                return res.status(400).json(error)
-            } else {
-                return res.status(200).json(newModel._id)
-            }
-        });
+       
 
     },
     new: async (req, res, next) => {
