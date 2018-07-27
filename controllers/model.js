@@ -48,7 +48,7 @@ module.exports = {
                 oldModel.name = name;
         
                 const newModel = Modeler(oldModel);
-                await newModel.save(function (error) {
+                newModel.save(function (error) {
                     if (error) {
                         return res.status(400).json(error)
                     } else {
