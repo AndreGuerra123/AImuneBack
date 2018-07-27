@@ -41,7 +41,7 @@ module.exports = {
                 newmodel.user = user;
                 newmodel.name = name;
                 const newModel = new Modeler(newmodel);
-                newModel.save(function(error){
+                await newModel.save(function(error){
                     if(error){
                         return res.status(400).json(error)
                     }else{
@@ -52,8 +52,6 @@ module.exports = {
                 return res.status(400).json(err)
             }
         });
-
-        next();
 
     },
     new: async (req, res, next) => {
