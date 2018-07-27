@@ -14,7 +14,10 @@ module.exports = {
                 "name": 1,
                 "user": 1,
                 "shared": 1,
-                "date": 1
+                "date": 1,
+                "architecture.name":1,
+                "architecture.user":1
+
             })
             .then(docs => {
                 return res.status(200).json(docs)
