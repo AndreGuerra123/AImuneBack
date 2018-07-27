@@ -34,10 +34,10 @@ module.exports = {
 
         const{user,name,source} = req.body;
 
-        await Modeler.findOne({id:source}).lean().exec(function(err,modelfound){
+        await Modeler.findById(source).lean().exec(function(err,modelfound){
             if(!err){
                 const newmodel = modelfound;
-                delete newmodel._id;
+                delete newmodel.id;
                 newmodel.user = user;
                 newmodel.name = name;
                 const newModel = new Modeler(newmodel);
