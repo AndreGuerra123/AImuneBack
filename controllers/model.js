@@ -12,13 +12,13 @@ module.exports = {
             }, {
                 shared: true
             }]).select({
-                "id":1,
+                "id": 1,
                 "name": 1,
                 "user": 1,
                 "shared": 1,
                 "date": 1,
-                "architecture.name":1,
-                "architecture.user":1
+                "architecture.name": 1,
+                "architecture.user": 1
 
             })
             .then(docs => {
@@ -32,24 +32,36 @@ module.exports = {
     },
     clone: async (req, res, next) => {
 
-        const{user,name,source} = req.body;
+        const {
+            user,
+            name,
+            source
+        } = req.body;
 
-        await Modeler.findById(source).lean().exec(function(err,modelfound){
-            if(!err){
-                const newmodel = modelfound;
-                delete newmodel.id;
-                newmodel.user = user;
-                newmodel.name = name;
-                const newModel = new Modeler(newmodel);
-                await newModel.save(function(error){
-                    if(error){
-                        return res.status(400).json(error)
-                    }else{
-                        return res.status(200).json(newModel._id)
-                    }
-                });
-            }else{
-                return res.status(400).json(err)
+        let oldModel;
+        await Modeler.findById(source).lean().exec(function (err, modelfound) {
+            if (!err) {
+                return res.status(404)
+            } else {
+                if (modelfound) {
+                    oldModel = modelfound;
+                } else {
+                    return res.status(404).json("No model found with such id.")
+                }
+
+            }
+        });
+
+        delete oldModel.id;
+        oldModel.user = user;
+        oldModel.name = name;
+
+        const newModel = Modeler(oldModel);
+        await newModel.save(function (error) {
+            if (error) {
+                return res.status(400).json(error)
+            } else {
+                return res.status(200).json(newModel._id)
             }
         });
 
