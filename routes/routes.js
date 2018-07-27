@@ -26,6 +26,7 @@ const designInitValidation = celebrate(schemas.designInit);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
 const modelInitValidation = celebrate(schemas.modelInit);
+const designDeleteValidation = celebrate(schemas.modelDelete);
 const modelCloneValidation = celebrate(schemas.modelClone);
 const modelNewValidation = celebrate(schemas.modelNew);
 const modelProceedValidation = celebrate(schemas.modelProceed);
@@ -72,6 +73,10 @@ router.route('/design/delete').delete(designDeleteValidation,
 
 router.route('/model/init').get(modelInitValidation,//jwtAuthentication,
     ModelController.init)
+
+router.route('/model/delete').delete(modelDeleteValidation,
+        //jwtAuthentication,//..
+        ModelController.delete)
 
 router.route('/model/clone').post(modelCloneValidation,//jwtAutentication
     ModelController.clone)

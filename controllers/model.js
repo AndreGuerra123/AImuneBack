@@ -30,6 +30,26 @@ module.exports = {
         next();
 
     },
+
+    delete: async (req, res, next) => {
+
+        const user = req.query.user;
+        const name = req.query.name;
+
+        await Modeler.findOneAndRemove({
+            user,
+            name
+        }, function (err, model) {
+            if (err) {
+                return res.status(404).json(err);
+            } else {
+                return res.status(200).json("Delete was sucessfull.")
+            }
+        })
+
+        next();
+    },
+
     clone: async (req, res, next) => {
 
         const {
@@ -42,11 +62,11 @@ module.exports = {
             if (err) {
                 return res.status(404)
             } else {
-               
+
                 delete oldModel._id;
                 oldModel.user = user;
                 oldModel.name = name;
-        
+
                 const newModel = Modeler(oldModel);
                 newModel.save(function (error) {
                     if (error) {
@@ -55,14 +75,14 @@ module.exports = {
                 });
 
                 return res.status(200).json(newModel._id)
-                
+
 
             }
         });
 
-       
 
-       
+
+
 
     },
     new: async (req, res, next) => {

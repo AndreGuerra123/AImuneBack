@@ -77,6 +77,12 @@ module.exports = {
                 user: Joi.string().required(),
             })
         },
+        modelDelete: {
+            query: Joi.object().keys({
+                name: Joi.string().required(),
+                user: Joi.string().required()
+            })
+        },
         modelClone: { 
             body: Joi.object().keys({
                 user: Joi.string().required(),
