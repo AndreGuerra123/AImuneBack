@@ -26,7 +26,7 @@ const designInitValidation = celebrate(schemas.designInit);
 const designDeleteValidation = celebrate(schemas.designDelete);
 
 const modelInitValidation = celebrate(schemas.modelInit);
-const designDeleteValidation = celebrate(schemas.modelDelete);
+const modelDeleteValidation = celebrate(schemas.modelDelete);
 const modelCloneValidation = celebrate(schemas.modelClone);
 const modelNewValidation = celebrate(schemas.modelNew);
 const modelProceedValidation = celebrate(schemas.modelProceed);
