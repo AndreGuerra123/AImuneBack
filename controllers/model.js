@@ -38,9 +38,9 @@ module.exports = {
             source
         } = req.body;
 
-        let oldModel;
+        var oldModel;
         await Modeler.findById(source).lean().exec(function (err, modelfound) {
-            if (!err) {
+            if (err) {
                 return res.status(404)
             } else {
                 if (modelfound) {
@@ -51,6 +51,9 @@ module.exports = {
 
             }
         });
+
+        console.log(oldModel._id);
+        console.log(oldModel.id)
 
         delete oldModel._id;
         oldModel.user = user;
