@@ -52,7 +52,7 @@ module.exports = {
             }
         });
 
-        delete oldModel.id;
+        delete oldModel._id;
         oldModel.user = user;
         oldModel.name = name;
 
