@@ -6,6 +6,7 @@ module.exports = {
 
         const user = req.query.user;
 
+
         await Modeler.find().or([{
                 user: user
             }, {
@@ -28,7 +29,32 @@ module.exports = {
         next();
 
     },
-    clone: async (req, res, next) => {},
+    clone: async (req, res, next) => {
+
+        const{user,name,source} = req.body;
+
+        await Modeler.findOne({id:source}).lean().exec(function(err,modelfound){
+            if(!err){
+                const newmodel = modelfound;
+                delete newmodel._id;
+                newmodel.user = user;
+                newmodel.name = name;
+                const newModel = new Modeler(newmodel);
+                newModel.save(function(error){
+                    if(error){
+                        return res.status(400).json(error)
+                    }else{
+                        return res.status(200).json(newModel._id)
+                    }
+                });
+            }else{
+                return res.status(400).json(err)
+            }
+        });
+
+        next();
+
+    },
     new: async (req, res, next) => {
         try {
             const {
