@@ -51,10 +51,11 @@ module.exports = {
                 newModel.save(function (error) {
                     if (error) {
                         return res.status(400).json(error)
-                    } else {
-                        return res.status(200).json({id:newModel._id})
                     }
                 });
+
+                return res.status(200).json(newModel._id)
+                
 
             }
         });
