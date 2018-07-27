@@ -12,6 +12,7 @@ module.exports = {
             }, {
                 shared: true
             }]).select({
+                "id":1,
                 "name": 1,
                 "user": 1,
                 "shared": 1,

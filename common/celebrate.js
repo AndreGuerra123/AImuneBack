@@ -79,7 +79,9 @@ module.exports = {
         },
         modelClone: { 
             body: Joi.object().keys({
-                
+                user: Joi.string().required(),
+                name: Joi.string().required(),
+                source: Joi.string().required()
             })
         },
         modelNew: { 
