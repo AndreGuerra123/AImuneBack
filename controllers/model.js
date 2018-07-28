@@ -115,15 +115,15 @@ module.exports = {
 
     },
     proceed: async (req, res, next) => {
-
-        agenda.now('config',req.query, (err,job)=>{
-                if(err){
-                    res.status(404).json(err);
-                }else{
-                    res.status(200).json(job);
-                }
-        });
-
+        try{
+            const job =  await agenda.now('config',req.query);
+            res.status(200).json(job);
+        }catch(err){
+            res.status(404).json(err)
+        }
+      
+            
+    }
     },
     proceed_config: async (req, res, next) => {
 
