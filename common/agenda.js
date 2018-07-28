@@ -1,4 +1,4 @@
-const {MONGO} = require('./config/index.js');
+const {MONGO} = require('../config/index.js');
 
 //Configuring agenda
 let agenda = new Agenda({db: {address: MONGO, collection: 'jobs'}});
