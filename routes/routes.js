@@ -84,7 +84,7 @@ router.route('/model/clone').post(modelCloneValidation,//jwtAutentication
 router.route('/model/new').post(modelNewValidation,//jwtAutentication
     ModelController.new)
 
-router.route('/model/proceed').get(modelProceedValidation,//jwtAutentication
+router.route('/model/proceed').get(//modelProceedValidation,//jwtAutentication
         ModelController.proceed)
 
 //Exporting routes
