@@ -120,10 +120,7 @@ module.exports = {
             res.status(200).json(job);
         }catch(err){
             res.status(404).json(err)
-        }
-      
-            
-    }
+        }         
     },
     proceed_config: async (req, res, next) => {
 
