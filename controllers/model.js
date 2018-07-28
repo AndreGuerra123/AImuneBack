@@ -1,5 +1,6 @@
 //Import Internal Dependencies
 const Modeler = require('../models/models.js');
+const agenda = require('../common/agenda.js');
 
 module.exports = {
     init: async (req, res, next) => {
@@ -113,6 +114,38 @@ module.exports = {
         }
 
     },
-    proceed: async (req, res, next) => {},
+    proceed: async (req, res, next) => {
+
+        agenda.now('config',req.query, (err,job)=>{
+                if(err){
+                    res.status(404).json(err);
+                }else{
+                    res.status(200).json(job);
+                }
+        });
+
+    },
+    proceed_config: async (req, res, next) => {
+
+
+
+
+
+    },
+    proceed_data: async (req, res, next) => {
+
+
+
+
+
+    },
+    proceed_train: async (req, res, next) => {
+
+
+
+
+
+    },
+    
 
 };
