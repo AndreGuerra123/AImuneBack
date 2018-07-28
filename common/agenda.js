@@ -1,5 +1,5 @@
 const {MONGO} = require('../config/index.js');
-
+const Agenda = require('agenda');
 //Configuring agenda
 let agenda = new Agenda({db: {address: MONGO, collection: 'jobs'}});
 
