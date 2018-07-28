@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 const {errors} = require('celebrate');
 
-const {PORT} = require('./config/index.js');
+const {MONGO,PORT} = require('./config/index.js');
 
 //TO SET THE SERVER CORRECTLY
 //sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
@@ -21,7 +21,7 @@ const credentials = {
 
 //MongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/authentication');
+mongoose.connect(MONGO);
 var conn = mongoose.connection;
 
 //Express
