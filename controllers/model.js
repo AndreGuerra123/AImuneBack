@@ -119,7 +119,7 @@ module.exports = {
                 
     },
     proceed_dataset_current: async (req, res, next) => { //get the current dataset configurations
-        const{source} = req.query.user;
+        const source = req.query.source;
         await Modeler.findById(source).lean().exec(function (err, oldModel) {
             if (err) {
                 return res.status(404).json(err)
@@ -130,7 +130,7 @@ module.exports = {
 
     },
     proceed_dataset_options: async (req, res, next) => { //get the user valid options for future selection
-        const {user} = req.query.user;
+        const user = req.query.user;
         let patients_opts,conditions_opts,compounds_opts,classes_opts;
         await Loader.distinct("patient",{user},(err,array)=>{
             if(err){
