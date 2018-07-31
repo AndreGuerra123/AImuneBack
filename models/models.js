@@ -8,11 +8,11 @@ const modelSchema = new Schema({
     shared: {type: Boolean, required: true},
     date: {type: Date, required: true},
     architecture: {type:Object, required: true},
-    config: {type:Object, required:false},
-    data: {type:Object,required:false},
-    results: {type:Object, required:false},
-    file: {type:Object,required:false}
-    
+    dataset: {type:Object,required:false, default: null},
+    config: {type:Object, required:false, default: null},
+    file: {type:Object,required:false,default:null},
+    results: {type:Object, required:false,default:null}
+
 });
 
 

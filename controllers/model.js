@@ -1,5 +1,6 @@
 //Import Internal Dependencies
 const Modeler = require('../models/models.js');
+const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
 
 module.exports = {
@@ -114,33 +115,72 @@ module.exports = {
         }
 
     },
-    proceed: async (req, res, next) => {
-        try{
-            const job =  await agenda.now('config',req.query);
-            res.status(200).json(job);
-        }catch(err){
-            res.status(404).json(err)
-        }         
+    proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
+                
+    },
+    proceed_dataset_current: async (req, res, next) => { //get the current dataset configurations
+        const{source} = req.query.user;
+        await Modeler.findById(source).lean().exec(function (err, oldModel) {
+            if (err) {
+                return res.status(404).json(err)
+            } else {
+                return res.status(200).json(oldModel.dataset);
+            }
+        });
+
+    },
+    proceed_dataset_options: async (req, res, next) => { //get the user valid options for future selection
+        const {user} = req.query.user;
+        let patients_opts,conditions_opts,compounds_opts,classes_opts;
+        await Loader.distinct("patient",{user},(err,array)=>{
+            if(err){
+                return res.status(404).send(err)
+            }else{
+                patients_opts = array;
+            }
+        })
+        await Loader.distinct("condition",{user},(err,array)=>{
+            if(err){
+                return res.status(404).send(err)
+            }else{
+                conditions_opts = array;
+            }
+        })
+        await Loader.distinct("compound",{user},(err,array)=>{
+            if(err){
+                return res.status(404).send(err)
+            }else{
+                compounds_opts = array;
+            }
+        })
+        await Loader.distinct("classi",{user},(err,array)=>{
+            if(err){
+                return res.status(404).send(err)
+            }else{
+                classes_opts = array;
+            }
+        })
+
+        res.status(200).json({patients_opts,compounds_opts,conditions_opts,classes_opts})
+        next();
+    },
+    proceed_dataset_update: async (req, res, next) => { //update the dataset in this model
+        const{source, rotate, normalise, patients, conditions, compounds, classes, width, height} = req.query.user;
+        await Modeler.update({_id:source},{$set:{dataset: {rotate, normalise,patients,conditions,compounds,classes,width,height}}},(err,model)=>{
+            if(err){
+                return res.status(404).json(err);
+            }else{
+                return res.status(202).json("Updated dataset configuration.")
+            }
+        })
     },
     proceed_config: async (req, res, next) => {
 
-
-
-
+    },
+    proceed_learning: async (req, res, next) => {
 
     },
-    proceed_data: async (req, res, next) => {
-
-
-
-
-
-    },
-    proceed_train: async (req, res, next) => {
-
-
-
-
+    proceed_results: async (req, res, next) => {
 
     },
     

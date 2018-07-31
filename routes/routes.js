@@ -57,11 +57,11 @@ router.route('/design/init').get(designInitValidation,
     //jwtAuthentication,//..
     DesignController.init);
 
-router.route('/design/savenew').post(//designSaveNewValidation,
+router.route('/design/savenew').post( //designSaveNewValidation,
     //jwtAuthentication,//.
     DesignController.savenew);
 
-router.route('/design/saveold').post(//designSaveOldValidation,
+router.route('/design/saveold').post( //designSaveOldValidation,
     //jwtAuthentication,//.
     DesignController.saveold);
 
@@ -71,21 +71,37 @@ router.route('/design/delete').delete(designDeleteValidation,
 
 ////////////////MODEL///////////////////
 
-router.route('/model/init').get(modelInitValidation,//jwtAuthentication,
+router.route('/model/init').get(modelInitValidation, //jwtAuthentication,
     ModelController.init)
 
 router.route('/model/delete').delete(modelDeleteValidation,
-        //jwtAuthentication,//..
-        ModelController.delete)
+    //jwtAuthentication,//..
+    ModelController.delete)
 
-router.route('/model/clone').post(modelCloneValidation,//jwtAutentication
+router.route('/model/clone').post(modelCloneValidation, //jwtAutentication
     ModelController.clone)
 
-router.route('/model/new').post(modelNewValidation,//jwtAutentication
+router.route('/model/new').post(modelNewValidation, //jwtAutentication
     ModelController.new)
 
-router.route('/model/proceed').get(//modelProceedValidation,//jwtAutentication
-        ModelController.proceed)
+//// Proceedings ////
+
+router.route('/proceed/status').get( //proceedStatusValidation,//jwtAutentication
+    ModelController.proceed)
+
+router.route('/proceed/dataset/current').get( //proceedDatasetCurrentValidation
+    ModelController.proceed_dataset_current)
+
+router.route('/proceed/dataset/options').get( //proceedDatasetCurrentValidation
+    ModelController.proceed_dataset_options)
+
+router.route('/proceed/dataset/current').get( //proceedDatasetCurrentValidation
+    ModelController.proceed_dataset_update)
+
+
+
+
+
 
 //Exporting routes
 

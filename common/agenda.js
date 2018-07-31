@@ -6,9 +6,7 @@ let agenda = new Agenda({db: {address: MONGO, collection: 'jobs'}});
 //Defining agenda jobs
 //create configuration of the architecture
 agenda.define('config',{priority:'high'},(job,done)=>{
-    const params =job.attrs.data;
-    console.log(params);
-    done();
+    
 });
 //create the dataset
 agenda.define('data',{priority:'high'},(job,done)=>{
