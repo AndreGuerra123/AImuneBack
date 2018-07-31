@@ -101,7 +101,7 @@ module.exports = {
         },
         modelProceed: { 
             query: Joi.object().keys({
-                
+                source: Joi.string().required()
             })
         },
 

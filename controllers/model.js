@@ -2,6 +2,143 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
+const uuid = require('node-uuid'); 
+
+const {
+    Joi
+} = require('celebrate');
+
+const datasetSchema = {
+    width: Joi.number().min(50).required(),
+    height: Joi.number().min(50).required(),
+    rotate: Joi.boolean().required(),
+    normalise: Joi.boolean().required(),
+    patients: Joi.array().required(),
+    conditions: Joi.array().required(),
+    compounds: Joi.array().required(),
+    classes: Joi.array().required(),
+    guid: Joi.string().guid().required()
+}
+
+const configSchema = { //TODO: Check what else needs to be set.
+    loss: Joi.string().required(),
+    optimiser: Joi.string().required(),
+    epochs: Joi.number().required(),
+    guid: Joi.string().guid().required()
+}
+const learningSchema = { //TODO: Check if allows for binary
+    h5: Joi.binary().required(),
+    guid: Joi.binary().required(),
+}
+const resultsSchema = { //TODO: Later
+
+}
+
+
+const evaluateStatus = function (model) {
+    var status = [];
+    status.push(evaluateDataset(model));
+    status.push(evaluateConfig(model));
+    status.push(evaluateLearning(model));
+    status.push(evaluateResults(model));
+    return status;
+}
+
+const evaluateDataset = function (model) {
+    if (!model.dataset) {
+        return 0;
+    } else if (model.dataset.queue) {
+        return 1;
+    } else if (model.dataset.error) {
+        return 2;
+    } else if (validDataset(model.dataset)) {
+        return 3;
+    } else {
+        return 4;
+    }
+}
+
+const validDataset = function (dataset) {
+    return Joi.validate(dataset, datasetSchema);
+}
+
+const evaluateConfig = function (model) {
+    if (!model.config) {
+        return 0;
+    } else if (model.config.queue) {
+        return 1;
+    } else if (model.config.error) {
+        return 2;
+    } else if (validConfig(model)) {
+        return 3;
+    } else {
+        return 4;
+    }
+}
+
+const validConfig = function (model) {
+    if (Joi.validate(model.config, configSchema)) {
+        if (model.config.guid != model.dataset.guid) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    };
+}
+
+const evaluateLearning = function (model) {
+    if (!model.file) {
+        return 0;
+    } else if (model.file.queue) {
+        return 1;
+    } else if (model.file.error) {
+        return 2;
+    } else if (validLearning(model)) {
+        return 3;
+    } else {
+        return 4;
+    }
+}
+
+const validLearning = function (model) {
+    if (Joi.validate(model.file, learningSchema)) {
+        if (model.file.guid != model.dataset.guid || model.file.guid != model.config.guid) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    };
+}
+
+const evaluateResults = function (model) {
+    if (!model.results) {
+        return 0;
+    } else if (model.results.queue) {
+        return 1;
+    } else if (model.results.error) {
+        return 2;
+    } else if (validResults(model.results)) {
+        return 3;
+    } else {
+        return 4;
+    }
+}
+
+const validResults = function(){
+    if (Joi.validate(model.results, resultsSchema)) {
+        if (model.results.guid != model.dataset.guid || model.results.guid != model.config.guid || model.results.guid != model.file.guid) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    };
+}
 
 module.exports = {
     init: async (req, res, next) => {
@@ -75,17 +212,9 @@ module.exports = {
                         return res.status(400).json(error)
                     }
                 });
-
                 return res.status(200).json(newModel._id)
-
-
             }
         });
-
-
-
-
-
     },
     new: async (req, res, next) => {
         try {
@@ -116,7 +245,20 @@ module.exports = {
 
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
-                
+        const source = req.query.source;
+
+        Modeler.findById(source, (err, model) => {
+            if (err) {
+                return res.status(404).json(err);
+            } else {
+                try {
+                    const status = evaluateStatus(model);
+                    return res.status(202).json(status);
+                } catch (error) {
+                    return res.status(404).json(error);
+                }
+            }
+        })
     },
     proceed_dataset_current: async (req, res, next) => { //get the current dataset configurations
         const source = req.query.source;
@@ -131,45 +273,84 @@ module.exports = {
     },
     proceed_dataset_options: async (req, res, next) => { //get the user valid options for future selection
         const user = req.query.user;
-        let patients_opts,conditions_opts,compounds_opts,classes_opts;
-        await Loader.distinct("patient",{user},(err,array)=>{
-            if(err){
+        let patients_opts, conditions_opts, compounds_opts, classes_opts;
+        await Loader.distinct("patient", {
+            user
+        }, (err, array) => {
+            if (err) {
                 return res.status(404).send(err)
-            }else{
+            } else {
                 patients_opts = array;
             }
         })
-        await Loader.distinct("condition",{user},(err,array)=>{
-            if(err){
+        await Loader.distinct("condition", {
+            user
+        }, (err, array) => {
+            if (err) {
                 return res.status(404).send(err)
-            }else{
+            } else {
                 conditions_opts = array;
             }
         })
-        await Loader.distinct("compound",{user},(err,array)=>{
-            if(err){
+        await Loader.distinct("compound", {
+            user
+        }, (err, array) => {
+            if (err) {
                 return res.status(404).send(err)
-            }else{
+            } else {
                 compounds_opts = array;
             }
         })
-        await Loader.distinct("classi",{user},(err,array)=>{
-            if(err){
+        await Loader.distinct("classi", {
+            user
+        }, (err, array) => {
+            if (err) {
                 return res.status(404).send(err)
-            }else{
+            } else {
                 classes_opts = array;
             }
         })
 
-        res.status(200).json({patients_opts,compounds_opts,conditions_opts,classes_opts})
+        res.status(200).json({
+            patients_opts,
+            compounds_opts,
+            conditions_opts,
+            classes_opts
+        })
         next();
     },
     proceed_dataset_update: async (req, res, next) => { //update the dataset in this model
-        const{source, rotate, normalise, patients, conditions, compounds, classes, width, height} = req.body;
-        await Modeler.update({_id:source},{$set:{dataset: {rotate, normalise,patients,conditions,compounds,classes,width,height}}},(err,model)=>{
-            if(err){
+        const {
+            source,
+            rotate,
+            normalise,
+            patients,
+            conditions,
+            compounds,
+            classes,
+            width,
+            height
+        } = req.body;
+        await Modeler.update({
+            _id: source
+        }, {
+            $set: {
+                dataset: {
+                    rotate,
+                    normalise,
+                    patients,
+                    conditions,
+                    compounds,
+                    classes,
+                    width,
+                    height,
+                    guid: uuid.v1
+                }
+            }
+        }, (err, model) => {
+            if (err) {
                 return res.status(404).json(err);
-            }else{
+            } else {
                 return res.status(202).json("Updated dataset configuration.")
             }
         })
@@ -183,6 +364,6 @@ module.exports = {
     proceed_results: async (req, res, next) => {
 
     },
-    
+
 
 };

@@ -29,7 +29,7 @@ const modelInitValidation = celebrate(schemas.modelInit);
 const modelDeleteValidation = celebrate(schemas.modelDelete);
 const modelCloneValidation = celebrate(schemas.modelClone);
 const modelNewValidation = celebrate(schemas.modelNew);
-const modelProceedValidation = celebrate(schemas.modelProceed);
+const proceedStatusValidation = celebrate(schemas.modelProceed);
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -88,7 +88,7 @@ router.route('/model/new').post(modelNewValidation, //jwtAutentication
 
     //Status
 
-router.route('/proceed/status').get( //proceedStatusValidation,//jwtAutentication
+router.route('/proceed/status').get(proceedStatusValidation,//jwtAutentication
     ModelController.proceed_status)
 
     //Dataset
