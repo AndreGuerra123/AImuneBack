@@ -95,7 +95,7 @@ router.route('/proceed/dataset/current').get( //proceedDatasetCurrentValidation
 router.route('/proceed/dataset/options').get( //proceedDatasetCurrentValidation
     ModelController.proceed_dataset_options)
 
-router.route('/proceed/dataset/current').get( //proceedDatasetCurrentValidation
+router.route('/proceed/dataset/update').get( //proceedDatasetCurrentValidation
     ModelController.proceed_dataset_update)
 
 
