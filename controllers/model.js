@@ -165,7 +165,7 @@ module.exports = {
         next();
     },
     proceed_dataset_update: async (req, res, next) => { //update the dataset in this model
-        const{source, rotate, normalise, patients, conditions, compounds, classes, width, height} = req.query.user;
+        const{source, rotate, normalise, patients, conditions, compounds, classes, width, height} = req.body;
         await Modeler.update({_id:source},{$set:{dataset: {rotate, normalise,patients,conditions,compounds,classes,width,height}}},(err,model)=>{
             if(err){
                 return res.status(404).json(err);

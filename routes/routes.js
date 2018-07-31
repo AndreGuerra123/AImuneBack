@@ -86,16 +86,20 @@ router.route('/model/new').post(modelNewValidation, //jwtAutentication
 
 //// Proceedings ////
 
+    //Status
+
 router.route('/proceed/status').get( //proceedStatusValidation,//jwtAutentication
     ModelController.proceed)
 
-router.route('/proceed/dataset/current').get( //proceedDatasetCurrentValidation
+    //Dataset
+
+router.route('/dataset/current').get( //proceedDatasetCurrentValidation
     ModelController.proceed_dataset_current)
 
-router.route('/proceed/dataset/options').get( //proceedDatasetCurrentValidation
+router.route('/dataset/options').get( //proceedDatasetCurrentValidation
     ModelController.proceed_dataset_options)
 
-router.route('/proceed/dataset/update').get( //proceedDatasetCurrentValidation
+router.route('/dataset/update').post( //proceedDatasetCurrentValidation
     ModelController.proceed_dataset_update)
 
 
