@@ -89,7 +89,7 @@ router.route('/model/new').post(modelNewValidation, //jwtAutentication
     //Status
 
 router.route('/proceed/status').get( //proceedStatusValidation,//jwtAutentication
-    ModelController.proceed)
+    ModelController.proceed_status)
 
     //Dataset
 
