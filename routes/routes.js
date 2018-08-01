@@ -31,6 +31,13 @@ const modelCloneValidation = celebrate(schemas.modelClone);
 const modelNewValidation = celebrate(schemas.modelNew);
 const proceedStatusValidation = celebrate(schemas.modelProceed);
 
+const proceedDatasetCurrentValidation = celebrate(schemas.datasetCurrent);
+const proceedDatasetOptionsValidation = celebrate(schemas.datasetOptions);
+const proceedDatasetUpdateValidation = celebrate(schemas.datasetUpdate);
+
+const proceedConfigCurrentValidation = celebrate(schemas.configCurrent);
+const proceedConfigUpdateValidation = celebrate(schemas.configUpdate);
+
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
     session: false
@@ -86,25 +93,31 @@ router.route('/model/new').post(modelNewValidation, //jwtAutentication
 
 //// Proceedings ////
 
-    //Status
+//Status
 
-router.route('/proceed/status').get(proceedStatusValidation,//jwtAutentication
+router.route('/proceed/status').get(proceedStatusValidation, //jwtAutentication
     ModelController.proceed_status)
 
-    //Dataset
+//Dataset
 
-router.route('/dataset/current').get( //proceedDatasetCurrentValidation
+router.route('/dataset/current').get(proceedDatasetCurrentValidation,
     ModelController.proceed_dataset_current)
 
-router.route('/dataset/options').get( //proceedDatasetCurrentValidation
+router.route('/dataset/options').get(proceedDatasetOptionsValidation,
     ModelController.proceed_dataset_options)
 
-router.route('/dataset/update').post( //proceedDatasetCurrentValidation
+router.route('/dataset/update').post(proceedDatasetUpdateValidation,
     ModelController.proceed_dataset_update)
 
 
+//Confid
 
 
+router.route('/config/current').get(proceedConfigCurrentValidation,
+    ModelController.proceed_dataset_current)
+
+router.route('/config/update').post(proceedConfigUpdateValidation,
+    ModelController.proceed_dataset_update)
 
 
 //Exporting routes

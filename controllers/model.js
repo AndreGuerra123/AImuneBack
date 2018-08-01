@@ -2,7 +2,7 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
-const uuid = require('node-uuid'); 
+const uuid = require('node-uuid');
 
 const {
     Joi
@@ -17,18 +17,15 @@ const datasetSchema = {
     conditions: Joi.array().required(),
     compounds: Joi.array().required(),
     classes: Joi.array().required(),
-    guid: Joi.string().guid().required()
 }
 
 const configSchema = { //TODO: Check what else needs to be set.
     loss: Joi.string().required(),
     optimiser: Joi.string().required(),
     epochs: Joi.number().required(),
-    guid: Joi.string().guid().required()
 }
 const learningSchema = { //TODO: Check if allows for binary
     h5: Joi.binary().required(),
-    guid: Joi.binary().required(),
 }
 const resultsSchema = { //TODO: Later
 
@@ -69,20 +66,16 @@ const evaluateConfig = function (model) {
         return 1;
     } else if (model.config.error) {
         return 2;
-    } else if (validConfig(model)) {
+    } else if (validConfig(model.config)) {
         return 3;
     } else {
         return 4;
     }
 }
 
-const validConfig = function (model) {
-    if (Joi.validate(model.config, configSchema)) {
-        if (model.config.guid != model.dataset.guid) {
-            return false;
-        } else {
-            return true;
-        }
+const validConfig = function (config) {
+    if (Joi.validate(config, configSchema)) {
+        return true;
     } else {
         return false;
     };
@@ -95,7 +88,7 @@ const evaluateLearning = function (model) {
         return 1;
     } else if (model.file.error) {
         return 2;
-    } else if (validLearning(model)) {
+    } else if (validLearning(model.file)) {
         return 3;
     } else {
         return 4;
@@ -104,11 +97,7 @@ const evaluateLearning = function (model) {
 
 const validLearning = function (model) {
     if (Joi.validate(model.file, learningSchema)) {
-        if (model.file.guid != model.dataset.guid || model.file.guid != model.config.guid) {
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     } else {
         return false;
     };
@@ -128,7 +117,7 @@ const evaluateResults = function (model) {
     }
 }
 
-const validResults = function(){
+const validResults = function () {
     if (Joi.validate(model.results, resultsSchema)) {
         if (model.results.guid != model.dataset.guid || model.results.guid != model.config.guid || model.results.guid != model.file.guid) {
             return false;
@@ -239,7 +228,6 @@ module.exports = {
                 id: newModel.id
             });
         } catch (err) {
-            console.log(err);
             return res.status(404).json(err);
         }
 
@@ -252,8 +240,7 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 try {
-                    const status = evaluateStatus(model);
-                    return res.status(202).json(status);
+                    return res.status(202).json(evaluateStatus(model));
                 } catch (error) {
                     return res.status(404).json(error);
                 }
@@ -343,8 +330,7 @@ module.exports = {
                     compounds,
                     classes,
                     width,
-                    height,
-                    guid: uuid.v1
+                    height
                 }
             }
         }, (err, model) => {
@@ -355,8 +341,45 @@ module.exports = {
             }
         })
     },
-    proceed_config: async (req, res, next) => {
+    proceed_config_current: async (req, res, next) => {
+        const source = req.query.source;
+        await Modeler.findById(source).lean().exec(function (err, oldModel) {
+            if (err) {
+                return res.status(404).json(err)
+            } else {
+                return res.status(200).json(oldModel.config);
+            }
+        });
 
+    },
+    proceed_config_update: async (req, res, next) => {
+        const {
+            source,
+            loss,
+            optimiser,
+            metrics,
+            batchsize,
+            epochs,
+        } = req.body;
+        await Modeler.update({
+            _id: source
+        }, {
+            $set: {
+                config: {
+                    loss,
+                    optimiser,
+                    metrics,
+                    batchsize,
+                    epochs
+                }
+            }
+        }, (err, model) => {
+            if (err) {
+                return res.status(404).json(err);
+            } else {
+                return res.status(202).json("Updated dataset configuration.")
+            }
+        })
     },
     proceed_learning: async (req, res, next) => {
 

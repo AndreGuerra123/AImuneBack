@@ -104,6 +104,45 @@ module.exports = {
                 source: Joi.string().required()
             })
         },
+        datasetOptions:{
+            query: Joi.object().keys({
+                user: Joi.string().required()
+            })
+        },
+        datasetCurrent:{
+            query: Joi.object().keys({
+                source: Joi.string().required()
+            })
+        },
+        datasetUpdate: {
+            body: Joi.object().keys({
+                source: Joi.string().required(),
+                rotate: Joi.boolean().required(),
+                normalise: Joi.boolean().required(),
+                patients: Joi.array().required(),
+                conditions: Joi.array().required(),
+                compounds: Joi.array().required(),
+                classes: Joi.array().required(),
+                width: Joi.number().min(50).required(),
+                height: Joi.number().min(50).required()
+            })
+        },
+        configCurrent: {
+            query: Joi.object().keys({
+                source: Joi.string().required()
+            })
+        },
+        configUpdate:{
+            body: Joi.object().keys({
+                source: Joi.string().required(),
+                loss: Joi.string().required(),
+                optimiser: Joi.string().required(),
+                metrics: Joi.array().required(),
+                batchsize: Joi.number().min(1).required(),
+                epochs: Joi.number().min(1).required()
+            })
+        }
+
 
 
     }
