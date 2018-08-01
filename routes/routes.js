@@ -114,10 +114,10 @@ router.route('/dataset/update').post(proceedDatasetUpdateValidation,
 
 
 router.route('/config/current').get(proceedConfigCurrentValidation,
-    ModelController.proceed_dataset_current)
+    ModelController.proceed_config_current)
 
 router.route('/config/update').post(proceedConfigUpdateValidation,
-    ModelController.proceed_dataset_update)
+    ModelController.proceed_config_update)
 
 
 //Exporting routes

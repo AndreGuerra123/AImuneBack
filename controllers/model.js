@@ -7,22 +7,26 @@ const {
     Joi
 } = require('celebrate');
 
-const datasetSchema = {
-    width: Joi.number().min(50).required(),
-    height: Joi.number().min(50).required(),
-    rotate: Joi.boolean().required(),
-    normalise: Joi.boolean().required(),
-    patients: Joi.array().required(),
-    conditions: Joi.array().required(),
-    compounds: Joi.array().required(),
-    classes: Joi.array().required(),
-}
+const datasetSchema = 
+    Joi.object().keys({width: Joi.number().min(50).required(),
+        height: Joi.number().min(50).required(),
+        rotate: Joi.boolean().required(),
+        normalise: Joi.boolean().required(),
+        patients: Joi.array().required(),
+        conditions: Joi.array().required(),
+        compounds: Joi.array().required(),
+        classes: Joi.array().required()})
+    
+const configSchema = 
+    Joi.object().keys({
+        source: Joi.string().required(),
+        loss: Joi.string().required(),
+        optimiser: Joi.string().required(),
+        metrics: Joi.array().required(),
+        batchsize: Joi.number().min(1).required(),
+        epochs: Joi.number().min(1).required()
+    })
 
-const configSchema = { //TODO: Check what else needs to be set.
-    loss: Joi.string().required(),
-    optimiser: Joi.string().required(),
-    epochs: Joi.number().required(),
-}
 const learningSchema = { //TODO: Check if allows for binary
     h5: Joi.binary().required(),
 }
@@ -129,6 +133,13 @@ const validResults = function () {
 }
 
 module.exports = {
+    
+    proceedSchemas:{
+        datasetSchema,
+        configSchema,
+        learningSchema,
+        resultsSchema
+    },
     init: async (req, res, next) => {
 
         const user = req.query.user;

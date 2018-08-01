@@ -3,6 +3,8 @@ const {
     INVITE_TOKEN
 } = require('../config/index.js')
 
+const {proceedSchemas} = require('../models/models.js');
+
 const maxdate = new Date();
 maxdate.setFullYear(maxdate.getFullYear() - 18);
 
@@ -115,17 +117,7 @@ module.exports = {
             })
         },
         datasetUpdate: {
-            body: Joi.object().keys({
-                source: Joi.string().required(),
-                rotate: Joi.boolean().required(),
-                normalise: Joi.boolean().required(),
-                patients: Joi.array().required(),
-                conditions: Joi.array().required(),
-                compounds: Joi.array().required(),
-                classes: Joi.array().required(),
-                width: Joi.number().min(50).required(),
-                height: Joi.number().min(50).required()
-            })
+            body: proceedSchemas.datasetSchema
         },
         configCurrent: {
             query: Joi.object().keys({
@@ -133,14 +125,7 @@ module.exports = {
             })
         },
         configUpdate:{
-            body: Joi.object().keys({
-                source: Joi.string().required(),
-                loss: Joi.string().required(),
-                optimiser: Joi.string().required(),
-                metrics: Joi.array().required(),
-                batchsize: Joi.number().min(1).required(),
-                epochs: Joi.number().min(1).required()
-            })
+            body: proceedSchemas.configSchema
         }
 
 
