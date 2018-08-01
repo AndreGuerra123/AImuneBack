@@ -2,7 +2,6 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
-const uuid = require('node-uuid');
 
 const {
     Joi
