@@ -113,7 +113,7 @@ router.route('/dataset/update').post(proceedDatasetUpdateValidation,
 //Config
 
 
-routerroute('/config/current').get(proceedConfigCurrentValidation,
+router.route('/config/current').get(proceedConfigCurrentValidation,
     ModelController.proceed_config_current)
 
 router.route('/config/update').post(proceedConfigUpdateValidation,
