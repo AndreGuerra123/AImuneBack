@@ -137,7 +137,7 @@ module.exports = {
     proceedSchemas: {
         datasetSchema,
         configSchema,
-        learningShema,
+        learningSchema,
         resultsSchema
     },
     init: async (req, res, next) => {
