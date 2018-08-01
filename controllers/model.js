@@ -8,7 +8,8 @@ const {
 } = require('celebrate');
 
 const datasetSchema = 
-    Joi.object().keys({width: Joi.number().min(50).required(),
+    Joi.object().keys({
+        width: Joi.number().min(50).required(),
         height: Joi.number().min(50).required(),
         rotate: Joi.boolean().required(),
         normalise: Joi.boolean().required(),
@@ -19,7 +20,6 @@ const datasetSchema =
     
 const configSchema = 
     Joi.object().keys({
-        source: Joi.string().required(),
         loss: Joi.string().required(),
         optimiser: Joi.string().required(),
         metrics: Joi.array().required(),

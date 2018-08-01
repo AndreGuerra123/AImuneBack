@@ -117,7 +117,11 @@ module.exports = {
             })
         },
         datasetUpdate: {
-            body: proceedSchemas.datasetSchema
+            body: proceedSchemas.datasetSchema,
+            headers:{
+                token: Joi.string().required(),
+                source: Joi.string().required()
+            }
         },
         configCurrent: {
             query: Joi.object().keys({
@@ -125,7 +129,11 @@ module.exports = {
             })
         },
         configUpdate:{
-            body: proceedSchemas.configSchema
+            body: proceedSchemas.configSchema,
+            headers:{
+                token: Joi.string().required(),
+                source: Joi.string().required()
+            }
         }
 
 
