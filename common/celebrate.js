@@ -4,6 +4,7 @@ const {
 } = require('../config/index.js')
 
 const {proceedSchemas} = require('../models/models.js');
+console.log(proceedSchemas);
 
 const maxdate = new Date();
 maxdate.setFullYear(maxdate.getFullYear() - 18);
