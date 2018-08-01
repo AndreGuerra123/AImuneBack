@@ -3,8 +3,6 @@ const {
     INVITE_TOKEN
 } = require('../config/index.js')
 
-const {proceedSchemas} = require('../controllers/model.js');
-
 const maxdate = new Date();
 maxdate.setFullYear(maxdate.getFullYear() - 18);
 
@@ -117,11 +115,16 @@ module.exports = {
             })
         },
         datasetUpdate: {
-            body: proceedSchemas.datasetSchema,
-            headers:{
-                token: Joi.string().required(),
-                source: Joi.string().required()
-            }
+            body:  Joi.object().keys({
+                source: Joi.string().required(),
+                width: Joi.number().min(50).required(),
+                height: Joi.number().min(50).required(),
+                rotate: Joi.boolean().required(),
+                normalise: Joi.boolean().required(),
+                patients: Joi.array().required(),
+                conditions: Joi.array().required(),
+                compounds: Joi.array().required(),
+                classes: Joi.array().required()})
         },
         configCurrent: {
             query: Joi.object().keys({
@@ -129,11 +132,15 @@ module.exports = {
             })
         },
         configUpdate:{
-            body: proceedSchemas.configSchema,
-            headers:{
-                token: Joi.string().required(),
-                source: Joi.string().required()
-            }
+            body: Joi.object().keys({
+                source: Joi.string().required(),
+                loss: Joi.string().required(),
+                optimiser: Joi.string().required(),
+                metrics: Joi.array().required(),
+                batchsize: Joi.number().min(1).required(),
+                epochs: Joi.number().min(1).required()
+            })
+           
         }
 
 

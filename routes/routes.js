@@ -110,10 +110,10 @@ router.route('/dataset/update').post(proceedDatasetUpdateValidation,
     ModelController.proceed_dataset_update)
 
 
-//Confid
+//Config
 
 
-router.route('/config/current').get(proceedConfigCurrentValidation,
+routerroute('/config/current').get(proceedConfigCurrentValidation,
     ModelController.proceed_config_current)
 
 router.route('/config/update').post(proceedConfigUpdateValidation,
