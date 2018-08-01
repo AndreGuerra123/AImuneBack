@@ -3,8 +3,7 @@ const {
     INVITE_TOKEN
 } = require('../config/index.js')
 
-const {proceedSchemas} = require('../models/models.js');
-console.log(proceedSchemas);
+const {proceedSchemas} = require('../controllers/models.js');
 
 const maxdate = new Date();
 maxdate.setFullYear(maxdate.getFullYear() - 18);

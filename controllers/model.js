@@ -135,10 +135,10 @@ const validResults = function () {
 module.exports = {
     
     proceedSchemas: {
-        datasetSchema: datasetSchema,
-        configSchema: configSchema,
-        learningShema: learningSchema,
-        resultsSchema: resultsSchema
+        datasetSchema,
+        configSchema,
+        learningShema,
+        resultsSchema
     },
     init: async (req, res, next) => {
 
