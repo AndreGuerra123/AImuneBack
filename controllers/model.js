@@ -324,7 +324,7 @@ module.exports = {
                     classes,
                     width,
                     height,
-                    date: Date.now
+                    date: new Date.now()
                 }
             }
         }, (err, model) => {
@@ -365,7 +365,7 @@ module.exports = {
                     metrics,
                     batchsize,
                     epochs,
-                    date: Date.now
+                    date: new Date.now()
                 }
             }
         }, (err, model) => {
