@@ -2,6 +2,8 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
+var oid = require('agenda/node_modules/mongodb').ObjectID;
+
 
 const {
     Joi
@@ -28,8 +30,11 @@ const configSchema = {
     date: Joi.date().required()
 }
 
-const learningSchema = { //TODO: Check if allows for binary
+const learningSchema = { 
     h5: Joi.binary().required(),
+    queue: Joi.string().required(),
+    sync: Joi.object().required(),
+    date: Joi.date().required()
 }
 const resultsSchema = { //TODO: Later
 
@@ -77,12 +82,58 @@ const validConfig = function (config) {
     };
 }
 
-const evaluateLearning = function (model) { //TODO:
-    if (!model.file) {
+const isjobrunning = function(queue){
+
+    agenda.jobs({"_id": new oid(queue)},(err,job)=>{
+        if(err){
+            return false;
+        }else{
+            return job.lastFinishedAt ? false: true;
+        }
+    })
+
+},
+
+const isjoberror = function(queue){
+
+    agenda.jobs({"_id": new oid(queue)},(err,job)=>{
+        if(err){
+            return false;
+        }else{
+            return job.failedAt ? true: false;
+        }
+    })
+    
+},
+
+const isoutdated = function(model){
+    if(model.dataset.date && model.file.sync.dataset_date && model.config.date && model.file.sync.config_date){
+        if(+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+},
+
+const validLearning = function (file) {
+    if (Joi.validate(file, learningSchema)) {
+        return true;
+    } else {
+        return false;
+    };
+}
+
+
+const evaluateLearning = function (model) { 
+    if (!model.file || !model.file.queue) {
         return 0;
-    } else if (model.file.queue) {
+    } else if (isjobrunning(model.file.queue)) {
         return 1;
-    } else if (model.file.error) {
+    } else if (isjoberror(model.file.queue) || isoutdated(model)) {
         return 2;
     } else if (validLearning(model.file)) {
         return 3;
@@ -91,13 +142,6 @@ const evaluateLearning = function (model) { //TODO:
     }
 }
 
-const validLearning = function (model) {
-    if (Joi.validate(model.file, learningSchema)) {
-        return true;
-    } else {
-        return false;
-    };
-}
 
 const evaluateResults = function (model) {
     if (!model.results) {
