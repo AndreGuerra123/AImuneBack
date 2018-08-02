@@ -50,7 +50,7 @@ const evaluateStatus = function (model) {
     return status;
 }
 
-const evaluateDataset = function (model) {
+const evaluateDataset = function(model){
     if (!model.dataset) {
         return 0;
     } else if (validDataset(model.dataset)) {
@@ -58,13 +58,13 @@ const evaluateDataset = function (model) {
     } else {
         return 4;
     }
-},
+}
 
-const validDataset = function (dataset) {
+const validDataset = function(dataset){
     return Joi.validate(dataset, datasetSchema);
-},
+}
 
-const evaluateConfig = function (model) {
+const evaluateConfig = function(model){
     if (!model.config) {
         return 0;
     } else if (validConfig(model.config)) {
@@ -72,15 +72,15 @@ const evaluateConfig = function (model) {
     } else {
         return 4;
     }
-},
+}
 
-const validConfig = function (config) {
+const validConfig = function(config){
     if (Joi.validate(config, configSchema)) {
         return true;
     } else {
         return false;
     };
-},
+}
 
 const isjobrunning = function(queue){
 
@@ -92,7 +92,7 @@ const isjobrunning = function(queue){
         }
     })
 
-},
+}
 
 const isjoberror = function(queue){
 
@@ -104,7 +104,7 @@ const isjoberror = function(queue){
         }
     })
     
-},
+}
 
 const isoutdated = function(model){
     if(model.dataset.date && model.file.sync.dataset_date && model.config.date && model.file.sync.config_date){
@@ -117,18 +117,18 @@ const isoutdated = function(model){
         return false;
     }
 
-},
+}
 
-const validLearning = function (file) {
+const validLearning = function(file){
     if (Joi.validate(file, learningSchema)) {
         return true;
     } else {
         return false;
     };
-},
+}
 
 
-const evaluateLearning = function (model) { 
+const evaluateLearning = function(model) { 
     if (!model.file || !model.file.queue) {
         return 0;
     } else if (isjobrunning(model.file.queue)) {
@@ -143,7 +143,7 @@ const evaluateLearning = function (model) {
 }
 
 
-const evaluateResults = function (model) {
+const evaluateResults = function(model) {
     if (!model.results) {
         return 0;
     } else if (model.results.queue) {
@@ -157,8 +157,8 @@ const evaluateResults = function (model) {
     }
 }
 
-const validResults = function () {
-    if (Joi.validate(model.results, resultsSchema)) {
+const validResults = function(results){
+    if (Joi.validate(results, resultsSchema)) {
         return true;
     } else {
         return false;
