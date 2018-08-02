@@ -2,7 +2,7 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
-const mongoose = required('mongoose');
+const mongoose = require('mongoose');
 const oid = mongoose.Types.ObjectId;
 
 
@@ -33,7 +33,7 @@ const configSchema = {
 
 const learningSchema = { 
     h5: Joi.binary().required(),
-    queue: Joi.string().required(),
+    queue: Joi.object().required(), //make it an object
     sync: Joi.object().required(),
     date: Joi.date().required()
 }
@@ -85,7 +85,7 @@ const validConfig = function(config){
 
 const isjobrunning = function(queue){
 
-    agenda.jobs({"_id": new oid(queue)},(err,job)=>{
+    agenda.jobs({"_id": queue},(err,job)=>{
         if(err){
             return false;
         }else{
@@ -97,7 +97,7 @@ const isjobrunning = function(queue){
 
 const isjoberror = function(queue){
 
-    agenda.jobs({"_id": new oid(queue)},(err,job)=>{
+    agenda.jobs({"_id": queue},(err,job)=>{
         if(err){
             return false;
         }else{
