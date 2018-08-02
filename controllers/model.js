@@ -312,8 +312,6 @@ module.exports = {
             height
         } = req.body;
 
-        var date = Date.now();
-
         await Modeler.update({
             _id: source
         }, {
@@ -327,7 +325,7 @@ module.exports = {
                     classes,
                     width,
                     height,
-                    date
+                    date: new Date()
                 }
             }
         }, (err, model) => {
@@ -358,8 +356,7 @@ module.exports = {
             batchsize,
             epochs,
         } = req.body;
-        
-        var date = Date.now();
+
 
         await Modeler.update({
             _id: source
@@ -371,7 +368,7 @@ module.exports = {
                     metrics,
                     batchsize,
                     epochs,
-                    date
+                    date: new Date()
                 },
             }
         }, (err, model) => {
