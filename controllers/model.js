@@ -58,11 +58,11 @@ const evaluateDataset = function (model) {
     } else {
         return 4;
     }
-}
+},
 
 const validDataset = function (dataset) {
     return Joi.validate(dataset, datasetSchema);
-}
+},
 
 const evaluateConfig = function (model) {
     if (!model.config) {
@@ -72,7 +72,7 @@ const evaluateConfig = function (model) {
     } else {
         return 4;
     }
-}
+},
 
 const validConfig = function (config) {
     if (Joi.validate(config, configSchema)) {
@@ -80,7 +80,7 @@ const validConfig = function (config) {
     } else {
         return false;
     };
-}
+},
 
 const isjobrunning = function(queue){
 
@@ -125,7 +125,7 @@ const validLearning = function (file) {
     } else {
         return false;
     };
-}
+},
 
 
 const evaluateLearning = function (model) { 
