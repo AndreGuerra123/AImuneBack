@@ -2,7 +2,8 @@
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
-var oid = require('../node_modules/agenda/node_modules/mongodb').ObjectID;
+const mongoose = required('mongoose');
+const oid = mongoose.Types.ObjectId;
 
 
 const {
