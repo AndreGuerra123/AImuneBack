@@ -7,26 +7,26 @@ const {
     Joi
 } = require('celebrate');
 
-const datasetSchema = 
-    {
-        width: Joi.number().min(50).required(),
-        height: Joi.number().min(50).required(),
-        rotate: Joi.boolean().required(),
-        normalise: Joi.boolean().required(),
-        patients: Joi.array().required(),
-        conditions: Joi.array().required(),
-        compounds: Joi.array().required(),
-        classes: Joi.array().required()
-    }
-    
-const configSchema = 
-   {
-        loss: Joi.string().required(),
-        optimiser: Joi.string().required(),
-        metrics: Joi.array().required(),
-        batchsize: Joi.number().min(1).required(),
-        epochs: Joi.number().min(1).required()
-    }
+const datasetSchema = {
+    width: Joi.number().min(50).required(),
+    height: Joi.number().min(50).required(),
+    rotate: Joi.boolean().required(),
+    normalise: Joi.boolean().required(),
+    patients: Joi.array().required(),
+    conditions: Joi.array().required(),
+    compounds: Joi.array().required(),
+    classes: Joi.array().required(),
+    date: Joi.date().required()
+}
+
+const configSchema = {
+    loss: Joi.string().required(),
+    optimiser: Joi.string().required(),
+    metrics: Joi.array().required(),
+    batchsize: Joi.number().min(1).required(),
+    epochs: Joi.number().min(1).required(),
+    date: Joi.date().required()
+}
 
 const learningSchema = { //TODO: Check if allows for binary
     h5: Joi.binary().required(),
@@ -48,10 +48,6 @@ const evaluateStatus = function (model) {
 const evaluateDataset = function (model) {
     if (!model.dataset) {
         return 0;
-    } else if (model.dataset.queue) {
-        return 1;
-    } else if (model.dataset.error) {
-        return 2;
     } else if (validDataset(model.dataset)) {
         return 3;
     } else {
@@ -66,10 +62,6 @@ const validDataset = function (dataset) {
 const evaluateConfig = function (model) {
     if (!model.config) {
         return 0;
-    } else if (model.config.queue) {
-        return 1;
-    } else if (model.config.error) {
-        return 2;
     } else if (validConfig(model.config)) {
         return 3;
     } else {
@@ -85,7 +77,7 @@ const validConfig = function (config) {
     };
 }
 
-const evaluateLearning = function (model) {
+const evaluateLearning = function (model) { //TODO:
     if (!model.file) {
         return 0;
     } else if (model.file.queue) {
@@ -123,18 +115,14 @@ const evaluateResults = function (model) {
 
 const validResults = function () {
     if (Joi.validate(model.results, resultsSchema)) {
-        if (model.results.guid != model.dataset.guid || model.results.guid != model.config.guid || model.results.guid != model.file.guid) {
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     } else {
         return false;
     };
 }
 
 module.exports = {
-    
+
     init: async (req, res, next) => {
 
         const user = req.query.user;
@@ -335,7 +323,8 @@ module.exports = {
                     compounds,
                     classes,
                     width,
-                    height
+                    height,
+                    date: Date.now
                 }
             }
         }, (err, model) => {
@@ -375,7 +364,8 @@ module.exports = {
                     optimiser,
                     metrics,
                     batchsize,
-                    epochs
+                    epochs,
+                    date: Date.now
                 }
             }
         }, (err, model) => {
@@ -386,7 +376,32 @@ module.exports = {
             }
         })
     },
-    proceed_learning: async (req, res, next) => {
+    proceed_learning_current: async(req,res,next)=>{
+
+    },
+    proceed_learning_start: async (req, res, next) => {
+        try {
+            const {
+                source
+            } = req.body.query; //Gets which model to train
+            const job = await agenda.now('train', {
+                source
+            })
+            await Modeler.update({
+                _id: source
+            }, {
+                $set: {
+                    file: {
+                        queue: job._id
+                    }
+                }
+            })
+            return res.status(200); //Starts new training job.
+        } catch (error) {
+            return res.status(404).json(err);
+        }
+    },
+    proceed_learning_cancel: async (req, res, next) => {
 
     },
     proceed_results: async (req, res, next) => {
