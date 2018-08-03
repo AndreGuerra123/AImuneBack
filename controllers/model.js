@@ -433,7 +433,7 @@ module.exports = {
             if(err){
                 return res.status(404).json(err)
             }else{
-                await agenda.jobs({"_id":model.file.queue}, (err,job)=>{
+                agenda.jobs({"_id":model.file.queue}, (err,job)=>{
                     if(err){
                         return res.status(404).json(err)
                     }else{
