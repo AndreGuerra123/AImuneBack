@@ -31,7 +31,7 @@ const configSchema = {
     date: Joi.date().required()
 }
 
-const learningSchema = { 
+const learningSchema = {
     h5: Joi.binary().required(),
     queue: Joi.object().required(), //make it an object
     sync: Joi.object().required(),
@@ -51,7 +51,7 @@ const evaluateStatus = function (model) {
     return status;
 }
 
-const evaluateDataset = function(model){
+const evaluateDataset = function (model) {
     if (!model.dataset) {
         return 0;
     } else if (validDataset(model.dataset)) {
@@ -61,11 +61,11 @@ const evaluateDataset = function(model){
     }
 }
 
-const validDataset = function(dataset){
+const validDataset = function (dataset) {
     return Joi.validate(dataset, datasetSchema);
 }
 
-const evaluateConfig = function(model){
+const evaluateConfig = function (model) {
     if (!model.config) {
         return 0;
     } else if (validConfig(model.config)) {
@@ -75,7 +75,7 @@ const evaluateConfig = function(model){
     }
 }
 
-const validConfig = function(config){
+const validConfig = function (config) {
     if (Joi.validate(config, configSchema)) {
         return true;
     } else {
@@ -83,44 +83,48 @@ const validConfig = function(config){
     };
 }
 
-const isjobrunning = function(queue){
+const isjobrunning = function (queue) {
 
-    agenda.jobs({"_id": queue},(err,job)=>{
-        if(err){
+    agenda.jobs({
+        "_id": queue
+    }, (err, job) => {
+        if (err) {
             return false;
-        }else{
-            return job.lastFinishedAt ? false: true;
+        } else {
+            return job.lastFinishedAt ? false : true;
         }
     })
 
 }
 
-const isjoberror = function(queue){
+const isjoberror = function (queue) {
 
-    agenda.jobs({"_id": queue},(err,job)=>{
-        if(err){
+    agenda.jobs({
+        "_id": queue
+    }, (err, job) => {
+        if (err) {
             return false;
-        }else{
-            return job.failedAt ? true: false;
+        } else {
+            return job.failedAt ? true : false;
         }
     })
-    
+
 }
 
-const isoutdated = function(model){
-    if(model.dataset.date && model.file.sync.dataset_date && model.config.date && model.file.sync.config_date){
-        if(+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date){
+const isoutdated = function (model) {
+    if (model.dataset.date && model.file.sync.dataset_date && model.config.date && model.file.sync.config_date) {
+        if (+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date) {
             return true;
-        }else{
+        } else {
             return false;
         }
-    }else{
+    } else {
         return false;
     }
 
 }
 
-const validLearning = function(file){
+const validLearning = function (file) {
     if (Joi.validate(file, learningSchema)) {
         return true;
     } else {
@@ -129,7 +133,7 @@ const validLearning = function(file){
 }
 
 
-const evaluateLearning = function(model) { 
+const evaluateLearning = function (model) {
     if (!model.file || !model.file.queue) {
         return 0;
     } else if (isjobrunning(model.file.queue)) {
@@ -144,7 +148,7 @@ const evaluateLearning = function(model) {
 }
 
 
-const evaluateResults = function(model) {
+const evaluateResults = function (model) {
     if (!model.results) {
         return 0;
     } else if (model.results.queue) {
@@ -158,7 +162,7 @@ const evaluateResults = function(model) {
     }
 }
 
-const validResults = function(results){
+const validResults = function (results) {
     if (Joi.validate(results, resultsSchema)) {
         return true;
     } else {
@@ -424,28 +428,39 @@ module.exports = {
             }
         })
     },
-    proceed_learning_current: async(req,res,next)=>{
+    proceed_learning_current: async (req, res, next) => {
 
         const source = req.query.source;
-        let queue;
+        let queue = {
+            id: null,
+            started: null,
+            finished: null,
+            error: null,
+            progress_value: null,
+            progress_description: null
+        };
 
-        await Modeler.findById(source).lean().exec(function(err, model){
-            if(err){
+        await Modeler.findById(source).lean().exec(function (err, model) {
+            if (err) {
                 return res.status(404).json(err)
-            }else{
-                agenda.jobs({"_id":model.file.queue}, (err,job)=>{
-                    if(err){
-                        return res.status(404).json(err)
-                    }else{
-                        queue.id = job._id;
-                        queue.started = job.lastRunAt;
-                        queue.finished = job.lastFinishedAt;
-                        queue.error = job.failedReason;
-                        queue.progress_value = job.progess_value;
-                        queue.progress_description = job.progress_description;
-                        return res.status(202).json(queue);
-                    }
-                })
+            } else {
+                if (model.file.queue) {
+                    agenda.jobs({
+                        "_id": model.file.queue
+                    }, (err, job) => {
+                        if (err) {
+                            return res.status(404).json(err)
+                        } else {
+                            queue.id = job._id;
+                            queue.started = job.lastRunAt;
+                            queue.finished = job.lastFinishedAt;
+                            queue.error = job.failedReason;
+                            queue.progress_value = job.progess_value;
+                            queue.progress_description = job.progress_description;
+                        }
+                    })
+                }
+                return res.status(202).json(queue);
             }
         })
 
