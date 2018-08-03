@@ -444,7 +444,7 @@ module.exports = {
             if (err) {
                 return res.status(404).json(err)
             } else {
-                if (model.file.queue) {
+                if (model.file && model.file.queue) {
                     agenda.jobs({
                         "_id": model.file.queue
                     }, (err, job) => {
