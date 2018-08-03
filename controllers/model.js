@@ -426,6 +426,29 @@ module.exports = {
     },
     proceed_learning_current: async(req,res,next)=>{
 
+        const source = req.query.source;
+        let queue;
+
+        await Modeler.findById(source).lean().exec(function(err, model){
+            if(err){
+                return res.status(404).json(err)
+            }else{
+                await agenda.jobs({"_id":model.file.queue}, (err,job)=>{
+                    if(err){
+                        return res.status(404).json(err)
+                    }else{
+                        queue.id = job._id;
+                        queue.started = job.lastRunAt;
+                        queue.finished = job.lastFinishedAt;
+                        queue.error = job.failedReason;
+                        queue.progress_value = job.progess_value;
+                        queue.progress_description = job.progress_description;
+                        return res.status(202).json(queue);
+                    }
+                })
+            }
+        })
+
     },
     proceed_learning_start: async (req, res, next) => {
         try {

@@ -38,6 +38,8 @@ const proceedDatasetUpdateValidation = celebrate(schemas.datasetUpdate);
 const proceedConfigCurrentValidation = celebrate(schemas.configCurrent);
 const proceedConfigUpdateValidation = celebrate(schemas.configUpdate);
 
+const proceedLearningCurrentValidation = celebrate(schemas.learningCurrent);
+
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
     session: false
@@ -112,12 +114,16 @@ router.route('/dataset/update').post(proceedDatasetUpdateValidation,
 
 //Config
 
-
 router.route('/config/current').get(proceedConfigCurrentValidation,
     ModelController.proceed_config_current)
 
 router.route('/config/update').post(proceedConfigUpdateValidation,
     ModelController.proceed_config_update)
+
+//Learning
+
+router.route('/learning/current').get(proceedLearningCurrentValidation,
+    ModelController.proceed_learning_current)
 
 
 //Exporting routes

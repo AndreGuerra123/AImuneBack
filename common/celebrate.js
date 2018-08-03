@@ -141,6 +141,11 @@ module.exports = {
                 epochs: Joi.number().min(1).required()
             })
            
+        },
+        learningCurrent: {
+            query: Joi.object().keys({
+                source: Joi.string().required()
+            })
         }
 
 
