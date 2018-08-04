@@ -172,6 +172,36 @@ const validResults = function (results) {
     };
 }
 
+const syncModelQueue = async function(source,job){
+    //Update the model with ObjectId and Sync object for the job!
+    let queue = job._id;
+    let sync = {
+        config_date: null,
+        dataset_date: null
+    }
+    await Modeler.findById(source).lean().exec(function (err, model){
+        if(err){
+            throw new Error(err);
+        }else{
+            sync.config_date = model.config.date;
+            sync.dataset_date = model.dataset.date;
+        }
+    }).catch(err=>{throw new Error(err)});
+
+    await Modeler.update({
+        _id: source
+    }, {
+        $set: {
+            file: {
+                queue,
+                sync,
+                date: Date.now()
+            }
+        }
+    }).catch(err=>{throw new Error(err)});
+
+}
+
 module.exports = {
 
     init: async (req, res, next) => {
@@ -475,23 +505,16 @@ module.exports = {
 
         await agenda.now('train', {
             source
-        }, async (err, job) => {
+        }, async (err, job) => { //This function runs when the job is registered in the database
             if (err) {
                 return res.status(404).json(err)
             } else {
-                await Modeler.update({
-                    _id: source
-                }, {
-                    $set: {
-                        file: {
-                            queue: job._id
-                        }
-                    }
-                }).then(() => {
-                    return res.status(202);
-                }).catch(err => {
-                    return res.status(404).json(err);
-                })
+                try{
+                    await syncModelQueue(source,job);
+                    return res.status(202)
+                }catch(error){
+                    return res.status(404).json(error);
+                }
             }
         });
 
@@ -504,11 +527,7 @@ module.exports = {
     },
     proceed_learning_reset: async (req, res, next) => {
 
-    }
-
-
-
-
+    },
     proceed_results: async (req, res, next) => {
 
     },
