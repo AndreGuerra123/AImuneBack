@@ -183,6 +183,7 @@ const syncModelQueue = function (source, job) {
         if (err) {
             throw new Error(err);
         } else {
+            console.log(model);
             Modeler.update({
                 _id: source
             }, {
