@@ -172,21 +172,23 @@ const validResults = function (results) {
     };
 }
 
-const syncModelQueue = async function(source,job){
+const syncModelQueue = async function (source, job) {
     //Update the model with ObjectId and Sync object for the job!
     let queue = job._id;
     let sync = {
         config_date: null,
         dataset_date: null
     }
-    await Modeler.findById(source).lean().exec(function (err, model){
-        if(err){
+    await Modeler.findById(source).lean().exec(function (err, model) {
+        if (err) {
             throw new Error(err);
-        }else{
+        } else {
             sync.config_date = model.config.date;
             sync.dataset_date = model.dataset.date;
         }
-    }).catch(err=>{throw new Error(err)});
+    }).catch(err => {
+        throw new Error(err)
+    });
 
     await Modeler.update({
         _id: source
@@ -198,7 +200,9 @@ const syncModelQueue = async function(source,job){
                 date: Date.now()
             }
         }
-    }).catch(err=>{throw new Error(err)});
+    }).catch(err => {
+        throw new Error(err)
+    });
 
 }
 
@@ -502,24 +506,20 @@ module.exports = {
         const {
             source
         } = req.body; //Gets which model to train
+        try {
+            const job = await agenda.now('train', {
+                source
+            });
+            await syncModelQueue(source, job);
+            return res.status(202)
+        } catch (error) {
+            return res.status(404).json(error);
+        }
+    }
+}
 
-        await agenda.now('train', {
-            source
-        }, async (err, job) => { //This function runs when the job is registered in the database
-            if (err) {
-                return res.status(404).json(err)
-            } else {
-                try{
-                    await syncModelQueue(source,job);
-                    return res.status(202)
-                }catch(error){
-                    return res.status(404).json(error);
-                }
-            }
-        });
-
-    },
-    proceed_learning_restart: async (req, res, next) => {
+},
+proceed_learning_restart: async (req, res, next) => {
 
     },
     proceed_learning_cancel: async (req, res, next) => {
