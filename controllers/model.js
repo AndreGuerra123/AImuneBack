@@ -172,34 +172,38 @@ const validResults = function (results) {
     };
 }
 
-const syncModelQueue = async function (source, job) {
+const sync = async function (source, job) {
 
 
-    await Modeler.findById(source, async (err, res) => {
-        if (!err) {
-            await Modeler.update({
-                _id: source
-            }, {
-                $set: {
-                    file: {
-                        queue: job._id,
-                        sync: {
-                            config_date: res.model.date,
-                            data_date: res.model.date
-                        },
-                        date: Date.now()
-                    }
+    let config_date = null;
+    let dataset_date = null;
+
+    try {
+        var model = await Modeler.findById(source).catch(err => {
+            throw new Error(err)
+        });
+
+        config_date = model.config.date;
+        dataset_date = model.dataset.date;
+
+    } finally {
+        await Modeler.update({
+            _id: source
+        }, {
+            $set: {
+                file: {
+                    queue: job._id,
+                    sync: {
+                        config_date,
+                        dataset_date
+                    },
+                    date: Date.now()
                 }
-            }, async (err, raw) => {
-                if (err) {
-                    throw new Error(err);
-                }
-            })
-        } else {
-            throw new Error(err);
-        }
-
-    })
+            }
+        }).catch(err => {
+            throw new Error(err)
+        })
+    }
 
 
 }
@@ -507,6 +511,7 @@ module.exports = {
         const job = await agenda.now('train', {
             source
         });
+
         await syncModelQueue(source, job).then(() => {
             return res.status(202)
         }).catch(err => {
