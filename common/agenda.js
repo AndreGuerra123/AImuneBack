@@ -13,7 +13,7 @@ agenda.define('train',{priority:'high'},(job,done)=>{
         config_date: null,
         dataset_date: null
     }
-    await Modeler.findById(source).lean().exec(function (err, oldModel){
+    Modeler.findById(source).lean().exec(function (err, oldModel){
         if(err){
             throw new Error(err);
         }else{
@@ -22,7 +22,7 @@ agenda.define('train',{priority:'high'},(job,done)=>{
         }
     });
 
-    await Modeler.update({"_id":source},{
+    Modeler.update({"_id":source},{
         $set: {
             sync
         }
