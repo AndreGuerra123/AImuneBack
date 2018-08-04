@@ -495,7 +495,9 @@ module.exports = {
 
         var queue = await get(model, 'file.queue', null);
 
-        return res.status(202).json(retrieveJobProps(queue));
+        var jobprops = retrieveJobProps(queue);
+
+        return res.status(202).json(jobprops);
 
     },
     proceed_learning_start: async (req, res, next) => {
