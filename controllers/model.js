@@ -182,8 +182,8 @@ const syncModelQueue = function (source, job) {
     }).exec(function (err, model) {
         if (err) {
             throw new Error(err);
-        } else {
-            console.log(model);
+        } else if(model[0]){
+           
             Modeler.update({
                 _id: source
             }, {
@@ -191,13 +191,15 @@ const syncModelQueue = function (source, job) {
                     file: {
                         queue: job._id,
                         sync: {
-                            config_date: model.config.date,
-                            data_date: model.dataset.date
+                            config_date: model[0].config.date,
+                            data_date: model[0].dataset.date
                         },
                         date: Date.now()
                     }
                 }
             })
+        }else{
+            throw new Error("Model not found.")
         }
     });
 }
