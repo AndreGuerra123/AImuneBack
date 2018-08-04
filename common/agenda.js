@@ -13,19 +13,14 @@ let agenda = new Agenda({
 });
 
 
-const updateJobProgress = async function (jobi, value, description) {
+const updateJobProgress = async function (job, value, description) {
 
-    await agenda.jobs({
-        "_id": jobi._id
-    }, function (err, job) {
-        if(!err){
             job.progress = {
                 value,
                 description
             }
             job.save();    
-        }
-    });
+        
 }
 
 //train the model
