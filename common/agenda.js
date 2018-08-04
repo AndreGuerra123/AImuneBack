@@ -13,7 +13,7 @@ let agenda = new Agenda({
 });
 
 
-const updateProgress = async function (jobi, value, description) {
+const updateJobProgress = async function (jobi, value, description) {
 
     await agenda.jobs({
         "_id": jobi._id
@@ -34,7 +34,7 @@ agenda.define('train', {
 }, (job, done) => {
     let i = 0;
     while (i <= 100) {
-        setTimeout(updateProgress(job, i, i), 1000);
+        setTimeout(updateJobProgress(job, i, i), 1000);
     }
     done();
 });
