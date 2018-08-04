@@ -112,13 +112,13 @@ const isjoberror = function (queue) {
 }
 
 const isoutdated = function (model) {
-    if (model.dataset.date && model.file.sync.dataset_date && model.config.date && model.file.sync.config_date) {
+    try {
         if (+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date) {
             return true;
         } else {
             return false;
         }
-    } else {
+    } catch (err) {
         return false;
     }
 
@@ -136,10 +136,12 @@ const validLearning = function (file) {
 const evaluateLearning = function (model) {
     if (!model.file || !model.file.queue) {
         return 0;
-    } else if (isjobrunning(model.file.queue)) {
-        return 1;
     } else if (isjoberror(model.file.queue) || isoutdated(model)) {
         return 2;
+
+    } else if (isjobrunning(model.file.queue)) {
+        return 1;
+
     } else if (validLearning(model.file)) {
         return 3;
     } else {
@@ -466,30 +468,47 @@ module.exports = {
 
     },
     proceed_learning_start: async (req, res, next) => {
-        try {
-            const {
-                source
-            } = req.body.query; //Gets which model to train
-            const job = await agenda.now('train', {
-                source
-            })
-            await Modeler.update({
-                _id: source
-            }, {
-                $set: {
-                    file: {
-                        queue: job._id
+
+        const {
+            source
+        } = req.body; //Gets which model to train
+
+        await agenda.now('train', {
+            source
+        }, (err, job) => {
+            if (err) {
+                return res.status(404).json(err)
+            } else {
+                await Modeler.update({
+                    _id: source
+                }, {
+                    $set: {
+                        file: {
+                            queue: job._id
+                        }
                     }
-                }
-            })
-            return res.status(200); //Starts new training job.
-        } catch (error) {
-            return res.status(404).json(err);
-        }
+                }).then(() => {
+                    return res.status(202);
+                }).catch(err => {
+                    return res.status(404).json(err);
+                })
+            }
+        });
+
+    },
+    proceed_learning_restart: async (req, res, next) => {
+
     },
     proceed_learning_cancel: async (req, res, next) => {
 
     },
+    proceed_learning_reset: async (req, res, next) => {
+
+    }
+
+
+
+
     proceed_results: async (req, res, next) => {
 
     },
