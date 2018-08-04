@@ -479,6 +479,7 @@ module.exports = {
             await agenda.jobs({
                 "_id": queue.id
             }, (err, job) => {
+                console.log(job)
                 if(err) return res.status(404).json(err);
                 queue.started = get(job,'attrs.lastRunAt',null);
                 queue.finished = get(job,'attrs.lastFinishedAt',null);
