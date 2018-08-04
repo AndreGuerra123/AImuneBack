@@ -515,11 +515,8 @@ module.exports = {
         } catch (error) {
             return res.status(404).json(error);
         }
-    }
-}
-
-},
-proceed_learning_restart: async (req, res, next) => {
+    },
+    proceed_learning_restart: async (req, res, next) => {
 
     },
     proceed_learning_cancel: async (req, res, next) => {
