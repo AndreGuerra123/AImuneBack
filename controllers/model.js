@@ -502,7 +502,7 @@ module.exports = {
 
     },
     proceed_learning_start: async (req, res, next) => {
-
+        console.log("here1")
         const {
             source
         } = req.body; //Gets which model to train
