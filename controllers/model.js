@@ -182,12 +182,12 @@ const syncModelQueue = async function (source, job) {
         }, {
             $set: {
                 file: {
-                    queue: job._id,
+                    queue: job.attrs._id,
                     sync: {
                         config_date: get(model,'config.date',null),
                         dataset_date: get(model,'dataset.date',null)
                     },
-                    date: Date.now()
+                    date: Date.now
                 }
             }
         }).catch(err => {
