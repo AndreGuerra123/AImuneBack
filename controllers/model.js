@@ -195,9 +195,6 @@ const syncModelQueue = async function (source, job) {
         })
     }
 
-
-}
-
 module.exports = {
 
     init: async (req, res, next) => {
