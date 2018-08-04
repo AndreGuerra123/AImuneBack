@@ -172,34 +172,33 @@ const validResults = function (results) {
     };
 }
 
-const syncModelQueue = async function (source, job) {
-    //Update the model with ObjectId and Sync object for the job!
-    let queue = job._id;
-    let sync = {
-        config_date: null,
-        dataset_date: null
-    }
-
-    await Modeler.find({_id:source}).select({ "config": 1, "dataset":1, "_id": 0}).exec((err, model)=>{
-        if(err){
-            throw new Error(err);
-        }
-        sync.config_date = model.config.date;
-        sync.dataset_date = model.dataset.date;
-    });
-
-    await Modeler.update({
+const syncModelQueue = function (source, job) {
+    Modeler.find({
         _id: source
-    }, {
-        $set: {
-            file: {
-                queue,
-                sync,
-                date: Date.now()
-            }
+    }).select({
+        "config": 1,
+        "dataset": 1,
+        "_id": 0
+    }).exec(function (err, model) {
+        if (err) {
+            throw new Error(err);
+        } else {
+            Modeler.update({
+                _id: source
+            }, {
+                $set: {
+                    file: {
+                        queue: job._id,
+                        sync: {
+                            config_date: model.config.date,
+                            data_date: model.dataset.date
+                        },
+                        date: Date.now()
+                    }
+                }
+            })
         }
-    })
-
+    });
 }
 
 module.exports = {
@@ -498,18 +497,14 @@ module.exports = {
 
     },
     proceed_learning_start: async (req, res, next) => {
-        console.log("here1")
         const {
             source
         } = req.body; //Gets which model to train
-        console.log("source")
         try {
             const job = await agenda.now('train', {
                 source
             });
-            console.log("here2")
-
-            await syncModelQueue(source, job);
+            syncModelQueue(source, job);
             return res.status(202)
         } catch (error) {
             return res.status(404).json(error);
