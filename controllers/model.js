@@ -124,6 +124,7 @@ const retrieveJobProps = function (queue) {
     agenda.jobs({
         "_id": queue
     }, (err, job) => {
+        console.log(job)
         if (!err) {
             jobprops.started = get(job, 'lastRunAt', null);
             jobprops.finished = get(job, 'lastFinishedAt', null);
@@ -494,8 +495,10 @@ module.exports = {
         })
 
         var queue = await get(model, 'file.queue', null);
+        console.log(queue)
 
         var jobprops = retrieveJobProps(queue);
+        console.log(jobprops)
 
         return res.status(202).json(jobprops);
 
