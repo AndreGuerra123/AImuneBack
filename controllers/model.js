@@ -475,7 +475,7 @@ module.exports = {
 
         await agenda.now('train', {
             source
-        }, (err, job) => {
+        }, async (err, job) => {
             if (err) {
                 return res.status(404).json(err)
             } else {
