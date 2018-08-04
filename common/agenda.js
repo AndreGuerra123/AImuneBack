@@ -5,30 +5,27 @@ const Modeler = require('../models/models.js');
 //Configuring agenda
 let agenda = new Agenda({db: {address: MONGO, collection: 'jobs'}});
 
+
+const updateProgress = async function(job, value, description){
+    await agenda.job({"_id":job._id}).update(
+        {
+            $set: {
+                progress:{
+                    value,
+                    description
+                }
+            }
+        }
+    )
+}
+
 //train the model
 agenda.define('train',{priority:'high'},(job,done)=>{
-
-    const {source} = job.attrs.data;
-    let sync = {
-        config_date: null,
-        dataset_date: null
-    }
-    Modeler.findById(source).lean().exec(function (err, oldModel){
-        if(err){
-            throw new Error(err);
-        }else{
-            sync.config_date = oldModel.config.date;
-            sync.dataset_date = oldModel.dataset.date;
-        }
-    });
-
-    Modeler.update({"_id":source},{
-        $set: {
-            sync
-        }
-    })
-
-
+   let i = 0;
+   while(i<=100){
+    setTimeout(updateProgress(job,i,i),1000);
+   }
+   done();
 });
 
 //Starting agenda
