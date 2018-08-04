@@ -13,7 +13,7 @@ let agenda = new Agenda({
 });
 
 
-const updateJobProgress = async function (job, value, description) {
+const updateJobProgress = function (job, value, description) {
 
             job.progress = {
                 value,
