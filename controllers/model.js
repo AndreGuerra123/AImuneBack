@@ -3,8 +3,7 @@ const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
 const mongoose = require('mongoose');
-const oid = mongoose.Types.ObjectId;
-
+const get = require('lodash/get');
 
 const {
     Joi
@@ -172,21 +171,12 @@ const validResults = function (results) {
     };
 }
 
-const sync = async function (source, job) {
+const syncModelQueue = async function (source, job) {
 
-
-    let config_date = null;
-    let dataset_date = null;
-
-    try {
         var model = await Modeler.findById(source).catch(err => {
             throw new Error(err)
         });
 
-        config_date = model.config.date;
-        dataset_date = model.dataset.date;
-
-    } finally {
         await Modeler.update({
             _id: source
         }, {
@@ -194,8 +184,8 @@ const sync = async function (source, job) {
                 file: {
                     queue: job._id,
                     sync: {
-                        config_date,
-                        dataset_date
+                        config_date: get(model,'config.date',null),
+                        dataset_date: get(model,'dataset.date',null)
                     },
                     date: Date.now()
                 }
