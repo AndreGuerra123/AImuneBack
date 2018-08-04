@@ -473,22 +473,30 @@ module.exports = {
         }).catch(err => {
             return res.status(404).json(err)
         })
-        queue.id = get(model, 'file.queue', null);
+        
+        queue.id = await get(model, 'file.queue', null);
 
         if (queue.id) {
             await agenda.jobs({
                 "_id": queue.id
             }, (err, job) => {
                 console.log(job)
-                if(err) return res.status(404).json(err);
-                queue.started = get(job,'attrs.lastRunAt',null);
-                queue.finished = get(job,'attrs.lastFinishedAt',null);
-                queue.error = get(job,'attrs.failedReason',null);
-                queue.progress_value = get(job,'attrs.progress.value',null);
-                queue.progress_description = get(job,'attrs.progress.description',null);
+                if (err) {
+                    return res.status(404).json(err);
+                } else {
+
+                    queue.started = get(job, 'attrs.lastRunAt', null);
+                    queue.finished = get(job, 'attrs.lastFinishedAt', null);
+                    queue.error = get(job, 'attrs.failedReason', null);
+                    queue.progress_value = get(job, 'attrs.progress.value', null);
+                    queue.progress_description = get(job, 'attrs.progress.description', null);
+                    return res.status(202).json(queue);
+
+                }
+
             })
         }
-        return res.status(202).json(queue);
+        
 
     },
     proceed_learning_start: async (req, res, next) => {
