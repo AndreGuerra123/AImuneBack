@@ -110,6 +110,33 @@ const isjoberror = function (queue) {
 
 }
 
+const retrieveJobProps = function (queue) {
+
+    let jobprops = {
+        id: queue,
+        started: null,
+        finished: null,
+        error: null,
+        progress_value: null,
+        progress_description: null
+    };
+
+    agenda.jobs({
+        "_id": queue
+    }, (err, job) => {
+        if (!err) {
+            jobprops.started = get(job, 'lastRunAt', null);
+            jobprops.finished = get(job, 'lastFinishedAt', null);
+            jobprops.error = get(job, 'failedReason', null);
+            jobprops.progress_value = get(job, 'progress.value', null);
+            jobprops.progress_description = get(job, 'progress.description', null);
+        }
+
+    })
+
+    return jobprops;
+}
+
 const isoutdated = function (model) {
     try {
         if (+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date) {
@@ -459,14 +486,6 @@ module.exports = {
     proceed_learning_current: async (req, res, next) => {
 
         const source = req.query.source;
-        let queue = {
-            id: null,
-            started: null,
-            finished: null,
-            error: null,
-            progress_value: null,
-            progress_description: null
-        };
 
         var model = await Modeler.findById(source).select({
             "file": 1
@@ -474,28 +493,9 @@ module.exports = {
             return res.status(404).json(err)
         })
 
-        queue.id = await get(model, 'file.queue', null);
+        var queue = await get(model, 'file.queue', null);
 
-        if (queue.id) {
-            await agenda.jobs({
-                "_id": queue.id
-            }, (err, job) => {
-                console.log(job)
-                if (err) {
-                    return res.status(404).json(err);
-                } else {
-
-                    queue.started = get(job, 'attrs.lastRunAt', null);
-                    queue.finished = get(job, 'attrs.lastFinishedAt', null);
-                    queue.error = get(job, 'attrs.failedReason', null);
-                    queue.progress_value = get(job, 'attrs.progress.value', null);
-                    queue.progress_description = get(job, 'attrs.progress.description', null);
-
-                }
-
-            })
-        }
-        return res.status(202).json(queue);       
+        return res.status(202).json(retrieveJobProps(queue));
 
     },
     proceed_learning_start: async (req, res, next) => {
