@@ -473,7 +473,7 @@ module.exports = {
         }).catch(err => {
             return res.status(404).json(err)
         })
-        
+
         queue.id = await get(model, 'file.queue', null);
 
         if (queue.id) {
@@ -490,13 +490,12 @@ module.exports = {
                     queue.error = get(job, 'attrs.failedReason', null);
                     queue.progress_value = get(job, 'attrs.progress.value', null);
                     queue.progress_description = get(job, 'attrs.progress.description', null);
-                    return res.status(202).json(queue);
 
                 }
 
             })
         }
-        
+        return res.status(202).json(queue);       
 
     },
     proceed_learning_start: async (req, res, next) => {
