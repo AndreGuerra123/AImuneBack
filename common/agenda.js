@@ -7,7 +7,7 @@ let agenda = new Agenda({db: {address: MONGO, collection: 'jobs'}});
 
 
 const updateProgress = async function(job, value, description){
-    await agenda.job({"_id":job._id}).update(
+    await agenda.update({"_id":job._id},
         {
             $set: {
                 progress:{
