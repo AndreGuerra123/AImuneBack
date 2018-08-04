@@ -179,15 +179,13 @@ const syncModelQueue = async function (source, job) {
         config_date: null,
         dataset_date: null
     }
-    await Modeler.findById(source).lean().exec(function (err, model) {
-        if (err) {
+
+    await Modeler.find({_id:source}).select({ "config": 1, "dataset":1, "_id": 0}).exec((err, model)=>{
+        if(err){
             throw new Error(err);
-        } else {
-            sync.config_date = model.config.date;
-            sync.dataset_date = model.dataset.date;
         }
-    }).catch(err => {
-        throw new Error(err)
+        sync.config_date = model.config.date;
+        sync.dataset_date = model.dataset.date;
     });
 
     await Modeler.update({
@@ -200,9 +198,7 @@ const syncModelQueue = async function (source, job) {
                 date: Date.now()
             }
         }
-    }).catch(err => {
-        throw new Error(err)
-    });
+    })
 
 }
 
@@ -506,10 +502,13 @@ module.exports = {
         const {
             source
         } = req.body; //Gets which model to train
+        console.log("source")
         try {
             const job = await agenda.now('train', {
                 source
             });
+            console.log("here2")
+
             await syncModelQueue(source, job);
             return res.status(202)
         } catch (error) {
