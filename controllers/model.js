@@ -487,8 +487,8 @@ module.exports = {
                             queue.started = job.lastRunAt;
                             queue.finished = job.lastFinishedAt;
                             queue.error = job.failedReason;
-                            queue.progress_value = job.progess_value;
-                            queue.progress_description = job.progress_description;
+                            queue.progress_value = job.progress.value;
+                            queue.progress_description = job.progress.description;
                         }
                     })
                 }
