@@ -172,36 +172,36 @@ const validResults = function (results) {
     };
 }
 
-const syncModelQueue = function (source, job) {
-    Modeler.find({
-        _id: source
-    }).select({
-        "config": 1,
-        "dataset": 1,
-        "_id": 0
-    }).exec(function (err, model) {
-        if (err) {
-            throw new Error(err);
-        } else if(model[0]){
-           
-            Modeler.update({
+const syncModelQueue = async function (source, job) {
+
+
+    await Modeler.findById(source, async (err, model) => {
+        if (!err) {
+           await Modeler.update({
                 _id: source
             }, {
                 $set: {
                     file: {
                         queue: job._id,
                         sync: {
-                            config_date: model[0].config.date,
-                            data_date: model[0].dataset.date
+                            config_date: res.model.date,
+                            data_date: res.model.date
                         },
                         date: Date.now()
                     }
                 }
+            },async (err,raw)=>{
+               if(err){
+                   throw new Error(err);
+               }
             })
-        }else{
-            throw new Error("Model not found.")
+        } else {
+            throw new Error(err);
         }
-    });
+
+    })
+
+
 }
 
 module.exports = {
@@ -507,7 +507,7 @@ module.exports = {
             const job = await agenda.now('train', {
                 source
             });
-            syncModelQueue(source, job);
+            await syncModelQueue(source, job);
             return res.status(202)
         } catch (error) {
             return res.status(404).json(error);
