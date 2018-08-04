@@ -173,27 +173,27 @@ const validResults = function (results) {
 
 const syncModelQueue = async function (source, job) {
 
-        var model = await Modeler.findById(source).catch(err => {
-            throw new Error(err)
-        });
+    var model = await Modeler.findById(source).select({"config":1,"dataset":1}).catch(err => {
+        throw new Error(err)
+    });
 
-        await Modeler.update({
-            _id: source
-        }, {
-            $set: {
-                file: {
-                    queue: job.attrs._id,
-                    sync: {
-                        config_date: get(model,'config.date',null),
-                        dataset_date: get(model,'dataset.date',null)
-                    },
-                    date: new Date()
-                }
+    await Modeler.update({
+        _id: source
+    }, {
+        $set: {
+            file: {
+                queue: job.attrs._id,
+                sync: {
+                    config_date: get(model, 'config.date', null),
+                    dataset_date: get(model, 'dataset.date', null)
+                },
+                date: new Date()
             }
-        }).catch(err => {
-            throw new Error(err)
-        })
-    }
+        }
+    }).catch(err => {
+        throw new Error(err)
+    })
+}
 
 module.exports = {
 
@@ -499,10 +499,11 @@ module.exports = {
             source
         });
 
-        await syncModelQueue(source, job).catch(err=>{return res.status(404).json(err);
+        await syncModelQueue(source, job).catch(err => {
+            return res.status(404).json(err);
         });
 
-        return res.status(200);
+        return res.status(202).json('Started learning process...');
 
     },
     proceed_learning_restart: async (req, res, next) => {
