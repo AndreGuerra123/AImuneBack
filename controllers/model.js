@@ -175,9 +175,9 @@ const validResults = function (results) {
 const syncModelQueue = async function (source, job) {
 
 
-    await Modeler.findById(source, async (err, model) => {
+    await Modeler.findById(source, async (err, res) => {
         if (!err) {
-           await Modeler.update({
+            await Modeler.update({
                 _id: source
             }, {
                 $set: {
@@ -190,10 +190,10 @@ const syncModelQueue = async function (source, job) {
                         date: Date.now()
                     }
                 }
-            },async (err,raw)=>{
-               if(err){
-                   throw new Error(err);
-               }
+            }, async (err, raw) => {
+                if (err) {
+                    throw new Error(err);
+                }
             })
         } else {
             throw new Error(err);
@@ -503,15 +503,16 @@ module.exports = {
         const {
             source
         } = req.body; //Gets which model to train
-        try {
-            const job = await agenda.now('train', {
-                source
-            });
-            await syncModelQueue(source, job);
+
+        const job = await agenda.now('train', {
+            source
+        });
+        await syncModelQueue(source, job).then(() => {
             return res.status(202)
-        } catch (error) {
-            return res.status(404).json(error);
-        }
+        }).catch(err => {
+            return res.status(404).json(err);
+        });
+
     },
     proceed_learning_restart: async (req, res, next) => {
 
