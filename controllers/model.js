@@ -187,7 +187,7 @@ const syncModelQueue = async function (source, job) {
                         config_date: get(model,'config.date',null),
                         dataset_date: get(model,'dataset.date',null)
                     },
-                    date: Date.now
+                    date: new Date()
                 }
             }
         }).catch(err => {
@@ -499,11 +499,10 @@ module.exports = {
             source
         });
 
-        await syncModelQueue(source, job).then(() => {
-            return res.status(202)
-        }).catch(err => {
-            return res.status(404).json(err);
+        await syncModelQueue(source, job).catch(err=>{return res.status(404).json(err);
         });
+
+        return res.status(200);
 
     },
     proceed_learning_restart: async (req, res, next) => {
