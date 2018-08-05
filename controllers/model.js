@@ -110,7 +110,7 @@ const isjoberror = function (queue) {
 
 }
 
-const retrieveJobProps = function (queue) {
+const retrieveJobProps = async function (queue) {
 
     let jobprops = {
         id: queue,
@@ -121,21 +121,20 @@ const retrieveJobProps = function (queue) {
         progress_description: null
     };
 
-    agenda.jobs({
+    await agenda.jobs({
         "_id": queue
     }, (err, job) => {
-        console.log(job)
-        if (!err) {
+       
             jobprops.started = get(job, 'lastRunAt', null);
             jobprops.finished = get(job, 'lastFinishedAt', null);
             jobprops.error = get(job, 'failedReason', null);
             jobprops.progress_value = get(job, 'progress.value', null);
             jobprops.progress_description = get(job, 'progress.description', null);
-        }
+            return jobprops;
 
     })
 
-    return jobprops;
+    
 }
 
 const isoutdated = function (model) {
@@ -488,17 +487,16 @@ module.exports = {
 
         const source = req.query.source;
 
-        var model = await Modeler.findById(source).select({
-            "file": 1
-        }).lean();
-
-        var queue = await get(model, 'file.queue', null);
-        console.log(queue)
-
-        var jobprops = retrieveJobProps(queue);
-        console.log(jobprops)
-
-        return res.status(202).json(jobprops);
+        await Modeler.findById(source, async (err, model) => {
+            if(err){
+                return res.status(404).json(err)
+            }else{
+                var queue = await get(model, 'file.queue', null);
+                var jobprops = await retrieveJobProps(queue);
+                return res.status(202).json(jobprops);
+            }
+            
+        })
 
     },
     proceed_learning_start: async (req, res, next) => {
