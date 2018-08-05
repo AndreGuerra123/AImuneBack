@@ -475,12 +475,7 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 jobprops.id = get(model, 'file.queue', null);
-                Modeler.findById(source).select({
-                    "dataset": 1
-                }).lean().exec(function (err, model) {
-                    console.log(model.dataset.date)
-                })
-                /* agenda.jobs({
+                agenda.jobs({
                     "_id": jobprops.id
                 }, (err, job) => {
                     console.log(err)
@@ -490,7 +485,7 @@ module.exports = {
                     jobprops.error = get(job, 'failedReason', null);
                     jobprops.progress_value = get(job, 'progress.value', null);
                     jobprops.progress_description = get(job, 'progress.description', null);
-                }) */
+                })
                 return res.status(202).json(jobprops);
             }
 
