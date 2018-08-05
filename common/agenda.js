@@ -27,7 +27,7 @@ const updateJobProgress = function (job, value, description) {
 agenda.define('train', (job, done) => {
     let i = 0;
     while (i <= 100) {
-        setTimeout(updateJobProgress(job, i, i), 1000);
+        setTimeout(updateJobProgress, 1000,job,i,i);
     }
     done();
 });
