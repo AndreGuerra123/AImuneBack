@@ -477,11 +477,10 @@ module.exports = {
                 var queue = get(model, 'file.queue', null);
                 await Jobs.findJobById(queue, (error, jobs) => {
                     var job = get(jobs, 0, null);
-                    console.log(job)
                     jobprops.id = get(job, '_id', null);
                     jobprops.started = get(job, 'lastRunAt', null);
                     jobprops.finished = get(job, 'lastFinishedAt', null);
-                    jobprops.error = get(job, 'failedReason', null);
+                    jobprops.error = get(job, 'failReason', null);
                     jobprops.progress_value = get(job, 'progress.value', null);
                     jobprops.progress_description = get(job, 'progress.description', null);
                     return res.status(202).json(jobprops);
