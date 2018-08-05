@@ -459,19 +459,18 @@ module.exports = {
     proceed_learning_current: async (req, res, next) => {
 
         const source = req.query.source;
-        let queue;
         let jobprops;
         await Modeler.findById(source).lean().exec(function (err, model) {
 
             if (err) {
                 return res.status(404).json(err);
             } else {
-                queue = get(model, 'file.queue', null);
+                jobprops.id = get(model, 'file.queue', null);
             }
 
         })
         await agenda.jobs({
-            "_id": queue
+            "_id": jobprops.id
         }, (err, job) => {
                 jobprops.started = get(job, 'lastRunAt', null);
                 jobprops.finished = get(job, 'lastFinishedAt', null);
