@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const jobSchema = new Schema({
-    failedReason: String,
-    lastFinishedAt: Date,
-    lastRunAt: Date,
-    progress: Object
-}, {
-    collection: 'jobs'
-});
 
-module.exports = mongoose.model('Jobs', jobSchema);
+const findJobById = function(jobid,cb) {
+
+    mongoose.connection.db.collection('jobs', function (err, collection) {
+        collection.find({'_id':jobid}).toArray(cb);
+    });
+
+}
+
+module.exports = {findJobById}
 
