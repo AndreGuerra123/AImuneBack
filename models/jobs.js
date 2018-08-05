@@ -10,8 +10,5 @@ const jobSchema = new Schema({
     collection: 'jobs'
 });
 
-const Jobs = mongoose.model('job', jobSchema);
+module.exports = mongoose.model('Jobs', jobSchema);
 
-module.exports={
-    Jobs
-}
