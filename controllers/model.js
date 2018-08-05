@@ -475,13 +475,13 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
-                Jobs.findById(queue, (err, job) => {
-                    jobprops.id = get(job,'attrs._id',null);
-                    jobprops.started = get(job, 'attrs.lastRunAt', null);
-                    jobprops.finished = get(job, 'attrs.lastFinishedAt', null);
-                    jobprops.error = get(job, 'attrs.failedReason', null);
-                    jobprops.progress_value = get(job, 'attrs.progress.value', null);
-                    jobprops.progress_description = get(job, 'attrs.progress.description', null);
+                Jobs.findById(queue).lean().exec((err, job) => {
+                    jobprops.id = get(job,'_id',null);
+                    jobprops.started = get(job, 'lastRunAt', null);
+                    jobprops.finished = get(job, 'lastFinishedAt', null);
+                    jobprops.error = get(job, 'failedReason', null);
+                    jobprops.progress_value = get(job, 'progress.value', null);
+                    jobprops.progress_description = get(job, 'progress.description', null);
                 })
                 return res.status(202).json(jobprops);
             }
