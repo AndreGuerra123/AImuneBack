@@ -475,13 +475,18 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
-                await Jobs.findJobById(queue, (jobs) => {
-                    jobprops.id = get(jobs[0], '_id', null);
-                    jobprops.started = get(jobs[0], 'lastRunAt', null);
-                    jobprops.finished = get(jobs[0], 'lastFinishedAt', null);
-                    jobprops.error = get(jobs[0], 'failedReason', null);
-                    jobprops.progress_value = get(jobs[0], 'progress.value', null);
-                    jobprops.progress_description = get(jobs[0], 'progress.description', null);
+                await Jobs.findJobById(queue, (error, jobs) => {
+                    console.log(error)
+                    console.log(jobs)
+                    if (!error && jobs[0]) {
+                        jobprops.id = get(jobs[0], '_id', null);
+                        jobprops.started = get(jobs[0], 'lastRunAt', null);
+                        jobprops.finished = get(jobs[0], 'lastFinishedAt', null);
+                        jobprops.error = get(jobs[0], 'failedReason', null);
+                        jobprops.progress_value = get(jobs[0], 'progress.value', null);
+                        jobprops.progress_description = get(jobs[0], 'progress.description', null);
+                    }
+
                 })
                 return res.status(202).json(jobprops);
             }
