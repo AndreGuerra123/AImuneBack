@@ -469,14 +469,14 @@ module.exports = {
         };
         await Modeler.findById(source).select({
             "file": 1
-        }).lean().exec(function (err, model) {
+        }).lean().exec(async function (err, model) {
 
             if (err) {
                 return res.status(404).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
-                Jobs.findById(queue).select({"lastRunAt":1,"lastFinishedAt":1,"failedReason":1,"progress":1}).exec((err, job) => {
-                    jobprops.id = get(job,'id',null);
+                await Jobs.findById(queue).select({"lastRunAt":1,"lastFinishedAt":1,"failedReason":1,"progress":1}).exec((err, job) => {
+                    jobprops.id = get(job,'_id',null);
                     jobprops.started = get(job, 'lastRunAt', null);
                     jobprops.finished = get(job, 'lastFinishedAt', null);
                     jobprops.error = get(job, 'failedReason', null);
