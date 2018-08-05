@@ -1,8 +1,8 @@
 //Import Internal Dependencies
 const Modeler = require('../models/models.js');
+const Jobs = require('../models/jobs.js');
 const Loader = require('../models/loader.js');
 const agenda = require('../common/agenda.js');
-const mongoose = require('mongoose');
 const get = require('lodash/get');
 
 const {
@@ -475,7 +475,7 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
-                agenda.findById(queue).exec((err, job) => {
+                Jobs.findById(queue, (err, job) => {
                     jobprops.id = get(job,'attrs._id',null);
                     jobprops.started = get(job, 'attrs.lastRunAt', null);
                     jobprops.finished = get(job, 'attrs.lastFinishedAt', null);
