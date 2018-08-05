@@ -490,9 +490,7 @@ module.exports = {
 
         var model = await Modeler.findById(source).select({
             "file": 1
-        }).catch(err => {
-            return res.status(404).json(err)
-        })
+        }).lean();
 
         var queue = await get(model, 'file.queue', null);
         console.log(queue)
