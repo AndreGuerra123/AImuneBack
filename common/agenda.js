@@ -16,7 +16,7 @@ let agenda = new Agenda({
 
 const updateJobProgress = function (job, value, description) {
 
-    Jobs.updateJobById(job._id, {
+    Jobs.updateJobById(job.attrs._id, {
         progress: {
             value,
             description
@@ -28,7 +28,7 @@ const updateJobProgress = function (job, value, description) {
 //train the model
 agenda.define('train', (job, done) => {
 
-
+    console.log(job.attrs.data.source);
     updateJobProgress(job, 50, "half way there...")
 
     done();
