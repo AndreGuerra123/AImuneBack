@@ -475,7 +475,7 @@ module.exports = {
             } else {
                 var queue = get(model, 'file.queue', null);
                 agenda.jobs({
-                    "_id": queue
+                    "id": queue
                 }, (err, jobs) => {
                     jobprops.id = get(jobs[0],'attrs._id',null);
                     jobprops.started = get(jobs[0], 'attrs.lastRunAt', null);
