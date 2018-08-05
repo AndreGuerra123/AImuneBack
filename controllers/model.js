@@ -475,7 +475,7 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 jobprops.id = get(model, 'file.queue', null);
-                await Modeler.findById(source).select({
+                Modeler.findById(source).select({
                     "dataset": 1
                 }).lean().exec(function (err, model) {
                     console.log(model.dataset.date)
