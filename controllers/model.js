@@ -473,21 +473,20 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 jobprops.id = get(model, 'file.queue', null);
-                return res.status(202).json(jobprops);
-
+                agenda.jobs({
+                    "_id": jobprops.id
+                }, (err, job) => {
+                        jobprops.started = get(job, 'lastRunAt', null);
+                        jobprops.finished = get(job, 'lastFinishedAt', null);
+                        jobprops.error = get(job, 'failedReason', null);
+                        jobprops.progress_value = get(job, 'progress.value', null);
+                        jobprops.progress_description = get(job, 'progress.description', null);
+                })
+               return res.status(202).json(jobprops);
             }
 
         })
-/*         await agenda.jobs({
-            "_id": jobprops.id
-        }, (err, job) => {
-                jobprops.started = get(job, 'lastRunAt', null);
-                jobprops.finished = get(job, 'lastFinishedAt', null);
-                jobprops.error = get(job, 'failedReason', null);
-                jobprops.progress_value = get(job, 'progress.value', null);
-                jobprops.progress_description = get(job, 'progress.description', null);
-                return res.status(202).json(jobprops);
-        }) */
+        
 
     },
     proceed_learning_start: async (req, res, next) => {
