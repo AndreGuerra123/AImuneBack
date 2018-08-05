@@ -24,9 +24,7 @@ const updateJobProgress = function (job, value, description) {
 }
 
 //train the model
-agenda.define('train', {
-    priority: 'high'
-}, (job, done) => {
+agenda.define('train', (job, done) => {
     let i = 0;
     while (i <= 100) {
         setTimeout(updateJobProgress(job, i, i), 1000);
