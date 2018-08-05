@@ -3,6 +3,7 @@ const {
 } = require('../config/index.js');
 const Agenda = require('agenda');
 const Modeler = require('../models/models.js');
+const Jobs = require('../models/jobs.js');
 
 //Configuring agenda
 let agenda = new Agenda({
@@ -15,15 +16,10 @@ let agenda = new Agenda({
 
 const updateJobProgress = function (job, value, description) {
 
-    agenda.jobs({
-        "_id": job._id
-    }, (err, job) => {
-        if (!err) {
-            job.progress = {
-                value,
-                description
-            }
-            job.save();
+    Jobs.updateJobById(job._id, {
+        progress: {
+            value,
+            description
         }
     })
 
