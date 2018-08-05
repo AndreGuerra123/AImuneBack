@@ -476,6 +476,8 @@ module.exports = {
                 agenda.jobs({
                     "_id": jobprops.id
                 }, (err, job) => {
+                    console.log(job)
+                
                         jobprops.started = get(job, 'lastRunAt', null);
                         jobprops.finished = get(job, 'lastFinishedAt', null);
                         jobprops.error = get(job, 'failedReason', null);
