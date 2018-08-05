@@ -479,7 +479,7 @@ module.exports = {
                 agenda.jobs({
                     "_id": queue
                 }, (err, job) => {
-                    jobprops.id = get(job,'attrs.id',null);
+                    jobprops.id = get(job,'attrs._id',null);
                     jobprops.started = get(job, 'lastRunAt', null);
                     jobprops.finished = get(job, 'lastFinishedAt', null);
                     jobprops.error = get(job, 'failedReason', null);
