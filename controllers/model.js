@@ -472,7 +472,9 @@ module.exports = {
             if (err) {
                 return res.status(404).json(err);
             } else {
-                /* jobprops.id = */ return res.status(202).json(get(model, 'file.queue', null));
+                jobprops.id = get(model, 'file.queue', null);
+                return res.status(202).json(jobprops);
+
             }
 
         })
