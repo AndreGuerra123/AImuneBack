@@ -475,10 +475,11 @@ module.exports = {
                 return res.status(404).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
+                console.log(typeof queue)
                 agenda.jobs({
                     "_id": queue
                 }, (err, job) => {
-               jobprops.id = get(job,'attrs._id',null);
+                    jobprops.id = get(job,'attrs.id',null);
                     jobprops.started = get(job, 'lastRunAt', null);
                     jobprops.finished = get(job, 'lastFinishedAt', null);
                     jobprops.error = get(job, 'failedReason', null);
