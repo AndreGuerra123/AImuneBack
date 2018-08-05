@@ -29,7 +29,7 @@ const updateJobProgress = function (job, value, description) {
 agenda.define('train', (job, done) => {
 
     console.log(job.attrs.data.source);
-    updateJobProgress(job, 50, "half way there...")
+    updateJobProgress(job, 0.5, "half way there...")
 
     done();
 
