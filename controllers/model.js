@@ -459,7 +459,14 @@ module.exports = {
     proceed_learning_current: async (req, res, next) => {
 
         const source = req.query.source;
-        let jobprops;
+        let jobprops = {
+            id:null,
+            started:null,
+            finished:null,
+            error:null,
+            progress_value:null,
+            progress_description:null
+        };
         await Modeler.findById(source).lean().exec(function (err, model) {
 
             if (err) {
