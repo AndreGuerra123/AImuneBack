@@ -460,32 +460,31 @@ module.exports = {
 
         const source = req.query.source;
         let jobprops = {
-            id: null,
-            started: null,
-            finished: null,
-            error: null,
-            progress_value: null,
-            progress_description: null
+            id:null,
+            started:null,
+            finished:null,
+            error:null,
+            progress_value:null,
+            progress_description:null
         };
-        await Modeler.findById(source).lean().exec(function (err, model) {
+        await Modeler.findById(source).select({"file":1}).lean().exec(function (err, model) {
 
             if (err) {
                 return res.status(404).json(err);
             } else {
                 jobprops.id = get(model, 'file.queue', null);
-                await agenda.jobs({
-                    "_id": jobprops.id
-                }, (err, job) => {
-                    jobprops.started = get(job, 'lastRunAt', null);
-                    jobprops.finished = get(job, 'lastFinishedAt', null);
-                    jobprops.error = get(job, 'failedReason', null);
-                    jobprops.progress_value = get(job, 'progress.value', null);
-                    jobprops.progress_description = get(job, 'progress.description', null);
-                    return res.status(202).json(jobprops);
-                })
-
             }
 
+        })
+        await agenda.jobs({
+            "_id": jobprops.id
+        }, (err, job) => {
+                jobprops.started = get(job, 'lastRunAt', null);
+                jobprops.finished = get(job, 'lastFinishedAt', null);
+                jobprops.error = get(job, 'failedReason', null);
+                jobprops.progress_value = get(job, 'progress.value', null);
+                jobprops.progress_description = get(job, 'progress.description', null);
+                return res.status(202).json(jobprops);
         })
 
     },
