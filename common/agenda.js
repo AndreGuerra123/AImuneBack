@@ -33,7 +33,6 @@ const getModelParameters = function (source) {
         "dataset": 1,
         "config":1,
         "architecture":1
-
     }).exec((err, model) => {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
@@ -125,6 +124,8 @@ const processedDataset = function (dataset) {
 
 const processedArchitecture = function (arch) {
 
+    arch.should.be.a('object');
+
 }
 
 const validateModelParameters = function(params){
@@ -149,16 +150,17 @@ agenda.define('train', (job, done) => {
     updateJobProgress(job, 0.2, "Validating model parameters...");
     validateModelParameters(params);
 
+    //Compiling
+    updateJobProgress(job, 0.2, "Compiling the model architecture...");
+    var model = params.architecture.compile({
+        optimizer: params.config.optimiser,
+        loss: params.config.loss,
+        //asmetrics: params.config.metrics
+    });
+    
     updateJobProgress(job, 0.1, "Resolving the dataset...");
 
     
-    //Compiling
-    updateJobProgress(job, 0.2, "Compiling the model architecture...");
-    var model = arch.compile({
-        optimizer: config.optimiser,
-        loss: config.loss,
-        metrics: config.metrics
-    });
 
     updateJobProgress(job, 0.3, "Training the model architecture...");
     //Training
