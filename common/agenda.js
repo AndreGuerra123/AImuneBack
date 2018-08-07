@@ -29,15 +29,6 @@ const updateJobProgress = function (job, value, description) {
 const toOBID = function(stringID){
     return new mongoose.Types.ObjectId(stringID)
 }
-const getModelParameters = function (source) {
-    Modeler.findById(toOBID(source),{"config":1, "dataset":1, "architecture":1, "queue":1},(err, model) => {
-        if (err) {
-            throw new Error('Error retrieving model dataset configuration')
-        } else {
-            return model;
-        }
-    });
-}
 
 const ax = axios.create({
     baseURL: "http://0.0.0.0:5000/"
@@ -55,8 +46,20 @@ agenda.define('train', (job, done) => {
     //Get necessary parameters
     updateJobProgress(job, 0.05, "Loading model parameters...")
     var source = get(job, 'attrs.data.source', null)
-    var params = getModelParameters(source);
+    let params;
+
+    Modeler.findById(toOBID(source),(err,res)=>{
+        if(err) throw new Error(err);
+        params=res;
+    })
+   
     console.log(params);
+
+    
+
+
+
+
 
     //Partitioning the dataset
     updateJobProgress(job, 0.1, "Partitioning the dataset...");
