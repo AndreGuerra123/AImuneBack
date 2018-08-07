@@ -63,6 +63,7 @@ agenda.define('train', (job, done) => {
         if (err) {
             throw new Error(err);
         } else {
+            console.log(res);
             params = res;
         }
     });
