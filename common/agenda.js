@@ -2,10 +2,13 @@ const {
     MONGO
 } = require('../config/index.js');
 const Agenda = require('agenda');
-const Jobs = require('../models/jobs.js');
 const axios = require('axios');
 const get = require('lodash/get')
+const mongoose = require('mongoose');
 const Modeler = require('../models/models.js');
+const Jobs = require('../models/jobs.js');
+
+
 
 //Configuring agenda
 let agenda = new Agenda({
