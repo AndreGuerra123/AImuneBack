@@ -2,11 +2,9 @@ const {
     MONGO
 } = require('../config/index.js');
 const Agenda = require('agenda');
-const Modeler = require('../models/models.js');
 const Jobs = require('../models/jobs.js');
 const axios = require('axios');
 const get = require('lodash/get')
-const mongoose = require('mongoose');
 
 //Configuring agenda
 let agenda = new Agenda({
@@ -46,13 +44,9 @@ agenda.define('train', (job, done) => {
     //Get necessary parameters
     updateJobProgress(job, 0.05, "Loading model parameters...")
     var source = get(job, 'attrs.data.source', null)
-    let params;
+    console.log(source);
 
-    Modeler.findById(toOBID(source),(err,res)=>{
-        if(err) throw new Error(err);
-        params=res;
-    })
-   
+    let params;
     console.log(params);
 
     
