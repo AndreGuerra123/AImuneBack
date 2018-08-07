@@ -26,19 +26,22 @@ const updateJobProgress = function (job, value, description) {
 
 }
 
-const getModelParameters = function (source) {
-    Modeler.findById(source).select({
+const getModelParameters = async function (source) {
+    let toreturn;
+    await Modeler.findById(source,{
         "dataset": 1,
         "config":1,
         "architecture":1,
         "queue":1
-    }).exec((err, model) => {
+    }, (err, model) => {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
         } else {
-            return model;
+            toreturn=model;
         }
-    })
+    });
+    return toreturn;
+
 }
 
 const ax = axios.create({
