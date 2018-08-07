@@ -26,9 +26,8 @@ const updateJobProgress = function (job, value, description) {
 
 }
 
-const getModelParameters = async function (source) {
-    let toreturn;
-    await Modeler.findById(source,{
+const getModelParameters = function (source) {
+    Modeler.findById(source,{
         "dataset": 1,
         "config":1,
         "architecture":1,
@@ -37,11 +36,9 @@ const getModelParameters = async function (source) {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
         } else {
-            toreturn=model;
+            return model;
         }
     });
-    return toreturn;
-
 }
 
 const ax = axios.create({
@@ -60,7 +57,6 @@ agenda.define('train', (job, done) => {
     //Get necessary parameters
     updateJobProgress(job, 0.05, "Loading model parameters...")
     var source = get(job, 'attrs.data.source', null)
-    console.log(typeof source);
     var params = getModelParameters(source);
     console.log(params);
 
