@@ -138,7 +138,7 @@ const ax = axios.create({
     baseURL: "http://0.0.0.0:5000/"
   });
 
-const trainingModel = async function(params){
+const trainingModel = function(params){
 
     ax.post("/train",params).then(res =>{return res}).catch(err =>{throw new Error(err)});
 
