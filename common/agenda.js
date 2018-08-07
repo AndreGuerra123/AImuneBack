@@ -27,12 +27,7 @@ const updateJobProgress = function (job, value, description) {
 }
 
 const getModelParameters = function (source) {
-    Modeler.findById(source,{
-        "dataset": 1,
-        "config":1,
-        "architecture":1,
-        "queue":1
-    }, (err, model) => {
+    Modeler.findById(source,'config dataset architecture queue',(err, model) => {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
         } else {
