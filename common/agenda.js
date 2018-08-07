@@ -56,7 +56,9 @@ agenda.define('train', (job, done) => {
 
     //Get necessary parameters
     updateJobProgress(job, 0.05, "Loading model parameters...")
-    var params = getModelParameters(get(job, 'attrs.data.source', null));
+    var source = get(job, 'attrs.data.source', null)
+    console.log(source);
+    var params = getModelParameters(source);
     console.log(params);
 
     //Partitioning the dataset
@@ -69,7 +71,7 @@ agenda.define('train', (job, done) => {
 
     //Results
     updateJobProgress(job, 0.8, "Returning model results...");
-    evaluateResults(params);
+    //evaluateResults(params);
 
     done();
 
