@@ -6,6 +6,7 @@ const Modeler = require('../models/models.js');
 const Jobs = require('../models/jobs.js');
 const axios = require('axios');
 const get = require('lodash/get')
+const mongoose = require('mongoose');
 
 //Configuring agenda
 let agenda = new Agenda({
@@ -27,7 +28,7 @@ const updateJobProgress = function (job, value, description) {
 }
 
 const getModelParameters = function (source) {
-    Modeler.findById(source,'config dataset architecture queue',(err, model) => {
+    Modeler.findById(mongoose.Types.ObjectId(source),'config dataset architecture queue',(err, model) => {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
         } else {
