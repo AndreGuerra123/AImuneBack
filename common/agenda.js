@@ -6,8 +6,7 @@ const Modeler = require('../models/models.js');
 const Jobs = require('../models/jobs.js');
 var should = require('chai').should();
 var get = require('lodash/get');
-import * as tf from '@tensorlowjs/tfjs';
-
+const axios = require('axios');
 
 //Configuring agenda
 let agenda = new Agenda({
@@ -44,6 +43,8 @@ const getModelParameters = function (source) {
         }
     })
 }
+
+const 
 
 const validMetrics = [
     "binaryAccuracy",
@@ -133,90 +134,40 @@ const validateModelParameters = function(params){
     processedDataset(params.dataset);
     processedArchitecture(params.architecture);
 }
+const ax = axios.create({
+    baseURL: "http://127.0.0.1:5000/"
+  });
+
+const trainingModel = async function(params){
+
+    ax.post("/train",params).then(res =>{return res}).catch(err =>{throw new Error(err)});
+
+}
 
 //train the model
 agenda.define('train', (job, done) => {
 
     //Get necessary parameters
-    updateJobProgress(job, 0.05, "Loading and checking necessary parameters...")
+    updateJobProgress(job, 0.05, "Loading model parameters...")
     var source = get(job, 'attrs.data.source', null)
     should.exist(source)
-
-    //Get Config config
-    updateJobProgress(job, 0.1, "Loading model parameters...");
     var params = getModelParameters(source);
 
     //Validating model parameters
     updateJobProgress(job, 0.2, "Validating model parameters...");
     validateModelParameters(params);
 
-    //Compiling
-    updateJobProgress(job, 0.2, "Compiling the model architecture...");
-    var model = params.architecture.compile({
-        optimizer: params.config.optimiser,
-        loss: params.config.loss,
-        //asmetrics: params.config.metrics
-    });
+    //Partitioning the dataset
+    updateJobProgress(job, 0.3, "Partitioning the dataset...");
+    partitioningDataset(params);
     
-    updateJobProgress(job, 0.1, "Resolving the dataset...");
-
-    
-
-    updateJobProgress(job, 0.3, "Training the model architecture...");
     //Training
+    updateJobProgress(job, 0.4, "Training model in AImunePython...");
+    trainingModel(params);
 
-    // How many examples the model should "see" before making a parameter update.
-    const BATCH_SIZE = config.batchsize;
-    // How many batches to train the model for.
-    const TRAIN_BATCHES = config.epochs;
-
-    // Every TEST_ITERATION_FREQUENCY batches, test accuracy over TEST_BATCH_SIZE examples.
-    // Ideally, we'd compute accuracy over the whole test set, but for performance
-    // reasons we'll use a subset.
-    const TEST_BATCH_SIZE = config.testbatchsize;
-    const TEST_ITERATION_FREQUENCY = config.testepochs;
-
-    for (let i = 0; i < TRAIN_BATCHES; i++) {
-        const batch = data.nextTrainBatch(BATCH_SIZE);
-
-        let testBatch;
-        let validationData;
-        // Every few batches test the accuracy of the mode.
-        if (i % TEST_ITERATION_FREQUENCY === 0) {
-            testBatch = data.nextTestBatch(TEST_BATCH_SIZE);
-            validationData = [
-                testBatch.xs.reshape([TEST_BATCH_SIZE, 28, 28, 1]), testBatch.labels
-            ];
-        }
-
-        // The entire dataset doesn't fit into memory so we call fit repeatedly
-        // with batches.
-        const history = await model.fit(
-            batch.xs.reshape([BATCH_SIZE, 28, 28, 1]),
-            batch.labels, {
-                batchSize: BATCH_SIZE,
-                validationData,
-                epochs: 1
-            });
-
-        const loss = history.history.loss[0];
-        const accuracy = history.history.acc[0];
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //Results
+    updateJobProgress(job, 0.8, "Returning model results...");
+    evaluateResults(params);
 
     done();
 
