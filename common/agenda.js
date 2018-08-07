@@ -135,7 +135,7 @@ const validateModelParameters = function(params){
     processedArchitecture(params.architecture);
 }
 const ax = axios.create({
-    baseURL: "http://127.0.0.1:5000/"
+    baseURL: "http://0.0.0.0:5000/"
   });
 
 const trainingModel = async function(params){
