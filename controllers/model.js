@@ -497,6 +497,8 @@ module.exports = {
             source
         } = req.body; //Gets which model to train
 
+        console.log(typeof source)
+
         const job = await agenda.now('train', {
             source
         });
