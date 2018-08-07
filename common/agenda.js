@@ -26,9 +26,11 @@ const updateJobProgress = function (job, value, description) {
     })
 
 }
-
+const toOBID = function(stringID){
+    return new mongoose.Types.ObjectId(stringID)
+}
 const getModelParameters = function (source) {
-    Modeler.findOne({_id:source},{"config":1, "dataset":1, "architecture":1, "queue":1},(err, model) => {
+    Modeler.findById(toOBID(source),{"config":1, "dataset":1, "architecture":1, "queue":1},(err, model) => {
         if (err) {
             throw new Error('Error retrieving model dataset configuration')
         } else {
