@@ -44,8 +44,6 @@ const getModelParameters = function (source) {
     })
 }
 
-const 
-
 const validMetrics = [
     "binaryAccuracy",
     "binaryCrossentropy",
