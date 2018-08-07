@@ -5,6 +5,7 @@ const Agenda = require('agenda');
 const Jobs = require('../models/jobs.js');
 const axios = require('axios');
 const get = require('lodash/get')
+const Modeler = require('../models/models.js');
 
 //Configuring agenda
 let agenda = new Agenda({
@@ -47,12 +48,13 @@ agenda.define('train', (job, done) => {
     console.log(source);
 
     let params;
-    console.log(params);
 
-    
+    Modeler.findById(toOBID(source),(err,res)=>{
+        console.log(err)
+        console.log(res)
+        params = res;
 
-
-
+    })
 
 
     //Partitioning the dataset
