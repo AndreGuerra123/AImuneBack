@@ -83,54 +83,85 @@ const isValidOptimiser = function (e) {
     return validOptimisers.contains(e);
 }
 
-const processedConfig = function (config) {
+const validateModelParameters = function(params){
 
-    var loss = get(config, 'loss', null);
+    //Configuration
+    var loss = get(params, 'config.loss', null);
     should.exist(loss);
     loss.should.be.a('string');
     if (!isValidLoss(loss)) throw new Error('Loss function is misconfigured.')
 
-    var optimiser = get(config, 'optimiser', null);
+    var optimiser = get(params, 'config.optimiser', null);
     should.exist(optimiser);
     optimiser.should.be.a('string');
     if (!isValidOptimiser(optimiser)) throw new Error('Optimiser function is misconfigured.')
 
-    var metrics = get(config, 'metrics', null);
+    var metrics = get(params, 'config.metrics', null);
     should.exist(metrics);
     metrics.should.be.a('array');
 
     if (metrics.includes("-1")) {
-        config.metrics = validMetrics;
+        params.config.metrics = validMetrics;
     } else if (!metrics.every(isValidMetric)) {
         throw new Error('Metrics object is misconfigured.')
     }
 
-    var batchsize = get(config, 'batchsize', null);
+    var batchsize = get(params, 'config.batchsize', null);
     should.exist(batchsize);
     batchsize.should.be.a('number');
     (batchsize % 1).should.be.equal(0);
 
-    var epochs = get(config, 'epochs', null);
+    var epochs = get(params, 'config.epochs', null);
     should.exist(epochs);
     epochs.should.be.a('number');
     (epochs % 1).should.be.equal(0);
+    
+    //Dataset
+    var rotate = get(params, 'dataset.rotate', null);
+    should.exist(rotate);
+    rotate.should.be.a('boolean');
 
-}
+    var normalise = get(params, 'dataset.normalise', null);
+    should.exist(normalise);
+    normalise.should.be.a('boolean');
 
-const processedDataset = function (dataset) {
+    var patients = get(params, 'dataset.patients', null);
+    should.exist(patients);
+    patients.should.be.a('array');
 
-}
+    if (patients.includes("-1")) {
+        params.dataset.patients = false;
+    }
 
-const processedArchitecture = function (arch) {
+    var conditions = get(params, 'dataset.conditions', null);
+    should.exist(conditions);
+    conditions.should.be.a('array');
 
+    if (conditions.includes("-1")) {
+        params.dataset.conditions = false;
+    }
+
+    var compounds = get(params, 'dataset.compounds', null);
+    should.exist(compounds);
+    compounds.should.be.a('array');
+
+    if (compounds.includes("-1")) {
+        params.dataset.compounds = false;
+    }
+
+    var classes = get(params, 'dataset.classes', null);
+    should.exist(classes);
+    classes.should.be.a('array');
+
+    if (classes.includes("-1")) {
+        params.dataset.classes = false;
+    }else if(classes.length < 2){
+        throw new Error('Insufficient classes associated with labels');
+    }
+
+    //Architecture
+    var arch = get(params,'config.architecture',null);
     arch.should.be.a('object');
-
-}
-
-const validateModelParameters = function(params){
-    processedConfig(params.config);
-    processedDataset(params.dataset);
-    processedArchitecture(params.architecture);
 }
 const ax = axios.create({
     baseURL: "http://0.0.0.0:5000/"
