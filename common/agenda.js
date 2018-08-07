@@ -57,7 +57,7 @@ agenda.define('train', (job, done) => {
     //Get necessary parameters
     updateJobProgress(job, 0.05, "Loading model parameters...")
     var source = get(job, 'attrs.data.source', null)
-    console.log(source);
+    console.log(typeof source);
     var params = getModelParameters(source);
     console.log(params);
 
