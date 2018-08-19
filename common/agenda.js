@@ -4,6 +4,10 @@ const {
 const Agenda = require('agenda');
 const axios = require('axios');
 
+const get = require('lodash/get')
+const expect = require('chai').expect
+
+
 //Configuring agenda
 let agenda = new Agenda({
     db: {
@@ -12,19 +16,27 @@ let agenda = new Agenda({
     }
 });
 
+
 const ax = axios.create({
-    baseURL: "http://0.0.0.0:5000/"
+    baseURL: "http://localhost:5000/"
 });
 
-//train the model
+const ann = function(obj,loc,msg){
+
+    const toreturn = get(obj,loc,null)
+    expect(toreturn,msg).to.exist;
+    return toreturn
+
+}
+
 agenda.define('train', (job, done) => {
 
-    const params = {
-       model_id: job.attrs.data.source,
-       job_id: job.attrs._id
-    }
 
-    ax.post("/train", params).then(res => {
+    model_id = ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
+    job_id = ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
+    
+
+    ax.post("/train", {model_id,job_id}).then(res => {
         return res
     }).catch(err => {
         throw new Error(err)
@@ -33,10 +45,6 @@ agenda.define('train', (job, done) => {
     done();
 
 });
-
-agenda.define('predict',(job,done)=>{
-    const params = {}
-})
 
 //Starting agenda
 agenda.on('ready', function () {

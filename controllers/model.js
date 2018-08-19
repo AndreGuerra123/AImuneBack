@@ -495,9 +495,9 @@ module.exports = {
     proceed_learning_start: async (req, res, next) => {
         const {
             source
-        } = req.body; //Gets which model to train
+        } = req.body;
 
-        console.log(typeof source)
+        console.log(typeof(source))
 
         const job = await agenda.now('train', {
             source
@@ -510,6 +510,7 @@ module.exports = {
         return res.status(202).json('Started learning process...');
 
     },
+
     proceed_learning_restart: async (req, res, next) => {
 
     },

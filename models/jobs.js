@@ -11,16 +11,6 @@ const findJobById = function (jobid, cb) { //cb erro res
 
 }
 
-const updateJobById = function (jobid, set) {
-    mongoose.connection.db.collection('jobs', function (err, collection) {
-        collection.update({
-            '_id': jobid
-        }, {
-            $set: set
-        });
-    });
-}
-
 module.exports = {
     findJobById,
     updateJobById
