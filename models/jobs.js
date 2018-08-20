@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Modeler = require('../models.js')
+const Modeler = require('./models.js')
 
 
 const findJobById = function (jobid, cb) { //cb erro res
