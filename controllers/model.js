@@ -533,10 +533,12 @@ module.exports = {
     proceed_learning_reset: async (req, res, next) => {
 
         const {source} = req.body
-        //reset model (clears all file fields including queue/meaning canceling)
-        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
+
         //remove job from queue
         await Jobs.removeJobByModelID(source)
+        //reset model (clears all file fields including queue/meaning canceling)
+        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
+
 
     },
     proceed_results: async (req, res, next) => {
