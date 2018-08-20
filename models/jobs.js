@@ -12,6 +12,5 @@ const findJobById = function (jobid, cb) { //cb erro res
 }
 
 module.exports = {
-    findJobById,
-    updateJobById
+    findJobById
 }
