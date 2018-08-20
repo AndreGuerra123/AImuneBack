@@ -27,14 +27,13 @@ const removeJobByModelID = async (modelid) => {
 }
 
 const removeJobByID = async (jobid) => {
-    if(jobid){
-        mongoose.connection.db.collection('jobs'),function(err, collection){
+
+    mongoose.connection.db.collection('jobs'),function(err, collection){
             collection.remove({
                 '_id':jobid
             })
         }
-    }
-
+    
 }
 
 
