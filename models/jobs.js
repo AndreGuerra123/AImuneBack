@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Modeler = require('./models.js')
-const get = require('loadash/get')
+const get = require('lodash/get')
 
 
 const findJobById = function (jobid, cb) { //cb erro res
