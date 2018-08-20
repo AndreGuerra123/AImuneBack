@@ -152,18 +152,8 @@ module.exports = {
                 source: Joi.string().required()
             })
         },
-        learningRestart:{
-            query: Joi.object().keys({
-                source: Joi.string().required()
-            })
-        },
-        learningCancel:{
-            query: Joi.object().keys({
-                source: Joi.string().required()
-            })
-        },
         learningReset:{
-            query: Joi.object().keys({
+            body: Joi.object().keys({
                 source: Joi.string().required()
             })
         }

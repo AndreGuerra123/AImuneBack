@@ -505,17 +505,38 @@ module.exports = {
             return res.status(404).json(err);
         });
 
-        return res.status(202).json('Started learning process...');
+        return res.status(202)
 
     },
 
     proceed_learning_restart: async (req, res, next) => {
 
-    },
-    proceed_learning_cancel: async (req, res, next) => {
+        const {source} = req.body
+
+        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
+     
+        await Jobs.removeJobByModelID(source)
+
+        const job = await agenda.now('train', {
+            source
+        });
+
+        await syncModelQueue(source, job).catch(err => {
+            return res.status(404).json(err);
+        });
+
+        return res.status(202)
+
 
     },
+
     proceed_learning_reset: async (req, res, next) => {
+
+        const {source} = req.body
+        //reset model (clears all file fields including queue/meaning canceling)
+        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
+        //remove job from queue
+        await Jobs.removeJobByModelID(source)
 
     },
     proceed_results: async (req, res, next) => {
