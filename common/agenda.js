@@ -31,7 +31,6 @@ const ann = function(obj,loc,msg){
 
 agenda.define('train', (job, done) => {
 
-
     model_id = ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
     job_id = ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
     

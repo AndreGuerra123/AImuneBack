@@ -17,14 +17,12 @@ const jwt_validation_function = async (payload, done) => {
         const user = await User.findById(payload.sub);
 
         if (!user) {
-            console.log("No user found in jwt validation")
             return done(null, false);
         }
 
         done(null, user);
 
     } catch (error) {
-        console.log("No user found in jwt validation: " + error.toString())
         done(error, false);
     }
 };
