@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Modeler = require('./models.js')
+const get = require('loadash/get')
 
 
 const findJobById = function (jobid, cb) { //cb erro res
@@ -14,8 +15,8 @@ const findJobById = function (jobid, cb) { //cb erro res
 
 const removeJobByModelID = async (modelid) => {
 
-    const jobid  = await Modeler.find({'_id':modelid},{'file.queue':1,'_id':0})
-    console.log(jobid)
+    const model  = await Modeler.findOne({'_id':modelid},{'file.queue':1,'_id':0})
+    const jobid  = get(model,'file.queue')
     if(jobid){
         mongoose.connection.db.collection('jobs'),function(err, collection){
             collection.remove({
@@ -26,19 +27,7 @@ const removeJobByModelID = async (modelid) => {
 
 }
 
-const removeJobByID = async (jobid) => {
-
-    mongoose.connection.db.collection('jobs'),function(err, collection){
-            collection.remove({
-                '_id':jobid
-            })
-        }
-    
-}
-
-
 module.exports = {
     findJobById,
     removeJobByModelID,
-    removeJobByID
 }

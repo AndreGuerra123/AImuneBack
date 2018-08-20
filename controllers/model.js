@@ -499,6 +499,8 @@ module.exports = {
 
         const job = await agenda.now('train', {
             source
+        }).catch(err=>{
+            return res.status(404).json(err);
         });
 
         await syncModelQueue(source, job).catch(err => {
@@ -506,27 +508,6 @@ module.exports = {
         });
 
         return res.status(202)
-
-    },
-
-    proceed_learning_restart: async (req, res, next) => {
-
-        const {source} = req.body
-
-        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
-     
-        await Jobs.removeJobByModelID(source)
-
-        const job = await agenda.now('train', {
-            source
-        });
-
-        await syncModelQueue(source, job).catch(err => {
-            return res.status(404).json(err);
-        });
-
-        return res.status(202)
-
 
     },
 

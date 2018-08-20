@@ -21,7 +21,7 @@ const ax = axios.create({
     baseURL: "http://localhost:5000/"
 });
 
-const ann = function(obj,loc,msg){
+const ann = async function(obj,loc,msg){
 
     const toreturn = get(obj,loc,null)
     expect(toreturn,msg).to.exist;
@@ -29,18 +29,16 @@ const ann = function(obj,loc,msg){
 
 }
 
-agenda.define('train', (job, done) => {
+agenda.define('train', async (job, done) => {
 
-    model_id = ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
-    job_id = ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
+    model_id = await ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
+    job_id = await ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
     
     ax.post("/train", {model_id,job_id}).then(res => {
-        return res
+        done();
     }).catch(err => {
         throw new Error(err)
     });
-
-    done();
 
 });
 
