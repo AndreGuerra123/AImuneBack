@@ -535,9 +535,15 @@ module.exports = {
         const {source} = req.body
 
         //remove job from queue
-        await Jobs.removeJobByModelID(source)
+        await Jobs.removeJobByModelID(source).catch(err => {
+            return res.status(404).json(err)
+        })
         //reset model (clears all file fields including queue/meaning canceling)
-        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}})
+        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}}).catch(err =>{
+           return res.status(404).json(err)
+        })
+
+        return res.status(202)
 
 
     },
