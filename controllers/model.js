@@ -1,11 +1,11 @@
 //Import Internal Dependencies
-import axios from "axios";
+const axios = require("axios");
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const get = require('lodash/get');
 
 const axPy = axios.create({
-    baseURL: "https://209.97.191.228:5000/",
+    baseURL: "https://0.0.0.0:5000/",
   });
 
 const {
@@ -436,8 +436,7 @@ module.exports = {
     },
     proceed_learning_start: async (req, res, next) => { 
 
-        const source = req.query.source
-        axPy.post('/train',{source})
+        axPy.post('/train',{source:req.query.source})
         return res.status(202)
 
     },
@@ -445,7 +444,8 @@ module.exports = {
 
         const source = req.body.source
         await Modeler.updateOne({'_id':source},{$set:{
-            'file.job':null
+            'file':null,
+            'results':null
         }}).catch(err=>{
             return res.status(404).json(err)
         })
