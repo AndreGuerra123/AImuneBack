@@ -24,7 +24,7 @@ const resetJobByModelId = async (modelid) => {
             })
         }
     }
-    await Modeler.findByIdAndUpdate(source,{$set: {file:null,results:null}})
+    await Modeler.findByIdAndUpdate(modelid,{$set: {file:null,results:null}})
 
 
 }
