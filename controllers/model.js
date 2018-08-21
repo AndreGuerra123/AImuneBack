@@ -1,9 +1,12 @@
 //Import Internal Dependencies
+import axios from "axios";
 const Modeler = require('../models/models.js');
-const Jobs = require('../models/jobs.js');
 const Loader = require('../models/loader.js');
-const agenda = require('../common/agenda.js');
 const get = require('lodash/get');
+
+const axPy = axios.create({
+    baseURL: "https://209.97.191.228:5000/",
+  });
 
 const {
     Joi
@@ -32,7 +35,7 @@ const configSchema = {
 
 const learningSchema = {
     h5: Joi.binary().required(),
-    queue: Joi.object().required(), //make it an object
+    job: Joi.object().required(),
     sync: Joi.object().required(),
     date: Joi.date().required()
 }
@@ -82,37 +85,24 @@ const validConfig = function (config) {
     };
 }
 
-const isjobrunning = function (queue) {
-
-    agenda.jobs({
-        "_id": queue
-    }, (err, job) => {
-        if (err) {
-            return false;
-        } else {
-            return job.lastFinishedAt ? false : true;
-        }
-    })
-
+const isjobrunning = function (job) { 
+   const started = get(job,'started')
+   const finished = get(job,'finished')
+   return (started && !finished) ? True : False
 }
 
-const isjoberror = function (queue) {
-
-    agenda.jobs({
-        "_id": queue
-    }, (err, job) => {
-        if (err) {
-            return false;
-        } else {
-            return job.failedAt ? true : false;
-        }
-    })
-
+const isjoberror = function (job) { 
+    return (get(job,'error') ? True : False)
 }
 
 const isoutdated = function (model) {
+    dataset_date = get(model,'dataset.date')
+    config_date = get(model,'config.date')
+    sync_dataset_date = get(model,'file.sync.dataset_date')    
+    sync_config_date = get(model,'file.sync.config_date')
+
     try {
-        if (+model.dataset.date == +model.file.sync.dataset_date && +model.config.date == +model.file.sync.config_date) {
+        if (+dataset_date == +sync_dataset_date && +config_date == +sync_config_date) {
             return true;
         } else {
             return false;
@@ -133,14 +123,12 @@ const validLearning = function (file) {
 
 
 const evaluateLearning = function (model) {
-    if (!model.file || !model.file.queue) {
+    if (!model.file || !model.file.job) {
         return 0;
-    } else if (isjoberror(model.file.queue) || isoutdated(model)) {
+    } else if (isjoberror(model.file.job) || isoutdated(model)) {
         return 2;
-
-    } else if (isjobrunning(model.file.queue)) {
+    } else if (isjobrunning(model.file.job)) {
         return 1;
-
     } else if (validLearning(model.file)) {
         return 3;
     } else {
@@ -279,7 +267,7 @@ module.exports = {
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
         const source = req.query.source;
 
-        Modeler.findById(source, (err, model) => {
+        Modeler.findById(source,{'dataset':1,'config':1,'file.sync':1,'file.job':1}, (err, model) => {
             if (err) {
                 return res.status(404).json(err);
             } else {
@@ -433,73 +421,35 @@ module.exports = {
     proceed_learning_current: async (req, res, next) => {
 
         const source = req.query.source;
-        let jobprops = {
-            id: null,
-            started: null,
-            finished: null,
-            error: null,
-            progress_value: null,
-            progress_description: null
-        };
-        await Modeler.findById(source).select({
-            "file": 1
-        }).lean().exec(async function (err, model) {
-
-            if (err) {
-                return res.status(402).json(err);
-            } else {
-                var queue = get(model, 'file.queue', null);
-                await Jobs.findJobById(queue, (error, jobs) => {
-                    var job = get(jobs, 0, null);
-                    jobprops.id = get(job, '_id', null);
-                    jobprops.started = get(job, 'lastRunAt', null);
-                    jobprops.finished = get(job, 'lastFinishedAt', null);
-                    jobprops.error = get(job, 'failReason', null);
-                    jobprops.progress_value = get(job, 'progress.value', null);
-                    jobprops.progress_description = get(job, 'progress.description', null);
-                    return res.status(202).json(jobprops);
-
-                })
-            }
-
-        })
-
-
-    },
-    proceed_learning_start: async (req, res, next) => {
-        const {
-            source
-        } = req.body;
-
-        var job = await agenda.now('train', {
-            source
-        }).catch(err=>{
-            return res.status(404).json(err);
-        });
-
-        await Jobs.syncJobByModelId(job,source).then(()=>{
-            return res.status(202)
-        }).catch(err => {
-            return res.status(404).json(err);
-        });
-
-        
-    },
-
-    proceed_learning_reset: async (req, res, next) => {
-
-        const {source} = req.body
-
-        //remove job from queue
-        await Jobs.resetJobByModelId(source).then(()=>{
-            return res.status(202)
-        }
-        ).catch(err => {
+        await Modeler.findById(source,{'file.job':1,'_id':0},(err, model)=>{
             if(err){
                 return res.status(404).json(err)
+            }else{
+                return res.status(202).json(get(model,'file.job'))
             }
+
         })
-     
+
+        
+
+
+    },
+    proceed_learning_start: async (req, res, next) => { 
+
+        const source = req.query.source
+        axPy.post('/train',{source})
+        return res.status(202)
+
+    },
+    proceed_learning_reset: async (req, res, next) => {
+
+        const source = req.body.source
+        await Modeler.updateOne({'_id':source},{$set:{
+            'file.job':null
+        }}).catch(err=>{
+            return res.status(404).json(err)
+        })
+
     },
     proceed_results: async (req, res, next) => {
 
