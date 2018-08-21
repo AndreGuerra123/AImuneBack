@@ -446,7 +446,7 @@ module.exports = {
         }).lean().exec(async function (err, model) {
 
             if (err) {
-                return res.status(404).json(err);
+                return res.status(402).json(err);
             } else {
                 var queue = get(model, 'file.queue', null);
                 await Jobs.findJobById(queue, (error, jobs) => {
@@ -471,17 +471,20 @@ module.exports = {
             source
         } = req.body;
 
-        const job = await agenda.now('train', {
+        var job = await agenda.now('train', {
             source
         }).catch(err=>{
             return res.status(404).json(err);
         });
 
         await Jobs.syncJobByModelId(job,source).catch(err => {
-            return res.status(404).json(err);
+            if(err){
+                return res.status(404).json(err);
+            }else{
+                return res.status(202)
+            }
         });
 
-        return res.status(202)
 
     },
 
@@ -491,10 +494,13 @@ module.exports = {
 
         //remove job from queue
         await Jobs.resetJobByModelId(source).catch(err => {
-            return res.status(404).json(err)
+            if(err){
+                return res.status(404).json(err)
+            }else{
+                return res.status(202)
+            }
         })
      
-        return res.status(202)
 
 
     },
