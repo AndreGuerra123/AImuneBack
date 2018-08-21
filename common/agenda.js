@@ -34,7 +34,7 @@ agenda.define('train', (job, done) => {
     model_id = ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
     job_id = ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
     ax.post("/train", {model_id,job_id})
-    
+    done()
 });
 
 //Starting agenda

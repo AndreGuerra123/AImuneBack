@@ -477,14 +477,12 @@ module.exports = {
             return res.status(404).json(err);
         });
 
-        await Jobs.syncJobByModelId(job,source).catch(err => {
-            if(err){
-                return res.status(404).json(err);
-            }
+        await Jobs.syncJobByModelId(job,source).then(()=>{
+            return res.status(202)
+        }).catch(err => {
+            return res.status(404).json(err);
         });
 
-        
-        return res.status(202)
         
     },
 
@@ -493,17 +491,15 @@ module.exports = {
         const {source} = req.body
 
         //remove job from queue
-        await Jobs.resetJobByModelId(source).catch(err => {
+        await Jobs.resetJobByModelId(source).then(()=>{
+            return res.status(202)
+        }
+        ).catch(err => {
             if(err){
                 return res.status(404).json(err)
             }
         })
      
-        
-        return res.status(202)
-        
-
-
     },
     proceed_results: async (req, res, next) => {
 
