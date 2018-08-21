@@ -480,12 +480,12 @@ module.exports = {
         await Jobs.syncJobByModelId(job,source).catch(err => {
             if(err){
                 return res.status(404).json(err);
-            }else{
-                return res.status(202)
             }
         });
 
-
+        
+        return res.status(202)
+        
     },
 
     proceed_learning_reset: async (req, res, next) => {
@@ -495,13 +495,13 @@ module.exports = {
         //remove job from queue
         await Jobs.resetJobByModelId(source).catch(err => {
             if(err){
-                console.log(err)
                 return res.status(404).json(err)
-            }else{
-                return res.status(202)
             }
         })
      
+        
+        return res.status(202)
+        
 
 
     },
