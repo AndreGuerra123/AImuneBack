@@ -34,7 +34,7 @@ agenda.define('train', async (job, done) => {
     model_id = await ann(job, 'attrs.data.source', "Failed to retrieve model id.").toString(),
     job_id = await ann(job, 'attrs._id', "Failed to retrieve job id.").toString()
     
-    ax.post("/train", {model_id,job_id}).then(res => {
+    await ax.post("/train", {model_id,job_id}).then(res => {
         done();
     }).catch(err => {
         throw new Error(err)
