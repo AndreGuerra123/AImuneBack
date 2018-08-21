@@ -171,32 +171,6 @@ const validResults = function (results) {
     };
 }
 
-const syncModelQueue = async function (source, job) {
-
-    var model = await Modeler.findById(source).select({
-        "config": 1,
-        "dataset": 1
-    }).catch(err => {
-        throw new Error(err)
-    });
-
-    await Modeler.update({
-        _id: source
-    }, {
-        $set: {
-            file: {
-                queue: job.attrs._id,
-                sync: {
-                    config_date: get(model, 'config.date', null),
-                    dataset_date: get(model, 'dataset.date', null)
-                },
-                date: new Date()
-            }
-        }
-    }).catch(err => {
-        throw new Error(err)
-    })
-}
 
 module.exports = {
 
@@ -503,7 +477,7 @@ module.exports = {
             return res.status(404).json(err);
         });
 
-        await syncModelQueue(source, job).catch(err => {
+        await Jobs.syncJobByModelId(job,source).catch(err => {
             return res.status(404).json(err);
         });
 
@@ -516,14 +490,10 @@ module.exports = {
         const {source} = req.body
 
         //remove job from queue
-        await Jobs.removeJobByModelID(source).catch(err => {
+        await Jobs.resetJobByModelId(source).catch(err => {
             return res.status(404).json(err)
         })
-        //reset model (clears all file fields including queue/meaning canceling)
-        await Modeler.findByIdAndUpdate(source,{$unset: {file:1,results:1}}).catch(err =>{
-           return res.status(404).json(err)
-        })
-
+     
         return res.status(202)
 
 
