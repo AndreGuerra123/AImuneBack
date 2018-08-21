@@ -432,15 +432,11 @@ module.exports = {
 
     },
     proceed_learning_start: async (req, res, next) => { 
-        console.log(typeof(req.body.source))
         axPy.post('/train',{source:req.body.source}).catch(err=>{})
         return res.status(202)
-
     },
     proceed_learning_reset: async (req, res, next) => {
-
-        const source = req.body.source
-        await Modeler.updateOne({'_id':source},{$set:{
+        await Modeler.updateOne({'_id':req.body.source},{$set:{
             'file':null,
             'results':null
         }}).catch(err=>{
