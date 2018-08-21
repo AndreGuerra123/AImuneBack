@@ -432,7 +432,7 @@ module.exports = {
 
     },
     proceed_learning_start: async (req, res, next) => { 
-        console.log(type(req.query.source))
+        console.log(typeof(req.query.source))
         axPy.post('/train',{source:req.query.source}).catch(err=>{})
         return res.status(202)
 
