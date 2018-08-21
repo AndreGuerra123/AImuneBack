@@ -16,7 +16,7 @@ const findJobById = function (jobid, cb) { //cb erro res
 const resetJobByModelId = async (modelid) => {
 
     const model  = await Modeler.findOne({'_id':modelid},{'file.queue':1,'_id':0})
-    const jobid  = await get(model,'file.queue')
+    const jobid  = get(model,'file.queue')
     if(jobid){
         mongoose.connection.db.collection('jobs'),function(err, collection){
             collection.remove({

@@ -495,6 +495,7 @@ module.exports = {
         //remove job from queue
         await Jobs.resetJobByModelId(source).catch(err => {
             if(err){
+                console.log(err)
                 return res.status(404).json(err)
             }else{
                 return res.status(202)
