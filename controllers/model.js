@@ -5,7 +5,7 @@ const Loader = require('../models/loader.js');
 const get = require('lodash/get');
 
 const axPy = axios.create({
-    baseURL: "https://0.0.0.0:5000/",
+    baseURL: "http://0.0.0.0:5000/",
   });
 
 const {
