@@ -138,7 +138,20 @@ module.exports = {
                 optimiser: Joi.string().required(),
                 metrics: Joi.array().required(),
                 batchsize: Joi.number().min(1).required(),
-                epochs: Joi.number().min(1).required()
+                epochs: Joi.number().min(1).required(),
+                lr: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
+                momentum: Joi.number().min(0).max(1).invalid(1).required(),
+                decay: Joi.number().min(0).max(1).invalid(1).required(),   
+                nesterov: Joi.boolean().required(),
+                shuffle: Joi.boolean().required(),
+                amsgrad: Joi.boolean().required(),
+                rho: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
+                beta1: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
+                beta2: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
+                validation_split: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
+                epsilon: Joi.number().min(0).invalid(0).max(1).invalid(1).allow(null),
+                seed: Joi.number().integer().allow(null)
+              
             })
            
         },

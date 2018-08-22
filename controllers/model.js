@@ -390,12 +390,23 @@ module.exports = {
     },
     proceed_config_update: async (req, res, next) => {
         const {
-            source,
-            loss,
-            optimiser,
-            metrics,
-            batchsize,
-            epochs,
+              loss,
+              optimiser,
+              epochs,
+              batchsize,
+              date,
+              lr,
+              momentum,
+              decay,
+              nesterov,
+              rho,
+              epsilon,
+              beta1,
+              beta2,
+              amsgrad,
+              shuffle,
+              seed,
+              validation_split
         } = req.body;
 
 
@@ -406,9 +417,21 @@ module.exports = {
                 config: {
                     loss,
                     optimiser,
-                    metrics,
-                    batchsize,
                     epochs,
+                    batchsize,
+                    date,
+                    lr,
+                    momentum,
+                    decay,
+                    nesterov,
+                    rho,
+                    epsilon,
+                    beta1,
+                    beta2,
+                    amsgrad,
+                    shuffle,
+                    seed,
+                    validation_split,
                     date: new Date()
                 },
             }
