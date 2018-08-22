@@ -5,7 +5,7 @@ const Loader = require('../models/loader.js');
 const get = require('lodash/get');
 
 const axPy = axios.create({
-    baseURL: "http://0.0.0.0:5000/",
+    baseURL: "http://127.0.0.1:5000/",
   });
 
 const {
@@ -266,14 +266,16 @@ module.exports = {
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
         const source = req.query.source;
-
         Modeler.findById(source,{'dataset':1,'config':1,'file.sync':1,'file.job':1}, (err, model) => {
             if (err) {
+                console.log(err)
                 return res.status(404).json(err);
             } else {
                 try {
                     return res.status(202).json(evaluateStatus(model));
                 } catch (error) {
+                    console.log(error)
+
                     return res.status(404).json(error);
                 }
             }
