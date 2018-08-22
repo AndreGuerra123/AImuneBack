@@ -117,14 +117,33 @@ module.exports = {
         datasetUpdate: {
             body:  Joi.object().keys({
                 source: Joi.string().required(),
-                width: Joi.number().min(50).required(),
-                height: Joi.number().min(50).required(),
-                rotate: Joi.boolean().required(),
-                normalise: Joi.boolean().required(),
                 patients: Joi.array().required(),
                 conditions: Joi.array().required(),
                 compounds: Joi.array().required(),
-                classes: Joi.array().required()})
+                classes: Joi.array().required(),
+                center: Joi.boolean().required(),
+                normalise: Joi.boolean().required(),
+                width: Joi.integer().min(1).required(),
+                height: Joi.integer().min(1).required(),
+                data_format : Joi.string().required(),
+                color_format: Joi.string().required(),
+                rescale: Joi.number().invalid(0).required(),
+                rounds: Joi.number().min(0).required(),
+                transform:Joi.boolean().required(),
+                random:Joi.boolean().required(),
+                keep:Joi.boolean().required(),
+                rotation: Joi.number().min(0).max(1).required(),
+                width_shift:Joi.number().min(0).max(1).required(),
+                height_shift:Joi.number().min(0).max(1).required(),
+                shear:Joi.number().min(0).max(1).required(),
+                channel_shift:Joi.number().min(0).max(1).required(),
+                brightness: Joi.number().min(0).invalid(0).max(1).required(),
+                zoom: Joi.number().min(0).max(2).required(),
+                horizontal_flip:Joi.boolean().required(),
+                vertical_flip:Joi.boolean().required(),
+                fill_mode: Joi.string().required(),
+                cval: Joi.number().required(),
+            })
         },
         configCurrent: {
             query: Joi.object().keys({

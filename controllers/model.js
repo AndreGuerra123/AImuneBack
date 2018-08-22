@@ -342,15 +342,34 @@ module.exports = {
     },
     proceed_dataset_update: async (req, res, next) => { //update the dataset in this model
         const {
-            source,
-            rotate,
-            normalise,
-            patients,
-            conditions,
-            compounds,
-            classes,
-            width,
-            height
+              source,
+              patients,
+              conditions,
+              compounds,
+              classes,
+              center,
+              normalise,
+              width,
+              height,
+              data_format,
+              color_format,
+              rescale,
+              rounds,
+              transform,
+              random,
+              keep,
+              rotation,
+              width_shift,
+              height_shift,
+              shear,
+              channel_shift,
+              brightness,
+              zoom,
+              horizontal_flip,
+              vertical_flip,
+              fill_mode,
+              cval,
+              date
         } = req.body;
 
         await Modeler.update({
@@ -358,14 +377,32 @@ module.exports = {
         }, {
             $set: {
                 dataset: {
-                    rotate,
-                    normalise,
                     patients,
                     conditions,
                     compounds,
                     classes,
+                    center,
+                    normalise,
                     width,
                     height,
+                    data_format,
+                    color_format,
+                    rescale,
+                    rounds,
+                    transform,
+                    random,
+                    keep,
+                    rotation,
+                    width_shift,
+                    height_shift,
+                    shear,
+                    channel_shift,
+                    brightness,
+                    zoom,
+                    horizontal_flip,
+                    vertical_flip,
+                    fill_mode,
+                    cval,
                     date: new Date()
                 }
             }
