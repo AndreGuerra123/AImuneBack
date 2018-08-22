@@ -390,6 +390,7 @@ module.exports = {
     },
     proceed_config_update: async (req, res, next) => {
         const {
+              source,
               loss,
               optimiser,
               epochs,
