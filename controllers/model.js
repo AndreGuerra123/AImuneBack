@@ -88,11 +88,11 @@ const validConfig = function (config) {
 const isjobrunning = function (job) { 
    const started = get(job,'started')
    const finished = get(job,'finished')
-   return (started && !finished) ? True : False
+   return (started && !finished) ? true : false
 }
 
 const isjoberror = function (job) { 
-    return (get(job,'error') ? True : False)
+    return (get(job,'error') ? true : false)
 }
 
 const isoutdated = function (model) {
