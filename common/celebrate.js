@@ -136,7 +136,6 @@ module.exports = {
                 source: Joi.string().required(),
                 loss: Joi.string().required(),
                 optimiser: Joi.string().required(),
-                metrics: Joi.array().required(),
                 batchsize: Joi.number().min(1).required(),
                 epochs: Joi.number().min(1).required(),
                 lr: Joi.number().min(0).invalid(0).max(1).invalid(1).required(),
