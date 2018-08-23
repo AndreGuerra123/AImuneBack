@@ -57,7 +57,7 @@ module.exports = {
                             name,
                             date,
                             shared,
-                            file: data
+                            file: JSON.parse(data)
 
                         });
 
