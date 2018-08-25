@@ -4,7 +4,7 @@ const Modeler = require('../models/models.js');
 const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
 const get = require('lodash/get');
-
+const ObjectId = require('mongoose').Types.ObjectId
 const axPy = axios.create({
     baseURL: "http://127.0.0.1:5000/",
   });
@@ -248,7 +248,7 @@ module.exports = {
                 archid
             } = req.body;
 
-            Designer.findOne({"_id":new ObjectID},(err,doc)=>{
+            Designer.findOne({"_id":new ObjectId(archid)},(err,doc)=>{
             if(err || !doc){
                 res.status(200).json('Failed to retrieve valid architecture.')
             }else{
