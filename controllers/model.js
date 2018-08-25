@@ -249,6 +249,7 @@ module.exports = {
             } = req.body;
 
             const arch = Designer.findOne({_id: new ObjectID(archid)}).catch(err => {
+                console.log(err)
                 return res.status(404).json(err)
             })
 
