@@ -259,7 +259,7 @@ module.exports = {
                     date,
                     architecture: res
                 });
-                await newModel.save();
+                newModel.save();
                 return res.status(200).json({
                     id: newModel.id
                 });
