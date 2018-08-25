@@ -248,7 +248,9 @@ module.exports = {
                 archid
             } = req.body;
 
-            const arch = Designer.findById(archid)
+            const arch = Designer.findById(archid).catch(err => {
+                return res.status(404).json('Could not find architecture referenced by '+archid)
+            })
 
             const newModel = new Modeler({
                 name,
