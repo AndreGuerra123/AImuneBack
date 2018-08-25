@@ -247,8 +247,11 @@ module.exports = {
                 date,
                 archid
             } = req.body;
-
-            const arch = Designer.findOne({_id: new ObjectID(archid)}).catch(err => {
+            console.log(archid)
+            const archobid = new ObjectID(archid)
+            console.log(archobid)
+            
+            const arch = Designer.findOne({_id: archobid}).catch(err => {
                 console.log(err)
                 return res.status(404).json(err)
             })
@@ -266,6 +269,7 @@ module.exports = {
                 id: newModel.id
             });
         } catch (err) {
+            console.log(err)
             return res.status(404).json(err);
         }
 
