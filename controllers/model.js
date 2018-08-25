@@ -4,7 +4,6 @@ const Modeler = require('../models/models.js');
 const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
 const get = require('lodash/get');
-const ObjectID = require('mongoose').Types.ObjectId
 
 const axPy = axios.create({
     baseURL: "http://127.0.0.1:5000/",
@@ -240,7 +239,7 @@ module.exports = {
         });
     },
     new: async (req, res, next) => {
-        try {
+        
             const {
                 name,
                 user,
@@ -248,32 +247,24 @@ module.exports = {
                 date,
                 archid
             } = req.body;
-            console.log(archid)
-            const archobid = new ObjectID(archid)
-            console.log(archobid)
 
-            const arch = Designer.findOne({_id: archobid}).catch(err => {
-                console.log(err)
-                return res.status(404).json(err)
+            Designer.findOne({"_id":new ObjectID},(err,doc)=>{
+            if(err || !doc){
+                res.status(200).json('Failed to retrieve valid architecture.')
+            }else{
+                const newModel = new Modeler({
+                    name,
+                    user,
+                    shared,
+                    date,
+                    architecture: res
+                });
+                await newModel.save();
+                return res.status(200).json({
+                    id: newModel.id
+                });
+            }
             })
-
-            const newModel = new Modeler({
-                name,
-                user,
-                shared,
-                date,
-                architecture: arch
-            });
-
-            await newModel.save();
-            return res.status(200).json({
-                id: newModel.id
-            });
-        } catch (err) {
-            console.log(err)
-            return res.status(404).json(err);
-        }
-
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
         const source = req.query.source;
