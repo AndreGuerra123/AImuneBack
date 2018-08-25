@@ -4,6 +4,7 @@ const Modeler = require('../models/models.js');
 const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
 const get = require('lodash/get');
+const ObjectID = require('mongoose').Types.ObjectId
 
 const axPy = axios.create({
     baseURL: "http://127.0.0.1:5000/",
@@ -250,7 +251,7 @@ module.exports = {
             console.log(archid)
             const archobid = new ObjectID(archid)
             console.log(archobid)
-            
+
             const arch = Designer.findOne({_id: archobid}).catch(err => {
                 console.log(err)
                 return res.status(404).json(err)
