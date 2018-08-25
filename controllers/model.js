@@ -263,7 +263,6 @@ module.exports = {
             return res.status(200).json({
                         id: newModel.id
                     });
-                }
 
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
