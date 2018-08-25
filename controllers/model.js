@@ -248,23 +248,23 @@ module.exports = {
                 archid
             } = req.body;
 
-            Designer.findOne({"_id":new ObjectId(archid)},(err,doc)=>{
-            if(err || !doc){
-                res.status(200).json('Failed to retrieve valid architecture.')
-            }else{
-                const newModel = new Modeler({
-                    name,
-                    user,
-                    shared,
-                    date,
-                    architecture: res
-                });
-                newModel.save();
-                return res.status(200).json({
-                    id: newModel.id
-                });
-            }
-            })
+            const arch = await Designer.findOne({"_id":new ObjectId(archid)})
+            console.log(arch)
+
+            const newModel = new Modeler({
+                        name,
+                        user,
+                        shared,
+                        date,
+                        architecture: arch
+                    });
+
+            newModel.save();
+            return res.status(200).json({
+                        id: newModel.id
+                    });
+                }
+
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
         const source = req.query.source;
