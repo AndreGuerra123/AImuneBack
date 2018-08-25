@@ -249,8 +249,6 @@ module.exports = {
             } = req.body;
 
             const arch = await Designer.findOne({"_id":new ObjectId(archid)})
-            console.log(arch)
-
             const newModel = new Modeler({
                         name,
                         user,
