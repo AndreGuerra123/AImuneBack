@@ -1,6 +1,7 @@
 //Import Internal Dependencies
 const axios = require("axios");
 const Modeler = require('../models/models.js');
+const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
 const get = require('lodash/get');
 
@@ -244,15 +245,17 @@ module.exports = {
                 user,
                 shared,
                 date,
-                architecture
+                archid
             } = req.body;
+
+            const arch = Designer.findById(archid)
 
             const newModel = new Modeler({
                 name,
                 user,
                 shared,
                 date,
-                architecture
+                architecture: arch
             });
 
             await newModel.save();

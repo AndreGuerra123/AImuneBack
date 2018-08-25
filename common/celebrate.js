@@ -96,7 +96,7 @@ module.exports = {
                 user: Joi.string().required(),
                 shared: Joi.boolean().required(),
                 date: Joi.date().required(),
-                architecture: Joi.object().required()
+                archid: Joi.object().required()
             })
         },
         modelProceed: { 
