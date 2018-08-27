@@ -501,10 +501,14 @@ module.exports = {
         const rid = get(model,'results')
         const wid = get(model,'weights')
 
-        const gridfs = req.app.get('gridfs')
-
+        const gfs = req.app.get('gfs')
+        await gfs.remove(rid, function (err, gridStore) {
+            if (err) return res.status(404).json(err)
+          });
         
-       
+        await gfs.remove(wid, function (err, gridStore) {
+            if (err) return res.status(404).json(err)
+          });
 
         await Modeler.updateOne({'_id':req.body.source},{$set:{
             'file':null,

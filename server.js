@@ -29,7 +29,7 @@ mongoose.connect(MONGO);
 Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
 conn.once('open', function () {
-    app.set('gridfs', Grid(conn.db));
+    app.set('gfs', Grid(conn.db));
 });
 
 //Middleware
