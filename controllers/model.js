@@ -41,7 +41,7 @@ const learningSchema = {
     date: Joi.date().required()
 }
 const resultsSchema = { 
-    results: Joi.object.required()
+    results: Joi.object().required()
 }
 
 const evaluateStatus = function (model) {
