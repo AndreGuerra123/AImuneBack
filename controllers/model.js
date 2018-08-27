@@ -3,6 +3,7 @@ const axios = require("axios");
 const Modeler = require('../models/models.js');
 const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
+const Filer = require('../models/fs.js');
 const get = require('lodash/get');
 const ObjectId = require('mongoose').Types.ObjectId
 const axPy = axios.create({
@@ -496,9 +497,25 @@ module.exports = {
         return res.status(202)
     },
     proceed_learning_reset: async (req, res, next) => {
+        const model = await Modeler.findOne({'_id':req.body.source},{'weights':1,'results':1})
+        const rid = get(model,'results')
+        const wid = get(model,'weights')
+
+        await Filer.unlink(rid, (err,file)=>{
+            if(err) 
+              return res.status(404).json(err)
+        })
+
+        await Filer.unlink(wid, (err,file)=>{
+            if(err) 
+              return res.status(404).json(err)
+        })
+       
+
         await Modeler.updateOne({'_id':req.body.source},{$set:{
             'file':null,
-            'results':null
+            'results':null,
+            'weights':null
         }}).catch(err=>{
             return res.status(404).json(err)
         })
