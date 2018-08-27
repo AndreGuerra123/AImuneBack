@@ -144,13 +144,9 @@ const evaluateLearning = function (model) {
 
 
 const evaluateResults = function (model) {
-    if (!model.results) {
+    if (!get(model,'results')) {
         return 0;
-    } else if (model.results.queue) {
-        return 1;
-    } else if (model.results.error) {
-        return 2;
-    } else if (validResults(model.results)) {
+    } else if (validResults(model)) {
         return 3;
     } else {
         return 4;
