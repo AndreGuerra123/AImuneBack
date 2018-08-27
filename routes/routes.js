@@ -134,7 +134,7 @@ router.route('/learning/reset').post(proceedLearningResetValidation,
     ModelController.proceed_learning_reset)
 
 //Results
-router.route('/results').get(resultsValidation,ModelController.proceed_results)    
+router.route('/results').post(resultsValidation,ModelController.proceed_results)    
 
 //Exporting routes
 
