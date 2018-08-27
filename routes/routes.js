@@ -1,5 +1,4 @@
 //External Dependencies
-const express = require('express');
 const router = require('express-promise-router')();
 const passport = require('passport');
 require('../passport.js'); // Sets the authentication mechanisms in the passport

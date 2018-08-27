@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
 const {errors} = require('celebrate');
+const Grid = require('gridfs-stream')
 
 const {MONGO,PORT} = require('./config/index.js');
 
@@ -19,13 +20,17 @@ const credentials = {
     cert: fs.readFileSync('/etc/ssl/certs/aimuneback.cert')
   }
 
+//Express
+var app = express();
+
 //MongoDB
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO);
+Grid.mongo = mongoose.mongo;
 var conn = mongoose.connection;
-
-//Express
-var app = express();
+conn.once('open', function () {
+    app.set('gridfs', Grid(conn.db));
+});
 
 //Middleware
 app.use(morgan('dev'));

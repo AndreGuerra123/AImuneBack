@@ -501,15 +501,9 @@ module.exports = {
         const rid = get(model,'results')
         const wid = get(model,'weights')
 
-        await Filer.unlink(rid, (err,file)=>{
-            if(err) 
-              return res.status(404).json(err)
-        })
+        const gridfs = req.app.get('gridfs')
 
-        await Filer.unlink(wid, (err,file)=>{
-            if(err) 
-              return res.status(404).json(err)
-        })
+        
        
 
         await Modeler.updateOne({'_id':req.body.source},{$set:{
