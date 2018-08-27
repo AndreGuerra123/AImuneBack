@@ -1,6 +1,6 @@
-/* const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 const {MONGO} = require('../config/index.js');
-mongoose.connect(MONGO); */
+mongoose.connect(MONGO);
 
 var gridfs = require('mongoose-gridfs')({
   collection:'fs',
