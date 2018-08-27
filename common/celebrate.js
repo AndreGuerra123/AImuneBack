@@ -189,7 +189,7 @@ module.exports = {
             })
         },
         results: {
-            query: Joi.object().keys({
+            body: Joi.object().keys({
                 source: Joi.string().required()
             })
         }
