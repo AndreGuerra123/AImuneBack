@@ -522,6 +522,7 @@ module.exports = {
     },
     proceed_results: async (req, res, next) => {
         axPy.post('/results',{source:req.body.source}).then(resi =>{
+            console.log(resi)
             return res.status(202).json(resi)
         }).catch(err=>{
             return res.status(404).json(err)
