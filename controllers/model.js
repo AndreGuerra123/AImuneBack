@@ -3,7 +3,6 @@ const axios = require("axios");
 const Modeler = require('../models/models.js');
 const Designer = require('../models/design.js')
 const Loader = require('../models/loader.js');
-const Filer = require('../models/fs.js');
 const get = require('lodash/get');
 const ObjectId = require('mongoose').Types.ObjectId
 const axPy = axios.create({
