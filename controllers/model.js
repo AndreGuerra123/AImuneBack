@@ -511,10 +511,6 @@ module.exports = {
         await deleteGridFile(req,res,rid)
         await deleteGridFile(req,res,wid)    
 
-        await gfs.remove(wid, function (err, gridStore) {
-            if (err) return res.status(404).json(err)
-          });
-
         await Modeler.updateOne({'_id':req.body.source},{$set:{
             'file':null,
             'results':null,
