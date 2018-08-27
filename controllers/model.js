@@ -161,6 +161,14 @@ const validResults = function (results) {
     };
 }
 
+const deleteGridFile =  async function(req,res,id){
+    if(id){
+        const gfs = req.app.get('gfs')
+        gfs.remove(id, function (err, gridStore) {
+            if (err) return res.status(404).json(err)
+        });
+    }   
+}
 
 module.exports = {
 
@@ -500,11 +508,9 @@ module.exports = {
         const rid = get(model,'results')
         const wid = get(model,'weights')
 
-        const gfs = req.app.get('gfs')
-        await gfs.remove(rid, function (err, gridStore) {
-            if (err) return res.status(404).json(err)
-          });
-        
+        await deleteGridFile(req,res,rid)
+        await deleteGridFile(req,res,wid)    
+
         await gfs.remove(wid, function (err, gridStore) {
             if (err) return res.status(404).json(err)
           });
