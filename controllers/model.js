@@ -35,15 +35,14 @@ const configSchema = {
 }
 
 const learningSchema = {
-    h5: Joi.binary().required(),
+    architecture: Joi.object().required(),
+    weights: Joi.object().required(),
     job: Joi.object().required(),
-    sync: Joi.object().required(),
     date: Joi.date().required()
 }
-const resultsSchema = { //TODO: Later
-
+const resultsSchema = { 
+    results: Joi.object.required()
 }
-
 
 const evaluateStatus = function (model) {
     var status = [];
@@ -86,17 +85,7 @@ const validConfig = function (config) {
     };
 }
 
-const isjobrunning = function (job) { 
-   const started = get(job,'started')
-   const finished = get(job,'finished')
-   return (started && !finished) ? true : false
-}
-
-const isjoberror = function (job) { 
-    return (get(job,'error') ? true : false)
-}
-
-const isoutdated = function (model) {
+const isLearningUnsync = function (model) {
     dataset_date = get(model,'dataset.date')
     config_date = get(model,'config.date')
     sync_dataset_date = get(model,'file.sync.dataset_date')    
@@ -104,33 +93,49 @@ const isoutdated = function (model) {
 
     try {
         if (+dataset_date == +sync_dataset_date && +config_date == +sync_config_date) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     } catch (err) {
-        return false;
+        return true;
     }
 
 }
+const isLearningEmpty = function (model){
+    return !(model && get(model,'file'))
+}
 
-const validLearning = function (file) {
-    if (Joi.validate(file, learningSchema)) {
+const isLearningError = function(model){
+    if(get(model,'file.job.error')){
+        return true
+    }else if(isLearningUnsync(model)){
+        return true
+    }else{
+        return false
+    } 
+}
+
+const isLearningRunning = function(model){
+    return (get(model,'file.job.started') && !get(model,'file.job.finished'))
+}
+
+const isLearningValid = function(model){
+    if (Joi.validate(model, learningSchema)) {
         return true;
     } else {
         return false;
     };
 }
 
-
 const evaluateLearning = function (model) {
-    if (!model.file || !model.file.job) {
+    if (isLearningEmpty(model)) {
         return 0;
-    } else if (isjoberror(model.file.job) || isoutdated(model)) {
+    } else if (isLearningError(model)) {
         return 2;
-    } else if (isjobrunning(model.file.job)) {
+    } else if (isLearningRunning(model)) {
         return 1;
-    } else if (validLearning(model.file)) {
+    } else if (isLearningValid(model)) {
         return 3;
     } else {
         return 4;
@@ -265,16 +270,13 @@ module.exports = {
     },
     proceed_status: async (req, res, next) => { //responsible for indicating if the steps are achieved, empty or ongoing
         const source = req.query.source;
-        Modeler.findById(source,{'dataset':1,'config':1,'file.sync':1,'file.job':1}, (err, model) => {
+        Modeler.findById(source,(err, model) => {
             if (err) {
-                console.log(err)
                 return res.status(404).json(err);
             } else {
                 try {
                     return res.status(202).json(evaluateStatus(model));
                 } catch (error) {
-                    console.log(error)
-
                     return res.status(404).json(error);
                 }
             }
