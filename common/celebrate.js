@@ -187,6 +187,11 @@ module.exports = {
             body: Joi.object().keys({
                 source: Joi.string().required()
             })
+        },
+        results: {
+            query: Joi.object().keys({
+                source: Joi.string().required()
+            })
         }
 
 

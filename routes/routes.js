@@ -41,6 +41,8 @@ const proceedLearningCurrentValidation = celebrate(schemas.learningCurrent);
 const proceedLearningStartValidation = celebrate(schemas.learningStart);
 const proceedLearningResetValidation = celebrate(schemas.learningReset);
 
+const resultsValidation = celebrate(schemas.results)
+
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -131,6 +133,8 @@ router.route('/learning/start').post(proceedLearningStartValidation,
 router.route('/learning/reset').post(proceedLearningResetValidation,
     ModelController.proceed_learning_reset)
 
+//Results
+router.route('/results').get(resultsValidation,ModelController.proceed_results)    
 
 //Exporting routes
 
