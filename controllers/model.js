@@ -524,6 +524,8 @@ module.exports = {
         axPy.get('/results',{source:req.body.source}).then(resi =>{
             return res.status(202).send(resi)
         }).catch(err=>{
+            console.log(err)
+
             return res.status(404).send(err)
         })
     },
