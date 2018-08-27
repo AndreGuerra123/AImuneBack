@@ -521,7 +521,7 @@ module.exports = {
 
     },
     proceed_results: async (req, res, next) => {
-        console.log(req)
+        console.log(req.query)
         axPy.get('/results',{source:req.body.source}).then(res =>{
             return res.status(202).json(res)
         }).catch(err=>{
