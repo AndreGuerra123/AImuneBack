@@ -59,7 +59,7 @@ module.exports = {
         const{user} = req.body
         models = await Modeler.find({$or:[{user:user},{shared:true}]})
         models = models.filter(model => !isLearningError(model)).filter(model => !isLearningRunning(model)).filter(model=>isLearningValid(model))
-        return res.status(404).json(models)
+        return res.status(202).json(models)
     },
     predictLoadTemporary: async (req, res, next) => {
 
