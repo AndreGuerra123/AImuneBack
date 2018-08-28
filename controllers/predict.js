@@ -76,13 +76,6 @@ module.exports = {
 
             } else {
 
-                const {
-                    user,
-                    patient,
-                    condition,
-                    compound,
-                } = fields;
-
                 path = files.image.path;
                 contentType = files.image.type;
                 fs.readFile(path, async function (err, data) {
@@ -95,10 +88,6 @@ module.exports = {
 
                         //Save load
                         const newTemp = new Temper({
-                            user,
-                            patient,
-                            condition,
-                            compound,
                             image: {
                                 data,
                                 contentType
