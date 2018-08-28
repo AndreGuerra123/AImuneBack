@@ -5,6 +5,7 @@ const Formidable = require('formidable');
 const fs = require('fs');
 const get = require('lodash/get');
 const {Joi} = require('celebrate');
+const axios = require('axios');
 const axPy = axios.create({
     baseURL: "http://127.0.0.1:5000/",
 });
