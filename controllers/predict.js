@@ -125,7 +125,7 @@ module.exports = {
         await Temper.findOne({'_id':temp_id},(err,temp)=>{
             if(err) res.status(404).json(err)
             temp.classi = classi
-            await Loader.insert(temp, (err,load)=>{
+            Loader.insert(temp, (err,load)=>{
                 if(err) res.status(404).json(err)
                 return res.status(202)
             })
