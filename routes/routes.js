@@ -12,6 +12,7 @@ const UsersController = require('../controllers/users');
 const LoaderController = require('../controllers/loader.js');
 const DesignController = require('../controllers/design.js')
 const ModelController = require('../controllers/model.js')
+const PredictController = require('../controllers/predict.js')
 
 //Pushing the validators
 const {
@@ -43,6 +44,9 @@ const proceedLearningResetValidation = celebrate(schemas.learningReset);
 
 const resultsValidation = celebrate(schemas.results)
 
+const predictCurrentValidation = celebrate(schemas.predictCurrent)
+const predictTransferTemporaryValidation = celebrate(schemas.predictTransferTemporary)
+const predictClassTemporaryValidation = celebrate(schemas.predictClassTemporary)
 
 //Pushing the authentications
 const jwtAuthentication = passport.authenticate('jwt', {
@@ -135,6 +139,15 @@ router.route('/learning/reset').post(proceedLearningResetValidation,
 
 //Results
 router.route('/results').post(resultsValidation,ModelController.proceed_results)    
+
+//Predict
+router.route('/predict/current').post(predictCurrentValidation,PredictController.predictCurrent)
+
+router.route('/predict/loadTemporary').post(PredictController.predictLoadTemporary)
+
+router.route('/predict/transferTemporary').post(predictTransferTemporaryValidation,PredictController.predictTransferTemporary)
+
+router.route('/predict/classifytemporary').post(predictClassTemporaryValidation,PredictController.predictClassTemporary)
 
 //Exporting routes
 

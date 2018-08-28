@@ -192,10 +192,25 @@ module.exports = {
             body: Joi.object().keys({
                 source: Joi.string().required()
             })
+        },
+        predictCurrent:{
+            body:Joi.object().keys({
+                user: Joi.string().required()
+            })
+        },
+        predictTransferTemporary:{
+            body:Joi.object().keys({
+                temp_id: Joi.string().required(),
+                classi: Joi.string().required()
+            })
+        },
+        predictClassTemporary:{
+            body:Joi.object().keys({
+                temp_id: Joi.string().required(),
+                model_id: Joi.string().required()
+            })
         }
-
-
-
+    
     }
 
 }
