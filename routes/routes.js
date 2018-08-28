@@ -147,7 +147,7 @@ router.route('/predict/loadTemporary').post(PredictController.predictLoadTempora
 
 router.route('/predict/transferTemporary').post(predictTransferTemporaryValidation,PredictController.predictTransferTemporary)
 
-router.route('/predict/classifytemporary').post(predictClassTemporaryValidation,PredictController.predictClassTemporary)
+router.route('/predict/classifyTemporary').post(predictClassTemporaryValidation,PredictController.predictClassTemporary)
 
 //Exporting routes
 

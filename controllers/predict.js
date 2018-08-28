@@ -5,7 +5,9 @@ const Formidable = require('formidable');
 const fs = require('fs');
 const get = require('lodash/get');
 const {Joi} = require('celebrate');
-
+const axPy = axios.create({
+    baseURL: "http://127.0.0.1:5000/",
+});
 
 const learningSchema = {
     architecture: Joi.object().required(),
@@ -111,10 +113,14 @@ module.exports = {
         });
     },
     predictTransferTemporary: async (req,res,next) =>{
-        const{temp_id,classi} = req.body
+        const{temp_id,user,patient,condition,compound,classi} = req.body
         await Temper.findOne({'_id':temp_id},(err,temp)=>{
             if(err) res.status(404).json(err)
-            temp.classi = classi
+            temp['user'] = user
+            temp['patient'] = patient
+            temp['condition'] = condition
+            temp['compound'] = compound
+            temp['classi'] = classi
             Loader.insert(temp, (err,load)=>{
                 if(err) res.status(404).json(err)
                 return res.status(202)
@@ -123,6 +129,13 @@ module.exports = {
 
     },
     predictClassTemporary: async (req,res,next) => {
-
+        await axPy.post('/predict',{
+            model_id:req.body.model_id,
+            temp_id:req.body.temp_id
+        }).then(res=>{
+            return res.status(202).json(res.data)
+        }).catch(err=>{
+            return res.status(404).json(err)
+        })
     }
 };

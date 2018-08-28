@@ -201,6 +201,10 @@ module.exports = {
         predictTransferTemporary:{
             body:Joi.object().keys({
                 temp_id: Joi.string().required(),
+                user: Joi.string().required(),
+                patient: Joi.string(),
+                condition: Joi.string(),
+                compound: Joi.string(),
                 classi: Joi.string().required()
             })
         },
