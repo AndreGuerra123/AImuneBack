@@ -1,4 +1,4 @@
-const Temper = require('../models/design.js');
+const Temper = require('../models/predct.js');
 const Modeler = require('../models/models.js');
 const Loader = require('../models/loader.js');
 const Formidable = require('formidable');
