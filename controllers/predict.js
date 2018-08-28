@@ -1,6 +1,6 @@
 const Temper = require('../models/design.js');
 const Modeler = require('../models/models.js');
-const Loader = require('../models/load.js');
+const Loader = require('../models/loader.js');
 const Formidable = require('formidable');
 const fs = require('fs');
 const get = require('lodash/get');
