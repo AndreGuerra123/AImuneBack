@@ -37,6 +37,7 @@ const configSchema = {
 const learningSchema = {
     architecture: Joi.object().required(),
     weights: Joi.object().required(),
+    hotlabels: Joi.object().required(),
     job: Joi.object().required(),
     date: Joi.date().required()
 }
@@ -514,7 +515,8 @@ module.exports = {
         await Modeler.updateOne({'_id':req.body.source},{$set:{
             'file':null,
             'results':null,
-            'weights':null
+            'weights':null,
+            'hotlabels':null
         }}).catch(err=>{
             return res.status(404).json(err)
         })
