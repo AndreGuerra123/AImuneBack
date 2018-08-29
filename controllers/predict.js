@@ -134,7 +134,6 @@ module.exports = {
             model_id:req.body.model_id,
             temp_id:req.body.temp_id
         }).then(resi=>{
-            console.log(resi.data)
             return res.status(202).json(resi.data)
         }).catch(err=>{
             return res.status(404).send(err)
