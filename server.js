@@ -1,24 +1,19 @@
 var express = require('express');
-var fs = require('fs');
-var https = require('https');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
-const {errors} = require('celebrate');
-const Grid = require('gridfs-stream')
+const {
+  errors
+} = require('celebrate');
 
-const {MONGO,PORT} = require('./config/index.js');
+const gridform = require('gridform')
+const easyGridFS = require('easy-gridfs')
 
-//TO SET THE SERVER CORRECTLY
-//sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
-//ufw allow from  fontend-ip to any port 3000
-//node server.js
-
-const credentials = {
-    key: fs.readFileSync('/etc/ssl/private/aimuneback.key'),
-    cert: fs.readFileSync('/etc/ssl/certs/aimuneback.cert')
-  }
+const {
+  MONGO,
+  PORT
+} = require('./config/index.js');
 
 //Express
 var app = express();
@@ -26,34 +21,42 @@ var app = express();
 //MongoDB
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO);
-Grid.mongo = mongoose.mongo;
+
+//Setting the GRIDFS drivers
 var conn = mongoose.connection;
 conn.once('open', function () {
-    app.set('gfs', Grid(conn.db));
+  gridform.mongo = mongoose.mongo;
+  gridform.db = conn.db;
+  app.set('gridform', gridform);
+  app.set('egfs', new easyGridFS(conn.db, mongoose.mongo))
 });
 
 //Middleware
 app.use(morgan('dev'));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({
+  limit: '50mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '50mb',
+  extended: true
+}));
 app.use(errors())
 
 //Allowing cors from all sources
 app.use(cors({
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": true,
-    "optionsSuccessStatus": 204
-  }));
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": true,
+  "optionsSuccessStatus": 204
+}));
 
 //Routes
 app.use('/', require('./routes/routes.js'));
 
-//Start server
-var httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(PORT, function () {
-    console.log('AImuneBackend listening on port:'+PORT.toString()+'.')
-  });
+app.listen(PORT, function () {
+  console.log('AImuneBackend listening on port:' + PORT.toString() + '.')
+});
 
-
+//To run server:
+//node server.js

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
+
 
 const loaderSchema = new Schema({
     user: {
@@ -22,10 +24,15 @@ const loaderSchema = new Schema({
         type: Number,
         required: true
     },
-    image: {
-        data: Buffer,
-        contentType: String
+    shared: {
+        type: Boolean,
+        required: true
     },
+    image: {
+        type: ObjectId,
+        required:true
+    },
+
 });
 
 const Loader = mongoose.model('load', loaderSchema);

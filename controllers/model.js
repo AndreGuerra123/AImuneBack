@@ -163,12 +163,12 @@ const validResults = function (results) {
 }
 
 const deleteGridFile =  async function(req,res,id){
-    if(id){
-        const gfs = req.app.get('gfs')
-        gfs.remove(id, function (err, gridStore) {
+        const egfs = req.app.get('egfs')()
+        egfs.removeFile(id, function (err, result) {
             if (err) return res.status(404).json(err)
+            else return res.status(200).json(result)
         });
-    }   
+    
 }
 
 module.exports = {

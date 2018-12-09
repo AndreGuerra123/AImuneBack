@@ -8,8 +8,10 @@ const {
 
 
 //Pushing the Controllers
-const UsersController = require('../controllers/users');
+const UsersController = require('../controllers/users.js');
 const LoaderController = require('../controllers/loader.js');
+const ImageController = require('../controllers/image.js');
+const DatasetController = require('../controllers/dataset.js')
 const DesignController = require('../controllers/design.js')
 const ModelController = require('../controllers/model.js')
 const PredictController = require('../controllers/predict.js')
@@ -24,26 +26,20 @@ const designInitValidation = celebrate(schemas.designInit);
 //const designSaveNewValidation = celebrate(schemas.designSaveNew);
 //const designSaveOldValidation = celebrate(schemas.designOldNew);
 const designDeleteValidation = celebrate(schemas.designDelete);
-
 const modelInitValidation = celebrate(schemas.modelInit);
 const modelDeleteValidation = celebrate(schemas.modelDelete);
 const modelCloneValidation = celebrate(schemas.modelClone);
 const modelNewValidation = celebrate(schemas.modelNew);
 const proceedStatusValidation = celebrate(schemas.modelProceed);
-
 const proceedDatasetCurrentValidation = celebrate(schemas.datasetCurrent);
 const proceedDatasetOptionsValidation = celebrate(schemas.datasetOptions);
 const proceedDatasetUpdateValidation = celebrate(schemas.datasetUpdate);
-
 const proceedConfigCurrentValidation = celebrate(schemas.configCurrent);
 const proceedConfigUpdateValidation = celebrate(schemas.configUpdate);
-
 const proceedLearningCurrentValidation = celebrate(schemas.learningCurrent);
 const proceedLearningStartValidation = celebrate(schemas.learningStart);
 const proceedLearningResetValidation = celebrate(schemas.learningReset);
-
 const resultsValidation = celebrate(schemas.results)
-
 const predictCurrentValidation = celebrate(schemas.predictCurrent)
 const predictTransferTemporaryValidation = celebrate(schemas.predictTransferTemporary)
 const predictClassTemporaryValidation = celebrate(schemas.predictClassTemporary)
@@ -57,16 +53,26 @@ const localAuthentication = passport.authenticate('local', {
 });
 
 //Routing
+
+/////////////// AUTHENTICATION ////////
 router.route('/signup')
     .post(signUpValidation, UsersController.signUp);
 
 router.route('/login')
     .post(logInValidation, localAuthentication, UsersController.logIn);
 
-//put jwt authentication on all this
+////////////// LOADING /////////////
 
-router.route('/load').post( //jwtAuthentication, In this case validation is done in the front end due to dificulties in importing form dat as body .
-    LoaderController.load);
+router.route('/load').post(LoaderController.load);
+
+///////////// IMAGES ////////////////
+router.route('/image').get(//jwtAuthentication,
+    ImageController.image);
+
+///////////// DATASET /////////////
+
+router.route('/dataset').get(//jwtAuthentication,
+    DatasetController.dataset);
 
 //////////////////DESIGN////////////////
 
